@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StyleButtonPrimary" parent="Widget.MaterialComponents.Button">
+        <item name="rippleColor">@color/cardview_dark_background</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:backgroundTint">@color/text_animation</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+</resources>

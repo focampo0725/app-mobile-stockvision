@@ -38,7 +38,7 @@ abstract class BaseActivity <T:IViewModel<K>,K>: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        inmerviseScreen(window)
+//        inmerviseScreen(window)
     }
 
 
