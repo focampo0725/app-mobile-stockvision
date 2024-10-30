@@ -14,4 +14,11 @@
         <item name="android:insetBottom">0dp</item>
     </style>
 
+
+    <style name="NavigationItemTextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+
 </resources>

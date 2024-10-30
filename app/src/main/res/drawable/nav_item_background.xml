@@ -1,0 +1,5 @@
+<!-- res/drawable/nav_item_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:drawable="@color/color_selected" /> <!-- Color cuando está seleccionado -->
+    <item android:state_pressed="true" android:drawable="@color/color_pressed" /> <!-- Color cuando se presiona -->/>
+</selector>

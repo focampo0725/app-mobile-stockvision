@@ -1,0 +1,9 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/ic_bell"
+    android:title="Notificaciones"
+        app:showAsAction="always" />
+</menu>

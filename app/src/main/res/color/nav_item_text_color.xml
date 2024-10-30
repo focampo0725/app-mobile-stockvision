@@ -1,0 +1,6 @@
+<!-- res/color/nav_item_text_color.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@color/text_animation" />
+    <item android:state_pressed="true" android:color="@color/text_animation" />
+    <item android:color="@color/white" />
+</selector>

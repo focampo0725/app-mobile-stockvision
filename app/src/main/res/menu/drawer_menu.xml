@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_item1"
+        android:title="Home"
+        android:checkable="true"
+        />
+    <item
+        android:id="@+id/nav_item2"
+        android:title="Nuevo Producto"
+        android:checkable="true" />
+    <item
+        android:id="@+id/nav_item3"
+        android:title="Producto Entrante"
+        android:checkable="true" />
+    <item
+        android:id="@+id/nav_item4"
+        android:title="Reservar Espacio"
+        android:checkable="true" />
+    <item
+        android:id="@+id/nav_item5"
+        android:title="Revisar Inventario"
+        android:checkable="true" />
+    <item
+        android:id="@+id/nav_item6"
+        android:title="Movimiento Producto"
+        android:checkable="true" />
+    <item
+        android:id="@+id/nav_item7"
+        android:title="Historial de Notificaciones"
+        android:checkable="true" />
+
+
+</menu>
