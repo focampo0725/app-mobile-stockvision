@@ -8,7 +8,9 @@ import com.upc.stockvision.databinding.ActivitySignUpBinding
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.splashscreen.SplashScreenState
 import com.upc.stockvision.presentation.ui.splashscreen.SplashScreenViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
     private val viewModel: SignUpViewModel by viewModels()
     private lateinit var binding: ActivitySignUpBinding

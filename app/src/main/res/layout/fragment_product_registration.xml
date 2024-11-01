@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.ui.product_registration.ProductRegistrationFragment">
+
+    <ImageView
+        android:id="@+id/ivProduct"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/circular_border"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Tomar Foto"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        style="@style/StyleButtonPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/ivProduct"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+    <ViewFlipper
+        android:id="@+id/vfRegisterProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btnTakePhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Producto"
+                    android:textColor="@color/text_animation"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/etProductName"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="25dp"
+                    android:background="@drawable/custom_input"
+                    android:drawableStart="@drawable/custom_label_product_icon"
+                    android:drawablePadding="12dp"
+                    android:ems="10"
+                    android:hint="Producto"
+                    android:inputType="textPassword"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Categoría"
+                    android:textColor="@color/text_animation"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/etCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="25dp"
+                    android:background="@drawable/custom_input"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_selector_right_24"
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/purple_700"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:hint="Selecciona una categoría"
+                    android:paddingStart="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="12dp"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Cantidad del Producto"
+                    android:textColor="@color/text_animation"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="25dp"
+                    android:background="@drawable/custom_input"
+                    android:drawableStart="@drawable/custom_amount_icon"
+                    android:drawablePadding="12dp"
+                    android:ems="10"
+                    android:hint="Cantidad"
+                    android:inputType="textPassword"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/btnNext"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="55dp"
+                    android:paddingHorizontal="50dp"
+                    android:text="Siguiente"
+                    android:textSize="18sp"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="20dp"
+                    android:backgroundTint="#FF4500  "
+                    style="@style/StyleButtonPrimary"
+                    />
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="Proveedor"
+                    android:textColor="@color/text_animation"
+                    />
+                <TextView
+                    android:id="@+id/tvSupplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:hint="Selecciona una Proveedor"
+                    android:textSize="18sp"
+                    android:drawableEnd="@drawable/ic_selector_right_24"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/custom_input"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="25dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="Ubicación en Almacen"
+                    android:textColor="@color/text_animation"
+                    />
+                <TextView
+                    android:id="@+id/tvWarehouse"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:hint="Selecciona una Almacen"
+                    android:textSize="18sp"
+                    android:drawableEnd="@drawable/ic_selector_right_v2_24"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/custom_input"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="25dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="Zona en Almacen"
+                    android:textColor="@color/text_animation"
+                    />
+                <TextView
+                    android:id="@+id/tvAreaWarehouse"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:hint="Selecciona una Almacen"
+                    android:textSize="18sp"
+                    android:drawableEnd="@drawable/ic_selector_right_24"
+                    android:drawableTint="@color/teal_700"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/custom_input"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:layout_marginHorizontal="25dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btnBack"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="Volver"
+                        android:textSize="18sp"
+                        android:textAllCaps="false"
+                        android:backgroundTint="#FF4500"
+                        android:layout_marginEnd="20dp"
+                        style="@style/StyleButtonPrimary"
+                        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                    <Button
+                        android:id="@+id/btnRegisterProduct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="Guardar"
+                        android:textSize="18sp"
+                        android:textAllCaps="false"
+                        android:backgroundTint="#77C18F"
+                        style="@style/StyleButtonPrimary"
+                        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ViewFlipper>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

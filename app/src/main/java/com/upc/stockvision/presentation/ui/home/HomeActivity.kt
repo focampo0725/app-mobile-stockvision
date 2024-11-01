@@ -1,25 +1,40 @@
 package com.upc.stockvision.presentation.ui.home
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ActivityHomeBinding
+import com.upc.stockvision.presentation.BaseActivity
+import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
+import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationFragment
+import com.upc.stockvision.presentation.ui.sign_up.SignUpViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class HomeActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
+
+    @Inject
+    lateinit var productRegistrationFragment: ProductRegistrationFragment
+    override fun processRenderState(renderState: HomeSatate, context: Context) {
+        TODO("Not yet implemented")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Configurar la Toolbar
+        setupViewModel(viewModel)
         setSupportActionBar(binding.toolbar)
         closeApp()
 
@@ -33,10 +48,18 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_item1 -> {
                     updateTitle(item.title.toString())
                     Toast.makeText(this, "Seleccionaste Item 1", Toast.LENGTH_SHORT).show()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, productRegistrationFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.nav_item2 -> {
                     updateTitle(item.title.toString())
                     Toast.makeText(this, "Seleccionaste Item 2", Toast.LENGTH_SHORT).show()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, ProductRegistrationFragment())
+                        .addToBackStack(null)
+                        .commit()
                 }
                 R.id.nav_item3 -> {
                     updateTitle(item.title.toString())
