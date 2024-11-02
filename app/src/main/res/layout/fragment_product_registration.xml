@@ -292,8 +292,7 @@
                         style="@style/StyleButtonPrimary"
                         app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 </LinearLayout>
 
