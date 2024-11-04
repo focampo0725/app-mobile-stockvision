@@ -1,4 +1,4 @@
-package com.upc.stockvision.presentation.ui.inventory_control
+package com.upc.stockvision.presentation.ui.detail_product
 
 import android.content.Context
 import android.os.Bundle
@@ -8,20 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.R
+import com.upc.stockvision.databinding.FragmentDetailProductBinding
 import com.upc.stockvision.databinding.FragmentInventoryControlBinding
-import com.upc.stockvision.databinding.FragmentProductRegistrationBinding
 import com.upc.stockvision.presentation.BaseFragment
-import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationViewModel
+import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlState
+import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
+class DetailProductFragment : BaseFragment<DetailProductViewModel, DetailProductState>() {
 
-class InventoryControlFragment : BaseFragment<InventoryControlViewModel,InventoryControlState>() {
-
-    val viewModel: InventoryControlViewModel by viewModels()
-    private lateinit var binding : FragmentInventoryControlBinding
-    override fun processRenderState(renderState: InventoryControlState, context: Context) {
-
+    val viewModel: DetailProductViewModel by viewModels()
+    private lateinit var binding : FragmentDetailProductBinding
+    override fun processRenderState(renderState: DetailProductState, context: Context) {
+        TODO("Not yet implemented")
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +33,7 @@ class InventoryControlFragment : BaseFragment<InventoryControlViewModel,Inventor
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentInventoryControlBinding.inflate(inflater, container,false)
+        binding = FragmentDetailProductBinding.inflate(inflater, container,false)
         return binding.root
     }
 
@@ -40,7 +41,8 @@ class InventoryControlFragment : BaseFragment<InventoryControlViewModel,Inventor
         super.onViewCreated(view, savedInstanceState)
         setupViewModel(viewModel = viewModel)
 
-        }
+
+    }
 
 
 }
