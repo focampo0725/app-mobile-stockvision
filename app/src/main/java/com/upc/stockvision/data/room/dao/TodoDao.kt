@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.upc.stockvision.domain.entities.Todo
 
 @Dao
-interface TodoDao {
+interface TodoDao  {
     @Query("SELECT * FROM Todo ")
     suspend fun getAllQupte():List<Todo>
 

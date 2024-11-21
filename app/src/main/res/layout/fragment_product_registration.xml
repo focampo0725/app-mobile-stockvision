@@ -94,7 +94,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/etCategory"
+                    android:id="@+id/tvCategory"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginHorizontal="25dp"
@@ -307,6 +307,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ViewFlipper>
+
+    <com.upc.stockvision.presentation.widget.DarkLoadingView
+        android:id="@+id/clLoading"
+        android:visibility="gone"
+        android:elevation="10dp"
+        android:clickable="true"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 

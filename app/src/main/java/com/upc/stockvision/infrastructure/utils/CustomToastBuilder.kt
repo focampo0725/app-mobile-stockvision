@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.CustomToastBinding
 
@@ -14,12 +15,12 @@ enum class SelectedIcon(val iconResId: Int, val backgroundColor: Int, val textCo
     ERROR(R.drawable.ic_alert_error_64, R.color.alert_error, R.color.alert_error_text_color)
 }
 
-
 class CustomToastBuilder(private val context: Context) {
     private var mensaje: String = ""
     private var icon: Int? = null
     private var selectedIcon: SelectedIcon? = null
 
+    // Establece el mensaje
     fun setMensaje(mensaje: String) = apply { this.mensaje = mensaje }
 
     // Establece el icono y guarda el enum
@@ -29,8 +30,10 @@ class CustomToastBuilder(private val context: Context) {
     }
 
     fun build() {
+        // Inflar el layout personalizado del Toast
         val binding = CustomToastBinding.inflate(LayoutInflater.from(context))
 
+        // Establecer el mensaje en el TextView
         binding.tvMessage.text = mensaje
 
         // Configura la imagen si se proporciona
@@ -41,20 +44,25 @@ class CustomToastBuilder(private val context: Context) {
             binding.ivIcon.visibility = View.GONE
         }
 
-        // Establecer el color de fondo según el icono seleccionado
-        binding.flBackground.setBackgroundColor(selectedIcon?.backgroundColor ?: R.color.text_animation)
+        // Establecer el color de fondo del LinearLayout
+        val backgroundColor = ContextCompat.getColor(
+            context,
+            selectedIcon?.backgroundColor ?: R.color.text_animation // Si no se selecciona un icono, usa un color predeterminado
+        )
+        binding.llToastContainer.setBackgroundColor(backgroundColor)
 
-        // Configura el color del texto
+        // Establecer el color del texto
         selectedIcon?.let {
             binding.tvMessage.setTextColor(context.getColor(it.textColor))
         }
 
-        // Crea y muestra el Toast
+        // Crear y mostrar el Toast
         val toast = Toast(context)
-        toast.setGravity(Gravity.CENTER_VERTICAL or Gravity.BOTTOM, 0, 200)
+//        toast.setGravity(Gravity.CENTER_VERTICAL or Gravity.BOTTOM, 0, 200)
+        toast.setGravity(Gravity.BOTTOM, 0, 0)
+        toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM , 0, 0)
         toast.duration = Toast.LENGTH_SHORT
         toast.view = binding.root
         toast.show()
     }
 }
-

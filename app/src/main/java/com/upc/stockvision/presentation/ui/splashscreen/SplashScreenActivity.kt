@@ -26,6 +26,11 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
     lateinit var context : Context
 
     override fun processRenderState(renderState: SplashScreenState, context: Context) {
+        when(renderState){
+            is SplashScreenState.LoadActivity -> {
+                onNextActivity(renderState.cls, null, true)
+            }
+        }
 
     }
 
@@ -33,9 +38,13 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupViewModel(viewModel)
         loadSlideInAnimation()
         loadScaleUpAnimation()
+        viewModel.loadScreen()
     }
+
+
 
     fun loadScaleUpAnimation() {
 

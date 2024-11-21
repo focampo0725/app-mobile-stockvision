@@ -1,7 +1,10 @@
 package com.upc.stockvision.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -10,10 +13,19 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.LoadingTYPE
 import com.upc.stockvision.infrastructure.extensions.logi
+interface OnToGoNewActivity {
+    fun onNextActivity(cls : Class<*>, bundle : Bundle?, isFinish : Boolean = false)
+}
+abstract class BaseActivity <T:IViewModel<K>,K>: AppCompatActivity(), OnToGoNewActivity {
 
-abstract class BaseActivity <T:IViewModel<K>,K>: AppCompatActivity() {
-
-
+    var isClosureDone = false
+    val closureOnStartDelay = Runnable {
+        // Do what ever you want
+//        SecurityUtils.onStart()
+//        SecurityUtils.activity = this
+        isClosureDone = true
+    }
+    private val handler = Handler(Looper.getMainLooper())
     fun updateUI(state : LCEState<K>){
         when (state) {
             is LCEState.Loading -> onLoading(isStarted = (state.state == LoadingTYPE.START))
@@ -27,6 +39,20 @@ abstract class BaseActivity <T:IViewModel<K>,K>: AppCompatActivity() {
     abstract fun processRenderState(renderState: K, context: Context)
     fun setupViewModel(viewModel : T){
         viewModel.renderState.observe(this, ::updateUI)
+    }
+
+    override fun onNextActivity(cls: Class<*>, bundle : Bundle?, isFinish : Boolean) {
+        val intent = Intent(this, cls)
+        bundle?.let {
+            intent.putExtras(bundle)
+        }
+        startActivity(intent)
+//        overridePendingTransition(R.anim.slide_in_right, R.anim.no_animation);
+        if (isFinish)
+        {
+            handler.removeCallbacks(closureOnStartDelay)
+            finish()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

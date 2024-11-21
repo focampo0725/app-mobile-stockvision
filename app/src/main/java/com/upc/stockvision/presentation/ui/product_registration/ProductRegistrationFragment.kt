@@ -27,7 +27,14 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
     private lateinit var binding: FragmentProductRegistrationBinding
 
     override fun processRenderState(renderState: ProductRegistrationState, context: Context) {
-        TODO("Not yet implemented")
+        when(renderState){
+            is ProductRegistrationState.CategoriesLoaded ->{
+                DialogCategory(categotyList = renderState.categoriesList) { selectedCategory ->
+                    binding.tvCategory.text = selectedCategory.categoryName
+                }.show(parentFragmentManager, DialogCategory.TAG)
+
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +54,8 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
         super.onViewCreated(view, savedInstanceState)
         setupViewModel(viewModel = viewModel)
         showView()
-        binding.etCategory.setOnClickListener {
-            cargaDatos()
+        binding.tvCategory.setOnClickListener {
+            viewModel.requestCategoryList()
         }
 
     }
@@ -80,35 +87,13 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
         )
 
          DialogCategory(response) { selectedCategory ->
-            binding.etCategory.text = selectedCategory.categoryName
+            binding.tvCategory.text = selectedCategory.categoryName
         }.show(parentFragmentManager, DialogCategory.TAG)
     }
 
-//    private fun showPopupWindow(anchor: View) {
-//        // Lista de productos
-//        val productos = arrayOf("Producto 1", "Producto 2", "Producto 3", "Producto 4",  "Producto 3", "Producto 4")
-//
-//        // Crear un ListView
-//        val listView = ListView(requireContext())
-//        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, productos)
-//        listView.adapter = adapter
-//
-//        // Crear el PopupWindow
-//        val popupWindow = PopupWindow(listView,
-//            RelativeLayout.LayoutParams.MATCH_PARENT,
-//            RelativeLayout.LayoutParams.WRAP_CONTENT)
-//
-//        // Mostrar el PopupWindow
-//        popupWindow.isFocusable = true
-//        popupWindow.showAsDropDown(anchor)
-//
-//        // Manejar el evento de selección
-//        listView.setOnItemClickListener { _, _, position, _ ->
-//            val selectedProduct = productos[position]
-//            binding.etCategory.setText(selectedProduct) // Establecer el texto en el EditText
-//            popupWindow.dismiss() // Cerrar el PopupWindow
-//        }
-//    }
-
+    override fun onLoading(isStarted: Boolean) {
+        super.onLoading(isStarted)
+        binding.clLoading.visibility = if (isStarted) View.VISIBLE else View.GONE
+    }
 
 }

@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ActivityHomeBinding
 import com.upc.stockvision.databinding.FragmentIncomingProductBinding
+import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.utils.CustomToastBuilder
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
@@ -48,12 +49,11 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navigationView: NavigationView = binding.navView
 
-        // Manejar clics en el NavigationView
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
                     updateTitle(item.title.toString())
-                    showCustomToast(this,"Se presiono el N° 1",SelectedIcon.SUCCESS)
+                    showCustomToast("Se presiono el N° 1",SelectedIcon.SUCCESS)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, InventoryControlFragment())
                         .addToBackStack(null)
@@ -62,7 +62,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 }
                 R.id.nav_item2 -> {
                     updateTitle(item.title.toString())
-                    showCustomToast(this,"Se presionoooo el N° 2",SelectedIcon.WARNING)
+                    showCustomToast("Se presionoooo el N° 2",SelectedIcon.WARNING)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, productRegistrationFragment)
                         .addToBackStack(null)
@@ -70,7 +70,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 }
                 R.id.nav_item3 -> {
                     updateTitle(item.title.toString())
-                    showCustomToast(this,"Se presionooooooo el N° 3",SelectedIcon.ERROR)
+                    showCustomToast("Se presionooooooo el N° 3",SelectedIcon.ERROR)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, incomingProductFragment)
                         .addToBackStack(null)
@@ -108,12 +108,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         }
     }
 
-    private fun showCustomToast(context: Context, message: String, iconType: SelectedIcon) {
-        CustomToastBuilder(context)
-            .setMensaje(message)         // Establece el mensaje del Toast
-            .setFoundIcon(iconType)      // Establece el icono (SUCCESS, WARNING o ERROR)
-            .build()                     // Construye y muestra el Toast
-    }
+
     private fun closeApp(){
         binding.cvLogout.setOnClickListener {
             Toast.makeText(this, "LogOut", Toast.LENGTH_SHORT).show()
