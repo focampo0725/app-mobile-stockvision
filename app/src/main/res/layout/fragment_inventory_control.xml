@@ -39,7 +39,7 @@
             android:drawableTint="@color/purple_700"
             android:focusable="true"
             android:gravity="center_vertical"
-            android:hint="Selecciona una categoría"
+            android:hint="Selecciona un Almacen"
             android:padding="12dp"
             android:textSize="18sp" />
 
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/etAmount"
+                android:id="@+id/etProductName"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="50dp"
@@ -84,7 +84,7 @@
                 android:drawablePadding="12dp"
                 android:hint="Buscar Producto"
                 android:layout_marginEnd="20dp"
-                android:inputType="number"
+                android:inputType="text"
                 android:padding="12dp"
                 android:textSize="18sp" />
 
@@ -92,13 +92,13 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
-                android:src="@drawable/ic_calendar_24"
                 android:background="@drawable/bg_gradient_button_search" />
         </LinearLayout>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProducts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingHorizontal="5dp"

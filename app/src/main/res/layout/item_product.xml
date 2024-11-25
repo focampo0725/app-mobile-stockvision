@@ -17,7 +17,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ivProduct"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/rounded_border_item"
@@ -43,7 +43,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/tvProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#FF8C42"
@@ -53,7 +53,7 @@
                 android:paddingBottom="4dp"/>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cantidad : "
@@ -62,7 +62,7 @@
                 android:paddingBottom="4dp"/>
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvWarehouse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Almacen : "

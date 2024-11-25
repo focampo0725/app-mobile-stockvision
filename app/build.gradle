@@ -72,8 +72,9 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.44"  // KAPT para el compilador de Hilt
 
     //room
-    implementation "androidx.room:room-ktx:2.4.0"
-    kapt "androidx.room:room-compiler:2.4.0"
+    implementation "androidx.room:room-ktx:2.4.1"
+    kapt "androidx.room:room-compiler:2.4.1"
+    implementation "androidx.room:room-ktx:2.4.1"
 
     //lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"

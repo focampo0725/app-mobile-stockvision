@@ -33,6 +33,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var productRegistrationFragment: ProductRegistrationFragment
     @Inject
     lateinit var incomingProductFragment: IncomingProductFragment
+    @Inject
+    lateinit var inventoryControlFragment: InventoryControlFragment
     override fun processRenderState(renderState: HomeSatate, context: Context) {
         TODO("Not yet implemented")
     }
@@ -73,6 +75,13 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                     showCustomToast("Se presionooooooo el N° 3",SelectedIcon.ERROR)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, incomingProductFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.nav_item5 -> {
+                    updateTitle(item.title.toString())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, inventoryControlFragment)
                         .addToBackStack(null)
                         .commit()
                 }

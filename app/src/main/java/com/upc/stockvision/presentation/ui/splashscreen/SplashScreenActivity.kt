@@ -13,10 +13,12 @@ import androidx.core.content.ContextCompat
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ActivitySplashScreenBinding
 import com.upc.stockvision.presentation.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenState>() {
     private val viewModel: SplashScreenViewModel by viewModels()
     private lateinit var binding: ActivitySplashScreenBinding
@@ -42,12 +44,10 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
         loadSlideInAnimation()
         loadScaleUpAnimation()
         viewModel.loadScreen()
+        viewModel.populateData()
     }
 
-
-
     fun loadScaleUpAnimation() {
-
         Handler(Looper.getMainLooper()).postDelayed({
             binding.tvStock.setTextColor(ContextCompat.getColor(this, R.color.text_animation))
             binding.imgSmartphoneLogo.setColorFilter(ContextCompat.getColor(this, R.color.text_animation), PorterDuff.Mode.SRC_IN)

@@ -22,5 +22,34 @@ class RoomModule {
     @Provides
     fun provideTodoDao(stockVisionDB:StockVisionDB) = stockVisionDB.todoDao()
 
+    @Singleton
+    @Provides
+    fun provideSessionDao(stockVisionDB:StockVisionDB) = stockVisionDB.sessionDao()
 
+    @Singleton
+    @Provides
+    fun provideIdentityUserDao(stockVisionDB:StockVisionDB) = stockVisionDB.identityUserDao()
+
+    @Singleton
+    @Provides
+    fun provideProductsDao(stockVisionDB:StockVisionDB) = stockVisionDB.productsDao()
+
+    @Singleton
+    @Provides
+    fun provideAreaWarehouseDao(stockVisionDB:StockVisionDB) = stockVisionDB.areaWarehouseDao()
+
+    @Singleton
+    @Provides
+    fun provideWarehouseDao(stockVisionDB:StockVisionDB) = stockVisionDB.warehouseDao()
+
+    @Singleton
+    @Provides
+    fun provideSupplierDao(stockVisionDB:StockVisionDB) = stockVisionDB.supplierDao()
+    @Singleton
+    @Provides
+    fun provideReserveAreaDao(stockVisionDB:StockVisionDB) = stockVisionDB.reserveAreaDao()
+
+    @Singleton
+    @Provides
+    fun provideCategoryDao(stockVisionDB:StockVisionDB) = stockVisionDB.categoryDao()
 }

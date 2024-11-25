@@ -17,7 +17,6 @@ class Session(
     @ColumnInfo(name = "motherSurname") var motherSurname:  String,
     @ColumnInfo(name = "startDate") var startDate: Date,
     @ColumnInfo(name = "finalDate") var finalDate:  Date,
-
     ) {
     companion object {
         const val TABLE_NAME = "Session"

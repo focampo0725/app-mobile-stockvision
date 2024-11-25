@@ -2,6 +2,7 @@ package com.upc.stockvision.presentation.ui.sign_in
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.upc.stockvision.databinding.ActivitySignInBinding
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
@@ -9,6 +10,7 @@ import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.home.HomeActivity
+import com.upc.stockvision.presentation.ui.sign_up.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +20,7 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
     override fun processRenderState(renderState: SignInState, context: Context) {
         when(renderState){
             is SignInState.SuccessfulAuthentication -> {
-                showCustomToast(this,"Bienvenido ---",SelectedIcon.SUCCESS)
+                showCustomToast("Bienvenido ---",SelectedIcon.SUCCESS)
                 onNextActivity(HomeActivity::class.java,null,true)
             }
             else -> {}
@@ -35,9 +37,13 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
     }
 
     fun init(){
+        binding.btnRegister.setOnClickListener {
+            onNextActivity(SignUpActivity::class.java,null,true)
+        }
         binding.btnIngresar.setOnClickListener {
-            val identityUser = binding.etUserIdentity.toString()
-            val password = binding.etPassword.toString()
+            val identityUser = binding.etUserIdentity.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
+            Log.d("[FrancoTest]", "identityUser: ${identityUser}, password: $password")
             viewModel.requestUserAuthentication(identityUser, password)
         }
     }

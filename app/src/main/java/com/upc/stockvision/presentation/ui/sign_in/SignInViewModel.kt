@@ -2,6 +2,7 @@ package com.upc.stockvision.presentation.ui.sign_in
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.infrastructure.extensions.*
@@ -26,19 +27,36 @@ class SignInViewModel @Inject constructor(private val stockVisionRepository: Sto
     @ApplicationContext
     lateinit var context: Context
     fun requestUserAuthentication(identityDocument : String, password : String){
-        stockVisionRepository.managementApi.getUser(identityDocument,password).applySchedulers().subscribeApp(
-            onSuccess = {
-                        if (it.isValid){
-                            stockVisionRepository.spf.isAuthenticateUser = true
-                            renderState.value = LCEState.Content(SignInState.SuccessfulAuthentication(it.content.name))
-                        }else{
-                            context.toast(it.exceptions)
-                        }
-
-            }, onError = {
-                context.toast("Hola Error : $it")
-            }
-        )
+       doAsynTask({
+           Log.d("[FrancoTest]", "identityUser: ${identityDocument}, password: $password")
+           val user = stockVisionRepository.identityUserDao.validateUser(identityDocument, password)
+           Log.d("[FrancoTest]", "User found: $user")
+           user
+       },{
+           if (it != null) {
+               renderState.postValue(LCEState.Content(SignInState.SuccessfulAuthentication(it.name)))
+           } else {
+               context.toast("usuario no existe")
+           }
+       },{
+           context.toast("[Error] -> $it")
+           context.logi("[Error] -> $it")
+       })
+        //ConsumoAPI
+//        stockVisionRepository.managementApi.getUser(identityDocument,password).applySchedulers().subscribeApp(
+//            onSuccess = {
+//                        if (it.isValid){
+//                            stockVisionRepository.spf.isAuthenticateUser = true
+//                            renderState.value = LCEState.Content(SignInState.SuccessfulAuthentication(it.content.name))
+//                        }else{
+//                            context.toast(it.exceptions)
+//                        }
+//
+//            }, onError = {
+//                context.toast("Hola Error : $it")
+//            }
+//        )
+        //EndConsumoAPI
 
     }
 
