@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ActivityHomeBinding
@@ -62,6 +63,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         // Configurar el DrawerLayout y NavigationView
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navigationView: NavigationView = binding.navView
+        loadNotification()
 
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
@@ -113,9 +115,23 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         }
     }
 
-    fun loadFragment(){
+    fun loadNotification(){
+        val fragmentToShow = intent.getStringExtra("fragment_to_show")
 
+        if (fragmentToShow == "0") {
+            // Mostrar el Fragmento 1
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, incomingProductFragment)  // Aquí se reemplaza por el Fragmento 1
+                .commit()
+        } else if (fragmentToShow == "1") {
+            // Mostrar el Fragmento 2
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, reserveSpaceFragment)  // Aquí se reemplaza por el Fragmento 2
+                .commit()
+        }
     }
+
+
 
     // Inflar el menú de la Toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

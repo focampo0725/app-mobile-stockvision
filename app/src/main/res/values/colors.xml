@@ -26,4 +26,6 @@
     <color name="color_selected">#FFDDDDDD</color> <!-- Cambia este color -->
     <color name="color_pressed">#FFCCCCCC</color>
 
+    <color name="notification_color">#F6F4F4</color>
+
 </resources>
