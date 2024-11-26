@@ -25,7 +25,6 @@
             android:scaleType="fitCenter"
             android:padding="4dp"
 
-
             />
 
         <!-- Línea divisoria vertical -->

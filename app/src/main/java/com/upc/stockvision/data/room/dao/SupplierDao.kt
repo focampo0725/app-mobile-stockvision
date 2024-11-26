@@ -9,4 +9,7 @@ import com.upc.stockvision.domain.entities.Supplier
 interface SupplierDao : BaseDao<Supplier> {
     @Query("SELECT * FROM Supplier")
     fun getAll(): List<Supplier>
+
+    @Query("DELETE FROM Supplier")
+    fun deleteAll()
 }

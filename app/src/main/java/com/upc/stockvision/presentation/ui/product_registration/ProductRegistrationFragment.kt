@@ -24,7 +24,9 @@ import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentProductRegistrationBinding
 import com.upc.stockvision.domain.dto.CategoryDTO
 import com.upc.stockvision.domain.dto.ResponseGenericDTO
+import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.extensions.toast
+import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.dialog.DialogAreaWarehouse
 import com.upc.stockvision.presentation.dialog.DialogCategory
@@ -65,7 +67,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
             }
             is ProductRegistrationState.SuccessProductRegister ->{
-                context.toast(renderState.message)
+                context.showCustomToast(renderState.message,SelectedIcon.SUCCESS)
             }
         }
     }
@@ -126,6 +128,8 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             }
 
 
+
+
             viewModel.registerProduct(productName, category, quantity, supplier, warehouse, areaWarehouse, photo!!)
         }
 
@@ -158,6 +162,24 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
         }
     }
 
+    fun clearBoxes(){
+        binding.tvCategory.text = ""
+        binding.tvSupplier.text = ""
+        binding.tvWarehouse.text = ""
+        binding.tvAreaWarehouse.text = ""
+        binding.etProductName.setText("")
+        binding.etAmount.setText("")
+
+        binding.tvCategory.hint = "Selecciona una categoría"
+        binding.tvSupplier.hint = "Selecciona un proveedor"
+        binding.tvWarehouse.hint = "Selecciona una ubicación"
+        binding.tvAreaWarehouse.hint = "Selecciona una zona"
+        binding.etProductName.setHint("Producto")
+        binding.tvAreaWarehouse.setHint("Selecciona una zona")
+        binding.ivProduct.setImageResource(R.drawable.box_referential)
+
+        binding.vfRegisterProduct.showPrevious()
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == AppCompatActivity.RESULT_OK) {

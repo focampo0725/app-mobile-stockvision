@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "554680886154",
+    "project_id": "proyecto-integrador-96146",
+    "storage_bucket": "proyecto-integrador-96146.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554680886154:android:6c203ad63fbdb1ac759e73",
+        "android_client_info": {
+          "package_name": "com.upc.stockvision"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS75936vOTxy0lSKGEDCjJROF5P7sRntU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,6 +15,7 @@ import javax.inject.Inject
 
 sealed class SignInState {
     class SuccessfulAuthentication(val message: String) : SignInState()
+    class FailderAuthentication(val message: String) : SignInState()
 
 }
 
@@ -35,12 +36,10 @@ class SignInViewModel @Inject constructor(private val stockVisionRepository: Sto
        },{
            if (it != null) {
                renderState.postValue(LCEState.Content(SignInState.SuccessfulAuthentication(it.name)))
-           } else {
-               context.toast("usuario no existe")
            }
+
        },{
-           context.toast("[Error] -> $it")
-           context.logi("[Error] -> $it")
+           renderState.postValue(LCEState.Content(SignInState.SuccessfulAuthentication("Usuario no encontrado")))
        })
         //ConsumoAPI
 //        stockVisionRepository.managementApi.getUser(identityDocument,password).applySchedulers().subscribeApp(

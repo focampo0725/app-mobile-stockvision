@@ -48,13 +48,6 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
         }
     }
 
-    fun convertDrawableToBase64(drawableId: Int): String {
-        val bitmap = BitmapFactory.decodeResource(context.resources, drawableId)
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
-    }
 
 
     fun bitmapToBase64(bitmap: Bitmap): String {
@@ -191,6 +184,13 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 
 
         doAsync{
+            stockVisionRepository.supplierDao.deleteAll()
+            stockVisionRepository.productsDao.deleteAll()
+            stockVisionRepository.identityUserDao.deleteAll()
+            stockVisionRepository.categoryDao.deleteAll()
+            stockVisionRepository.warehouseDao.deleteAll()
+            stockVisionRepository.areaWarehouseDao.deleteAll()
+
             stockVisionRepository.supplierDao.insertAll(listSupplier)
             stockVisionRepository.productsDao.insertAll(listProducts)
             stockVisionRepository.identityUserDao.insertAll(listUser)

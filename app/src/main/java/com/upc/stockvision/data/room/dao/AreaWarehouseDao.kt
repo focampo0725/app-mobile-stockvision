@@ -8,4 +8,7 @@ import com.upc.stockvision.domain.entities.AreaWarehouse
 interface AreaWarehouseDao : BaseDao<AreaWarehouse> {
     @Query("SELECT * FROM AreaWarehouse WHERE warehouseReference = :code")
     fun getAll(code : Int): List<AreaWarehouse>
+
+    @Query("DELETE FROM AreaWarehouse")
+    fun deleteAll()
 }

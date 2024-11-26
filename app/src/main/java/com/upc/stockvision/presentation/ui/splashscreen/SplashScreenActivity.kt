@@ -43,8 +43,10 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
         setupViewModel(viewModel)
         loadSlideInAnimation()
         loadScaleUpAnimation()
-        viewModel.loadScreen()
         viewModel.populateData()
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewModel.loadScreen()
+        }, 2800)
     }
 
     fun loadScaleUpAnimation() {
@@ -54,7 +56,9 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
             val animation = AnimationUtils.loadAnimation(this, R.anim.scale_up)
             binding.animatedCircle.visibility = View.VISIBLE
             binding.animatedCircle.startAnimation(animation)
-        }, 1600) // 2000 milisegundos = 2 segundos
+
+        }, 1600)
+//        viewModel.loadScreen()
     }
 
     fun loadSlideInAnimation() {
@@ -65,6 +69,7 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
         binding.imgSmartphoneLogo.startAnimation(scaleUp)
         binding.tvStock.startAnimation(slideInLeft)
         binding.tvVision.startAnimation(slideInRight)
+
     }
 
 

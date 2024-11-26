@@ -11,8 +11,8 @@ import com.upc.stockvision.databinding.CustomToastBinding
 
 enum class SelectedIcon(val iconResId: Int, val backgroundColor: Int, val textColor: Int) {
     SUCCESS(R.drawable.ic_alert_success_64, R.color.alert_success, R.color.white),
-    WARNING(R.drawable.ic_alert_warning_64, R.color.alert_warning, R.color.alert_warning_text_color),
-    ERROR(R.drawable.ic_alert_error_64, R.color.alert_error, R.color.alert_error_text_color)
+    WARNING(R.drawable.ic_alert_warning_white_64, R.color.alert_warning, R.color.white),
+    ERROR(R.drawable.ic_alert_error_white_64, R.color.alert_error, R.color.white)
 }
 
 class CustomToastBuilder(private val context: Context) {

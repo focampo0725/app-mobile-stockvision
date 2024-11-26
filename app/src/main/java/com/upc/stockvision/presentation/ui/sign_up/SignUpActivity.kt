@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.upc.stockvision.databinding.ActivitySignUpBinding
+import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.extensions.toast
+import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.sign_in.SignInActivity
 import com.upc.stockvision.presentation.ui.sign_in.SignInState
@@ -23,6 +25,9 @@ class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
                 binding.tvNames.text = renderState.name
                 binding.tvSurnames.text = renderState.surnames
             }
+            is SignUpState.FailedSearchUser ->{
+                showCustomToast(renderState.message,SelectedIcon.WARNING)
+            }
         }
     }
 
@@ -39,7 +44,15 @@ class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
             val identityUser = binding.etUserIdentity.text.toString().trim()
             viewModel.searchUser(identityUser)
         }
-        validateData()
+
+        binding.tvSignIn.setOnClickListener {
+            onNextActivity(SignInActivity::class.java,null,true)
+        }
+
+        binding.btnIngresar.setOnClickListener {
+            validateData()
+        }
+//        validateData()
     }
 
     fun validateData(){
@@ -52,10 +65,10 @@ class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
             return
         }
         if (password == confirmPassword) {
-            toast("Usuario Registrado")
+            showCustomToast("Usuario Registrado",SelectedIcon.SUCCESS)
             onNextActivity(SignInActivity::class.java,null,true)
         } else {
-            toast("Contraseñas no coninciden")
+            showCustomToast("Usuario Registrado",SelectedIcon.WARNING)
         }
     }
 }

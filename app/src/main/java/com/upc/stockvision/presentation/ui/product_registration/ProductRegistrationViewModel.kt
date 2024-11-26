@@ -128,18 +128,18 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
 
     fun registerProduct(productName: String, categoryName: String, quanty: Int, supplierName: String, warehouse: String, areaWarehouse: String, photo: String) {
         val product = Products(
-            productName,
-            categoryName,
-            quanty,
-            supplierName,
-            warehouse,
-            areaWarehouse,
-            photo
+            productName= productName,
+            categoryName = categoryName,
+            quantity = quanty,
+            supplierName =  supplierName,
+            warehouse =  warehouse,
+            areaWarehouse =  areaWarehouse,
+            photo =  photo
         )
         doAsync {
             try {
                 stockVisionRepository.productsDao.insert(product)
-                renderState.value = LCEState.Content(ProductRegistrationState.SuccessProductRegister("Producto registrado"))
+                renderState.postValue(LCEState.Content(ProductRegistrationState.SuccessProductRegister("Producto registrado")))
             } catch (e: Exception) {
                 context.logi("[EroorRegistro] -> $e")
             }

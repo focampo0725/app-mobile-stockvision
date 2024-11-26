@@ -115,6 +115,8 @@
         android:text="¿Has olvidado tu contraseña?"
         android:textStyle="bold"
         android:textSize="20sp"
+        android:clickable="true"
+        android:focusable="true"
         android:textColor="#6C6E70"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

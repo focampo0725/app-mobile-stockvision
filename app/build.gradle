@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -79,9 +80,14 @@ dependencies {
     //lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
 //    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-
+//  Firebase messaging
+    implementation platform('com.google.firebase:firebase-bom:33.6.0')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+
+    implementation "com.airbnb.android:lottie:3.4.0"
+
 }

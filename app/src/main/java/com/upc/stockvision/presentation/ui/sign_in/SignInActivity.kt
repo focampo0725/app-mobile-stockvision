@@ -20,8 +20,11 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
     override fun processRenderState(renderState: SignInState, context: Context) {
         when(renderState){
             is SignInState.SuccessfulAuthentication -> {
-                showCustomToast("Bienvenido ---",SelectedIcon.SUCCESS)
+                showCustomToast("Bienvenido ${renderState.message}",SelectedIcon.SUCCESS)
                 onNextActivity(HomeActivity::class.java,null,true)
+            }
+            is SignInState.FailderAuthentication ->{
+                showCustomToast("Bienvenido ${renderState.message}",SelectedIcon.WARNING)
             }
             else -> {}
         }
@@ -37,6 +40,9 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
     }
 
     fun init(){
+        binding.tvRecoverdPassword.setOnClickListener {
+            showCustomToast("Not Implemented",SelectedIcon.WARNING)
+        }
         binding.btnRegister.setOnClickListener {
             onNextActivity(SignUpActivity::class.java,null,true)
         }

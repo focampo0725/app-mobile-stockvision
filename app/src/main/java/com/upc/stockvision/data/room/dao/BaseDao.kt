@@ -26,4 +26,6 @@ interface BaseDao <T>{
     @Delete
     fun delete(vararg entity: T): Int
 
+
+
 }

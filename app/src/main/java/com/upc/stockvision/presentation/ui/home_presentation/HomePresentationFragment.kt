@@ -1,4 +1,4 @@
-package com.upc.stockvision.presentation.ui.reserve_space
+package com.upc.stockvision.presentation.ui.home_presentation
 
 import android.content.Context
 import android.os.Bundle
@@ -8,19 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.R
-import com.upc.stockvision.databinding.FragmentIncomingProductBinding
+import com.upc.stockvision.databinding.FragmentHomePresentationBinding
 import com.upc.stockvision.databinding.FragmentReserveSpaceBinding
 import com.upc.stockvision.presentation.BaseFragment
-import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationViewModel
+import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
+import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ReserveSpaceFragment @Inject constructor() : BaseFragment<ReserveSpaceViewModel, ReserveSpaceState>() {
-    val viewModel: ReserveSpaceViewModel by viewModels()
-    private lateinit var binding: FragmentReserveSpaceBinding
-
-    override fun processRenderState(renderState: ReserveSpaceState, context: Context) {
+class HomePresentationFragment @Inject constructor() : BaseFragment<HomePresentationViewModel, HomePresentationState>() {
+    val viewModel: HomePresentationViewModel by viewModels()
+    private lateinit var binding: FragmentHomePresentationBinding
+    override fun processRenderState(renderState: HomePresentationState, context: Context) {
         TODO("Not yet implemented")
     }
 
@@ -34,7 +34,7 @@ class ReserveSpaceFragment @Inject constructor() : BaseFragment<ReserveSpaceView
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentReserveSpaceBinding.inflate(inflater, container,false)
+        binding = FragmentHomePresentationBinding.inflate(inflater, container,false)
         return binding.root
     }
 

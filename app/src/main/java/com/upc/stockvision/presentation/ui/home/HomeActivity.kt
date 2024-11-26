@@ -17,9 +17,12 @@ import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.utils.CustomToastBuilder
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
+import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
 import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragment
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationFragment
+import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceFragment
+import com.upc.stockvision.presentation.ui.sign_in.SignInActivity
 import com.upc.stockvision.presentation.ui.sign_up.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -35,6 +38,11 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var incomingProductFragment: IncomingProductFragment
     @Inject
     lateinit var inventoryControlFragment: InventoryControlFragment
+    @Inject
+    lateinit var reserveSpaceFragment: ReserveSpaceFragment
+
+    @Inject
+    lateinit var homePresentationFragment: HomePresentationFragment
     override fun processRenderState(renderState: HomeSatate, context: Context) {
         TODO("Not yet implemented")
     }
@@ -46,7 +54,11 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         setupViewModel(viewModel)
         setSupportActionBar(binding.toolbar)
         closeApp()
-
+        getSupportActionBar()?.setDisplayShowTitleEnabled(false);
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.content_frame, homePresentationFragment)
+            .addToBackStack(null)
+            .commit()
         // Configurar el DrawerLayout y NavigationView
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navigationView: NavigationView = binding.navView
@@ -54,17 +66,14 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
-                    updateTitle(item.title.toString())
-                    showCustomToast("Se presiono el N° 1",SelectedIcon.SUCCESS)
+//                    updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, InventoryControlFragment())
+                        .replace(R.id.content_frame, homePresentationFragment)
                         .addToBackStack(null)
                         .commit()
-
                 }
                 R.id.nav_item2 -> {
                     updateTitle(item.title.toString())
-                    showCustomToast("Se presionoooo el N° 2",SelectedIcon.WARNING)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, productRegistrationFragment)
                         .addToBackStack(null)
@@ -72,9 +81,15 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 }
                 R.id.nav_item3 -> {
                     updateTitle(item.title.toString())
-                    showCustomToast("Se presionooooooo el N° 3",SelectedIcon.ERROR)
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, incomingProductFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.nav_item4 -> {
+                    updateTitle(item.title.toString())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, reserveSpaceFragment)
                         .addToBackStack(null)
                         .commit()
                 }
@@ -96,6 +111,10 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         binding.toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START) // Abre el Navigation Drawer
         }
+    }
+
+    fun loadFragment(){
+
     }
 
     // Inflar el menú de la Toolbar
@@ -120,7 +139,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
 
     private fun closeApp(){
         binding.cvLogout.setOnClickListener {
-            Toast.makeText(this, "LogOut", Toast.LENGTH_SHORT).show()
+            onNextActivity(SignInActivity::class.java,null,true)
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
         }
     }
 

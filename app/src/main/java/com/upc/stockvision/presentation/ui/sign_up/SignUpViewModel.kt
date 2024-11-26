@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 sealed class SignUpState {
     class SuccessfulSearchUser(val name: String , val surnames: String) : SignUpState()
+    class FailedSearchUser(val message : String) : SignUpState()
 }
 
 @SuppressLint("StaticFieldLeak")
@@ -37,8 +38,10 @@ class SignUpViewModel @Inject constructor(private val stockVisionRepository: Sto
                 val surname = "${it.fhaterSurname} ${it.motherSurname}"
                 renderState.postValue(LCEState.Content(SignUpState.SuccessfulSearchUser(name,surname)))
             } else {
-                context.toast("usuario no existe")
+                renderState.postValue(LCEState.Content(SignUpState.FailedSearchUser("Usuario no existe")))
             }
+        },{
+            renderState.postValue(LCEState.Content(SignUpState.FailedSearchUser("Usuario no existe")))
         })
     }
 
