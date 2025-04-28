@@ -8,12 +8,13 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.upc.stockvision.databinding.ItemProductBinding
 import com.upc.stockvision.domain.dto.ProductDTO
 import com.upc.stockvision.infrastructure.extensions.toast
 
-class ProductAdapter(private val context: Context) :
+class ProductAdapter(private val context: Context , val onClick : (productDetail : ProductDTO) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     private var productList: List<ProductDTO> = emptyList()
@@ -53,9 +54,10 @@ class ProductAdapter(private val context: Context) :
                 binding.tvWarehouse.text = warehouse
                 binding.tvQuantity.text = quantity.toString()
 
-                binding.root.setOnClickListener {
-                    context.toast("Click en el item")
+                val onClick : (view : View) -> Unit = { v : View ->
+                    onClick(this)
                 }
+                binding.root.setOnClickListener(onClick)
             }
         }
     }

@@ -14,10 +14,13 @@ import com.google.android.material.navigation.NavigationView
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ActivityHomeBinding
 import com.upc.stockvision.databinding.FragmentIncomingProductBinding
+import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
+import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.infrastructure.utils.CustomToastBuilder
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
+import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
 import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
 import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragment
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
@@ -44,6 +47,12 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
 
     @Inject
     lateinit var homePresentationFragment: HomePresentationFragment
+    @Inject
+    lateinit var detailProductFragment: DetailProductFragment
+    @Inject
+    lateinit var appState: AppState
+
+
     override fun processRenderState(renderState: HomeSatate, context: Context) {
         TODO("Not yet implemented")
     }
@@ -64,7 +73,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navigationView: NavigationView = binding.navView
         loadNotification()
-
+        drawProductDetail()
+        drawInventoryCOntrol()
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
@@ -151,7 +161,38 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    private fun removeCurrentFragment() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame)
+        currentFragment?.let {
+            supportFragmentManager.beginTransaction()
+                .remove(it)
+                .commitNow()  // Usa commitNow para asegurar que la transacción se complete inmediatamente
+        }
+    }
+    private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
+        removeCurrentFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        fragment.arguments = args
+        transaction.replace(R.id.content_frame, fragment)
+        transaction.commit()
+    }
 
+    fun drawProductDetail() {
+        appState.onDrawProductDetail = {
+            val args = Bundle().apply {
+                putSerializable(Constants.PRODUCT_KEY, it)
+            }
+            replaceFragment(detailProductFragment, args)
+        }
+
+    }
+
+    fun drawInventoryCOntrol(){
+        appState.onDrawInventoryCOntrol = {
+            replaceFragment(detailProductFragment)
+        }
+    }
 
     private fun closeApp(){
         binding.cvLogout.setOnClickListener {

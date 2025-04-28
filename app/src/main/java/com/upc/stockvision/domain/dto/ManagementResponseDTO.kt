@@ -1,6 +1,7 @@
 package com.upc.stockvision.domain.dto
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class IdentityUserDTO(
     @SerializedName("name")
@@ -23,21 +24,21 @@ data class SupplierDTO(
     val codeSupplier : Int,
     @SerializedName("categoryName")
     val supplierName : String
-)
+): Serializable
 
 data class WarehouseDTO(
     @SerializedName("codeCategory")
     val codeWarehouse : Int,
     @SerializedName("categoryName")
     val warehouseName : String
-)
+): Serializable
 
 data class AreaWarehouseDTO(
     @SerializedName("codeCategory")
     val codeAreaWarehouse : Int,
     @SerializedName("categoryName")
     val areaWarehouseName : String
-)
+): Serializable
 
 data class ProductDTO(
     @SerializedName("productName")
@@ -54,4 +55,4 @@ data class ProductDTO(
     val areaWarehouse: String,
     @SerializedName("photo")
     val photo: String
-)
+): Serializable

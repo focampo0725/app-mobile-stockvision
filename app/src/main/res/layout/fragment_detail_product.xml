@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C2C2C2"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.ui.detail_product.DetailProductFragment">
 
     <ImageButton
@@ -14,236 +14,296 @@
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_left_arrow_64"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-    <TextView
-        android:id="@+id/tvTitleNameProduct"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre del Producto"
-        android:textColor="#FF8C42"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        app:layout_constraintTop_toBottomOf="@+id/btnBack"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activar Modificación"
+            android:textColor="#FF8C42"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:singleLine="true" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sCUpdateProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            app:thumbTint="@color/white"
+            app:trackTint="@color/switch_track_active_color" />
+    </LinearLayout>
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <!-- ViewFlipper que contendrá dos ConstraintLayout diferentes -->
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitleNameProduct"
+        android:inAnimation="@android:anim/slide_in_left"
+        android:outAnimation="@android:anim/slide_out_right"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Imagen de fondo que representa el producto -->
-        <ImageView
-            android:id="@+id/fondoImagen"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
-            android:background="@drawable/rounded_border"
-            android:scaleType="fitCenter"
-            android:padding="4dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/box_referential"
-             />
-
-        <!-- CardView que se superpone a la imagen y tiene efecto de blur -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+        <!-- Primer ConstraintLayout: Título + Información del producto -->
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="30dp"
-            android:layout_height="350dp"
-            android:layout_below="@id/fondoImagen"
-            android:layout_marginTop="-30dp"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="@android:color/transparent"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp">
+            android:layout_height="match_parent">
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/tvTitleNameProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Producto"
+                android:textColor="#FF8C42"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#696969"
-                android:alpha="0.4" />
-            <View
-                android:layout_width="200dp"
-                android:layout_height="5dp"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="8dp"
-                android:background="#FF8C42" />
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/tvTitleNameProduct"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-                <LinearLayout
+                <!-- Imagen de fondo -->
+                <ImageView
+                    android:id="@+id/fondoImagen"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:background="@drawable/rounded_border"
+                    android:scaleType="fitCenter"
+                    android:padding="4dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/box_referential" />
+
+                <!-- CardView con info del producto -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="25dp"
-                    android:padding="25dp">
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_height="350dp"
+                    android:layout_below="@id/fondoImagen"
+                    android:layout_marginTop="-30dp"
+                    android:layout_centerHorizontal="true"
+                    android:backgroundTint="@android:color/transparent"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp">
 
-                    <!-- Sección 1 -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#696969"
+                        android:alpha="0.4" />
+
+                    <View
+                        android:layout_width="200dp"
+                        android:layout_height="5dp"
+                        android:layout_gravity="center|top"
+                        android:layout_marginTop="8dp"
+                        android:background="#FF8C42" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_category_64"
-                            />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Categoría:"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="Categoría 01"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-                    <!-- Sección 2 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_marginTop="25dp"
-                        android:orientation="horizontal">
+                        android:padding="25dp">
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_storage_64" />
+                        <!-- Secciones de info: categoría, almacén, etc. -->
+                        <!-- (Copié todo tal cual lo tenías) -->
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Almacén: "
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="5dp"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_category_64" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Categoría:"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvCategory"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="Categoría 01"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="A02B"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF" />
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_storage_64" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Almacén: "
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvWarehouse"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="A02B"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_box_pointer_64" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Zona de almacén:"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvAreaWarehouse"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="B-04"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_amount_64" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Cantidad:"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvQuantity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="000"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_suplier_64" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="Proveedor:"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvSupplier"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="Proveedor00"
+                                android:textSize="18sp"
+                                android:textColor="#FFFFFF" />
+                        </LinearLayout>
+
                     </LinearLayout>
-                    <!-- Sección 3 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:orientation="horizontal">
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_box_pointer_64" />
+        <!-- Segundo ConstraintLayout: Solo un TextView -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="zona de almacén : "
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvSecondScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vista alternativa"
+                android:textColor="#FF8C42"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="B-04"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-                    <!-- Sección 4 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_amount_64" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Cantidad: "
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="000"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-                    <!-- Sección 5 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="25dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_suplier_64" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Proveedor: "
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="Proveedor00"
-                            android:textSize="18sp"
-                            android:textColor="#FFFFFF" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            <!-- Linea superior del CardView -->
-
-
-            <!-- Contenedor para las secciones con efecto blur -->
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
-
-
-
-
-
+    </ViewFlipper>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

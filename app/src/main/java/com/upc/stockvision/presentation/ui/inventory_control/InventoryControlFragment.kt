@@ -10,29 +10,33 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
+import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentInventoryControlBinding
 import com.upc.stockvision.databinding.FragmentProductRegistrationBinding
 import com.upc.stockvision.domain.dto.ProductDTO
+import com.upc.stockvision.infrastructure.AppState
+import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.adapter.ProductAdapter
 import com.upc.stockvision.presentation.dialog.DialogCategory
 import com.upc.stockvision.presentation.dialog.DialogSupplier
 import com.upc.stockvision.presentation.dialog.DialogWarehouse
+import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class InventoryControlFragment @Inject constructor(): BaseFragment<InventoryControlViewModel,InventoryControlState>() {
+class InventoryControlFragment @Inject constructor(val appState: AppState): BaseFragment<InventoryControlViewModel,InventoryControlState>() {
 
     val viewModel: InventoryControlViewModel by viewModels()
     private lateinit var binding : FragmentInventoryControlBinding
 
     private lateinit var productList: List<ProductDTO>
     private lateinit var productAdapter: ProductAdapter
+
     override fun processRenderState(renderState: InventoryControlState, context: Context) {
         when(renderState){
             is InventoryControlState.ProductLoaded -> {
@@ -75,9 +79,13 @@ class InventoryControlFragment @Inject constructor(): BaseFragment<InventoryCont
         super.onViewCreated(view, savedInstanceState)
         setupViewModel(viewModel = viewModel)
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext())
-        productAdapter = ProductAdapter(requireContext())
+        productAdapter = ProductAdapter(requireContext()) {
+            appState.onDrawProductDetail?.invoke(it)
+            context?.toast("${it.productName} ")
+        }
 
         binding.rvProducts.adapter = productAdapter
+        
         binding.tvCategory.setOnClickListener {
             viewModel.requestCategoryLista()
         }
@@ -86,6 +94,7 @@ class InventoryControlFragment @Inject constructor(): BaseFragment<InventoryCont
         }
         viewModel.requestProductList()
         setupFilters()
+        
         }
     private fun setupFilters() {
         binding.etProductName.addTextChangedListener(object : TextWatcher {
@@ -97,6 +106,23 @@ class InventoryControlFragment @Inject constructor(): BaseFragment<InventoryCont
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+    }
+    private fun removeCurrentFragment() {
+        val currentFragment = parentFragmentManager.findFragmentById(R.id.content_frame)
+        currentFragment?.let {
+            parentFragmentManager.beginTransaction()
+                .remove(it)
+                .commitNow()
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
+        removeCurrentFragment()
+        val fragmentManager = parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        fragment.arguments = args
+        transaction.replace(R.id.content_frame, fragment)
+        transaction.commit()
     }
 
     private fun applyFilter(warehouse: String?, category: String?, productName: String?) {

@@ -86,6 +86,8 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
         })
     }
 
+
+
     override val renderState: MutableLiveData<LCEState<InventoryControlState>>
         get() = getLiveData()
 }
