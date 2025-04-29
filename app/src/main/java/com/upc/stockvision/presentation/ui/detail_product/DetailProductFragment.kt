@@ -98,15 +98,18 @@ class DetailProductFragment @Inject constructor(): BaseFragment<DetailProductVie
         }
     }
     private fun loadProductDetailsData() {
-        binding.tvTitleNameProduct.text = product.productName
-        binding.tvCategory.text = product.categoryName
-        binding.tvQuantity.text = product.quantity.toString()
-        binding.tvSupplier.text = product.supplierName
-        binding.tvWarehouse.text = product.warehouse
-        binding.tvAreaWarehouse.text = product.areaWarehouse
-
-        val bitmap = base64ToBitmap(product.photo)
-        binding.fondoImagen.setImageBitmap(bitmap)
+        binding.viewFlipper.showPrevious()
+        binding.viewFlipper.showNext()
+        binding.viewFlipper.isShowingLayoutBounds
+//        binding.tvTitleNameProduct.text = product.productName
+//        binding.tvCategory.text = product.categoryName
+//        binding.tvQuantity.text = product.quantity.toString()
+//        binding.tvSupplier.text = product.supplierName
+//        binding.tvWarehouse.text = product.warehouse
+//        binding.tvAreaWarehouse.text = product.areaWarehouse
+//
+//        val bitmap = base64ToBitmap(product.photo)
+//        binding.fondoImagen.setImageBitmap(bitmap)
     }
 
 
