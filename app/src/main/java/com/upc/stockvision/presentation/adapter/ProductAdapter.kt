@@ -12,15 +12,16 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.upc.stockvision.databinding.ItemProductBinding
 import com.upc.stockvision.domain.dto.ProductDTO
+import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.infrastructure.extensions.toast
 
-class ProductAdapter(private val context: Context , val onClick : (productDetail : ProductDTO) -> Unit) :
+class ProductAdapter(private val context: Context , val onClick : (productDetail : ProductOnDetailDTO) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
-    private var productList: List<ProductDTO> = emptyList()
-    private var filteredList: MutableList<ProductDTO> = mutableListOf()
+    private var productList: List<ProductOnDetailDTO> = emptyList()
+    private var filteredList: MutableList<ProductOnDetailDTO> = mutableListOf()
 
-    fun setProduct(dispatch: List<ProductDTO>) {
+    fun setProduct(dispatch: List<ProductOnDetailDTO>) {
         productList = dispatch
         filteredList = productList.toMutableList()
         notifyDataSetChanged()

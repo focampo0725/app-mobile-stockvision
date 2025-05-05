@@ -74,7 +74,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         val navigationView: NavigationView = binding.navView
         loadNotification()
         drawProductDetail()
-        drawInventoryCOntrol()
+        drawInventoryControlFromDetail()
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
@@ -188,11 +188,14 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
 
     }
 
-    fun drawInventoryCOntrol(){
-        appState.onDrawInventoryCOntrol = {
-            replaceFragment(detailProductFragment)
+    fun drawInventoryControlFromDetail() {
+        appState.onDrawinventoryControlFragment = {
+            replaceFragment(inventoryControlFragment, null)
         }
+
     }
+
+
 
     private fun closeApp(){
         binding.cvLogout.setOnClickListener {

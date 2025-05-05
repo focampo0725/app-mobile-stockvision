@@ -13,10 +13,7 @@ class Products(
     @ColumnInfo(name = "warehouse") var warehouse: String,
     @ColumnInfo(name = "areaWarehouse") var areaWarehouse: String,
     @ColumnInfo(name = "photo") var photo: String,
-
-
 ){
-
     companion object {
         const val TABLE_NAME = "Products"
     }

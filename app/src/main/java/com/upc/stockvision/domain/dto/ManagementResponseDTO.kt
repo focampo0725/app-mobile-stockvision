@@ -56,3 +56,22 @@ data class ProductDTO(
     @SerializedName("photo")
     val photo: String
 ): Serializable
+
+data class ProductOnDetailDTO(
+    @SerializedName("idProduct")
+    val idProduct: Int,
+    @SerializedName("productName")
+    val productName: String,
+    @SerializedName("categoryName")
+    val categoryName: String,
+    @SerializedName("quantity")
+    val quantity: Int,
+    @SerializedName("supplierName")
+    val supplierName: String,
+    @SerializedName("warehouse")
+    val warehouse: String,
+    @SerializedName("areaWarehouse")
+    val areaWarehouse: String,
+    @SerializedName("photo")
+    val photo: String
+): Serializable

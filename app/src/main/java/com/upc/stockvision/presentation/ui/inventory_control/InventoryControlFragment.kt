@@ -15,6 +15,7 @@ import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentInventoryControlBinding
 import com.upc.stockvision.databinding.FragmentProductRegistrationBinding
 import com.upc.stockvision.domain.dto.ProductDTO
+import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
@@ -34,7 +35,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
     val viewModel: InventoryControlViewModel by viewModels()
     private lateinit var binding : FragmentInventoryControlBinding
 
-    private lateinit var productList: List<ProductDTO>
+    private lateinit var productList: List<ProductOnDetailDTO>
     private lateinit var productAdapter: ProductAdapter
 
     override fun processRenderState(renderState: InventoryControlState, context: Context) {

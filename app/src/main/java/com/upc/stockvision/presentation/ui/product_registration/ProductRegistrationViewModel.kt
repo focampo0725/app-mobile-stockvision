@@ -75,7 +75,6 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
                 LCEState.Content(ProductRegistrationState.CategoriesLoaded(response))
         })
     }
-
     fun requestSupplier() {
         doAsynTask({
             val listCategory = stockVisionRepository.supplierDao.getAll()
@@ -91,7 +90,6 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
             renderState.value = LCEState.Content(ProductRegistrationState.ProductsLoaded(response))
         })
     }
-
     fun requestWarehouse() {
         doAsynTask({
             val listCategory = stockVisionRepository.warehouseDao.getAll()
@@ -107,7 +105,6 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
             renderState.value = LCEState.Content(ProductRegistrationState.WarehouseLoaded(response))
         })
     }
-
     fun requestAreaWarehouse(warehose: String) {
         doAsynTask({
             val areaWarehouse = stockVisionRepository.warehouseDao.getWarehouseCodeByName(warehose)

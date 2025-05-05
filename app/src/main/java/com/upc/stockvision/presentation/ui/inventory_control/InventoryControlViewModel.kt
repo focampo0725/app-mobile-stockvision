@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
-import com.upc.stockvision.domain.dto.CategoryDTO
-import com.upc.stockvision.domain.dto.ProductDTO
-import com.upc.stockvision.domain.dto.ResponseGenericDTO
-import com.upc.stockvision.domain.dto.WarehouseDTO
+import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.presentation.BaseViewModel
@@ -18,7 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 sealed class InventoryControlState{
-    class ProductLoaded(val productList : List<ProductDTO>) : InventoryControlState()
+    class ProductLoaded(val productList : List<ProductOnDetailDTO>) : InventoryControlState()
 
     class CategoriesLoaded(val categoriesList: ResponseGenericDTO<CategoryDTO>) :
         InventoryControlState()
@@ -38,7 +35,8 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
         doAsynTask({
             val listCategory = stockVisionRepository.productsDao.getAll()
             listCategory.map { product ->
-                ProductDTO(
+                ProductOnDetailDTO(
+                    idProduct = product.id,
                     productName = product.productName,
                     categoryName = product.categoryName,
                     quantity = product.quantity,

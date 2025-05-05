@@ -68,7 +68,9 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             }
             is ProductRegistrationState.SuccessProductRegister ->{
                 context.showCustomToast(renderState.message,SelectedIcon.SUCCESS)
+                clearBoxes()
             }
+            else -> {}
         }
     }
 
@@ -161,7 +163,6 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             binding.vfRegisterProduct.showPrevious()
         }
     }
-
     fun clearBoxes(){
         binding.tvCategory.text = ""
         binding.tvSupplier.text = ""
@@ -183,13 +184,11 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == AppCompatActivity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            binding.ivProduct.setImageBitmap(imageBitmap)
-            photo = viewModel.bitmapToBase64(imageBitmap)
+            val imageBitmapOnUpdate = data?.extras?.get("data") as Bitmap
+            binding.ivProduct.setImageBitmap(imageBitmapOnUpdate)
+            photo = viewModel.bitmapToBase64(imageBitmapOnUpdate)
         }
     }
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -205,7 +204,6 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             }
         }
     }
-
     override fun onLoading(isStarted: Boolean) {
         super.onLoading(isStarted)
         binding.clLoading.visibility = if (isStarted) View.VISIBLE else View.GONE
