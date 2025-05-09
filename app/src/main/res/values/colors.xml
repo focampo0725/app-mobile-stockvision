@@ -28,4 +28,6 @@
 
     <color name="notification_color">#F6F4F4</color>
 
+    <color name="colorPrincipalDatePicker">#042431</color>
+
 </resources>

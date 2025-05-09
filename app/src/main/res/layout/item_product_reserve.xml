@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/materialCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="5dp"
+    card_view:cardElevation="1dp"
+    android:layout_margin="2dp"
+    card_view:layout_constraintStart_toStartOf="parent"
+    card_view:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="5dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvProductNameReserve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:clickable="false"
+            android:text="Producto"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/ivProductReserve"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvIndex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="#1"
+            android:textSize="16sp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivProductReserve"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/rounded_border_item"
+            android:padding="4dp"
+            android:layout_marginStart="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/box_referential"
+
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/tvIndex"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
+
+

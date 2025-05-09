@@ -10,6 +10,9 @@ interface ProductsDao : BaseDao<Products> {
     @Query("SELECT * FROM Products")
     fun getAll(): List<Products>
 
+    @Query("SELECT * FROM Products WHERE categoryName = :categoryName")
+    fun getProductsByCategory(categoryName: String): List<Products>
+
     @Query("DELETE FROM Products")
     fun deleteAll()
 

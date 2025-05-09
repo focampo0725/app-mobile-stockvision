@@ -17,8 +17,6 @@ import com.upc.stockvision.databinding.FragmentIncomingProductBinding
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.utils.Constants
-import com.upc.stockvision.infrastructure.utils.CustomToastBuilder
-import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
 import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
@@ -26,8 +24,8 @@ import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragm
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationFragment
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceFragment
+import com.upc.stockvision.presentation.ui.show_reservation.ShowReservationFragment
 import com.upc.stockvision.presentation.ui.sign_in.SignInActivity
-import com.upc.stockvision.presentation.ui.sign_up.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,6 +47,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var homePresentationFragment: HomePresentationFragment
     @Inject
     lateinit var detailProductFragment: DetailProductFragment
+    @Inject
+    lateinit var showReservationFragment: ShowReservationFragment
     @Inject
     lateinit var appState: AppState
 
@@ -101,7 +101,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 R.id.nav_item4 -> {
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, reserveSpaceFragment)
+                        .replace(R.id.content_frame, showReservationFragment)
                         .addToBackStack(null)
                         .commit()
                 }
@@ -136,7 +136,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         } else if (fragmentToShow == "1") {
             // Mostrar el Fragmento 2
             supportFragmentManager.beginTransaction()
-                .replace(R.id.content_frame, reserveSpaceFragment)  // Aquí se reemplaza por el Fragmento 2
+                .replace(R.id.content_frame, showReservationFragment)  // Aquí se reemplaza por el Fragmento 2
                 .commit()
         }
     }

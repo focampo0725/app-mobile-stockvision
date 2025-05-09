@@ -10,7 +10,6 @@ import com.upc.stockvision.databinding.ItemWarehouseBinding
 import com.upc.stockvision.domain.dto.AreaWarehouseDTO
 import com.upc.stockvision.domain.dto.WarehouseDTO
 
-
 class AreaWarehouseAdapter(private val context: Context, private var areaWarehouseList : List<AreaWarehouseDTO>, val onClick : (areaWarehouse : AreaWarehouseDTO) -> Unit) :
     RecyclerView.Adapter<AreaWarehouseAdapter.ViewHolder>() {
 

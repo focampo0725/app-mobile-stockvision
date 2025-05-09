@@ -117,15 +117,6 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
-        removeCurrentFragment()
-        val fragmentManager = parentFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        fragment.arguments = args
-        transaction.replace(R.id.content_frame, fragment)
-        transaction.commit()
-    }
-
     private fun applyFilter(warehouse: String?, category: String?, productName: String?) {
         productAdapter.filterProducts(warehouse, category, productName)
     }
