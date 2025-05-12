@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.show_reservation.ShowReservationFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/llDateContainer"
@@ -48,7 +47,8 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    tools:text=".." />
+
+                     />
 
                 <ImageButton
                     android:id="@+id/btnCalenderStartTime"
@@ -94,7 +94,7 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    tools:text=".." />
+                    />
 
                 <ImageButton
                     android:id="@+id/btnCalenderEndTime"
@@ -129,23 +129,24 @@
         app:strokeWidth="2dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvReserve"
+        android:id="@+id/rvProductMovement"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:clipToPadding="false"
         android:elevation="4dp"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_movement"
         android:paddingHorizontal="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSearchByDate"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_reserve">
+       >
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/btnNext"
+        android:id="@+id/btnCreateMovement"
         style="@style/StyleButtonPrimary"
         android:layout_width="wrap_content"
         android:layout_height="55dp"
@@ -154,7 +155,7 @@
         android:layout_marginBottom="50dp"
         android:backgroundTint="#FF4500"
         android:paddingHorizontal="50dp"
-        android:text="Crear Reserva"
+        android:text="Crear Movimiento"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

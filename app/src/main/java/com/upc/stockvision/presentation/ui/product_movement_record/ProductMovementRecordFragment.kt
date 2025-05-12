@@ -1,4 +1,4 @@
-package com.upc.stockvision.presentation.ui.show_reservation
+package com.upc.stockvision.presentation.ui.product_movement_record
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -11,13 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upc.stockvision.R
+import com.upc.stockvision.databinding.FragmentProductMovementRecordBinding
 import com.upc.stockvision.databinding.FragmentReserveSpaceBinding
 import com.upc.stockvision.databinding.FragmentShowReservationBinding
+import com.upc.stockvision.domain.dto.ProductMovementDTO
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReserveAreaDTO
+import com.upc.stockvision.domain.entities.ProductMovement
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.adapter.ProductAdapter
+import com.upc.stockvision.presentation.adapter.ProductMovementAdapter
 import com.upc.stockvision.presentation.adapter.ReserveAdapter
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceViewModel
@@ -26,20 +30,23 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservationViewModel, ShowReservationState>() {
+class ProductMovementRecordFragment @Inject constructor() : BaseFragment<ProductMovementRecordViewModel, ProductMovementRecordState>() {
 
-    val viewModel: ShowReservationViewModel by viewModels()
-    private lateinit var binding: FragmentShowReservationBinding
+    val viewModel: ProductMovementRecordViewModel by viewModels()
+    private lateinit var binding: FragmentProductMovementRecordBinding
 
-    private lateinit var reservationList: List<ReserveAreaDTO>
-    private lateinit var reserveAdapter: ReserveAdapter
+    private lateinit var productMovementList: List<ProductMovementDTO>
+    private lateinit var productMovementAdapter: ProductMovementAdapter
 
-    override fun processRenderState(renderState: ShowReservationState, context: Context) {
+
+
+    override fun processRenderState(renderState: ProductMovementRecordState, context: Context) {
         when(renderState){
-            is ShowReservationState.ReserveLoaded ->{
-                reservationList = renderState.reserveList
-                reserveAdapter.setReserves(reservationList)
+            is ProductMovementRecordState.ProductMovementLoaded ->{
+                productMovementList = renderState.productMovementList
+                productMovementAdapter.setReserves(productMovementList)
             }
+
 
             else -> {}
         }
@@ -56,33 +63,33 @@ class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservati
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentShowReservationBinding.inflate(inflater, container,false)
+        binding = FragmentProductMovementRecordBinding.inflate(inflater, container,false)
         return binding.root
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel(viewModel = viewModel)
-
-        binding.rvReserve.layoutManager = LinearLayoutManager(requireContext())
-        reserveAdapter = ReserveAdapter(requireContext()) {
+        onInit()
+        binding.rvProductMovement.layoutManager = LinearLayoutManager(requireContext())
+        productMovementAdapter = ProductMovementAdapter(requireContext()) {
 
             context?.toast("${it.productName} ")
         }
+        viewModel.requestProductMovementList()
 
-        binding.rvReserve.adapter = reserveAdapter
-        initView()
     }
 
-    fun initView(){
-        viewModel.requestReserveList()
-
+    fun onInit(){
         binding.btnCalenderStartTime.setOnClickListener {
             mostrarSelectorDeFecha()
         }
 
         binding.btnCalenderEndTime.setOnClickListener {
             mostrarSelectorDeFecha()
+        }
+        binding.btnCreateMovement.setOnClickListener {
+
         }
     }
 
@@ -110,5 +117,7 @@ class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservati
             setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrincipalDatePicker))
         }
     }
+
+
 
 }

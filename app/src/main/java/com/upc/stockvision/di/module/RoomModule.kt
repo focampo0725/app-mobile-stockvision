@@ -48,6 +48,9 @@ class RoomModule {
     @Singleton
     @Provides
     fun provideReserveAreaDao(stockVisionDB:StockVisionDB) = stockVisionDB.reserveAreaDao()
+    @Singleton
+    @Provides
+    fun provideProductMovementDao(stockVisionDB:StockVisionDB) = stockVisionDB.productMovementDao()
 
     @Singleton
     @Provides

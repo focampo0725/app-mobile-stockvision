@@ -86,3 +86,17 @@ data class ReserveAreaDTO(
     val createAt: String,
     val durationDays: Int
 )
+
+data class ProductMovementDTO(
+    val idMovemet : Int,
+    val creationUser : String,
+    val productName : String,
+    val initialWarehouse: String,
+    val initialAreaWarehouse: String,
+    val finalWarehouse: String,
+    val finalAreaWarehouse: String,
+    val amountMoved : Int,
+    val typeMovement: String,
+    val movementDate : String
+
+)

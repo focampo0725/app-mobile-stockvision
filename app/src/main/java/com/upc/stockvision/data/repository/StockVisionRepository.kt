@@ -14,7 +14,8 @@ class StockVisionRepository @Inject constructor(
     val areaWarehouseDao: AreaWarehouseDao,
     val supplierDao: SupplierDao,
     val productsDao: ProductsDao,
-    val reserveAreaDao : ReserveAreaDao
+    val reserveAreaDao : ReserveAreaDao,
+    val productMovementDao: ProductMovementDao
 
 ) {
 
