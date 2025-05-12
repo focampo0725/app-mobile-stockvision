@@ -18,10 +18,12 @@ import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.presentation.BaseActivity
+import com.upc.stockvision.presentation.ui.create_product_movement.CreateProductMovementFragment
 import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
 import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
 import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragment
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
+import com.upc.stockvision.presentation.ui.product_movement_record.ProductMovementRecordFragment
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationFragment
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceFragment
 import com.upc.stockvision.presentation.ui.show_reservation.ShowReservationFragment
@@ -49,6 +51,12 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var detailProductFragment: DetailProductFragment
     @Inject
     lateinit var showReservationFragment: ShowReservationFragment
+
+    @Inject
+    lateinit var createProductMovementFragment: CreateProductMovementFragment
+
+    @Inject
+    lateinit var productMovementRecordFragment: ProductMovementRecordFragment
     @Inject
     lateinit var appState: AppState
 
@@ -75,6 +83,10 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         loadNotification()
         drawProductDetail()
         drawInventoryControlFromDetail()
+        drawCreateReserveArea()
+        drawCreateMovement()
+        drawDetailovement()
+        DrawShowReserve()
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
@@ -109,6 +121,13 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, inventoryControlFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+                R.id.nav_item6 -> {
+                    updateTitle(item.title.toString())
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, productMovementRecordFragment)
                         .addToBackStack(null)
                         .commit()
                 }
@@ -166,7 +185,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         currentFragment?.let {
             supportFragmentManager.beginTransaction()
                 .remove(it)
-                .commitNow()  // Usa commitNow para asegurar que la transacción se complete inmediatamente
+                .commitNow()
         }
     }
     private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
@@ -191,6 +210,36 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     fun drawInventoryControlFromDetail() {
         appState.onDrawinventoryControlFragment = {
             replaceFragment(inventoryControlFragment, null)
+        }
+
+    }
+
+    fun drawCreateReserveArea() {
+        appState.onDrawCreateReserveArea = {
+            replaceFragment(reserveSpaceFragment, null)
+        }
+
+    }
+
+    fun DrawShowReserve() {
+        appState.onDrawShowReserve = {
+            replaceFragment(showReservationFragment, null)
+        }
+
+    }
+
+
+
+    fun drawCreateMovement() {
+        appState.onDrawCreateMovement = {
+            replaceFragment(createProductMovementFragment, null)
+        }
+
+    }
+
+    fun drawDetailovement() {
+        appState.onDrawMovement = {
+            replaceFragment(productMovementRecordFragment, null)
         }
 
     }

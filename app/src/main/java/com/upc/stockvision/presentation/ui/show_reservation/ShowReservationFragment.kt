@@ -15,6 +15,7 @@ import com.upc.stockvision.databinding.FragmentReserveSpaceBinding
 import com.upc.stockvision.databinding.FragmentShowReservationBinding
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReserveAreaDTO
+import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.adapter.ProductAdapter
@@ -22,17 +23,20 @@ import com.upc.stockvision.presentation.adapter.ReserveAdapter
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservationViewModel, ShowReservationState>() {
+class ShowReservationFragment @Inject constructor(val appState: AppState) : BaseFragment<ShowReservationViewModel, ShowReservationState>() {
 
     val viewModel: ShowReservationViewModel by viewModels()
     private lateinit var binding: FragmentShowReservationBinding
 
     private lateinit var reservationList: List<ReserveAreaDTO>
     private lateinit var reserveAdapter: ReserveAdapter
+
+    val inputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun processRenderState(renderState: ShowReservationState, context: Context) {
         when(renderState){
@@ -78,15 +82,36 @@ class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservati
         viewModel.requestReserveList()
 
         binding.btnCalenderStartTime.setOnClickListener {
-            mostrarSelectorDeFecha()
+            mostrarSelectorDeFecha(0)
         }
 
         binding.btnCalenderEndTime.setOnClickListener {
-            mostrarSelectorDeFecha()
+            mostrarSelectorDeFecha(1)
+        }
+        binding.btnCreateReserve.setOnClickListener {
+            appState.onDrawCreateReserveArea?.invoke()
+        }
+        binding.btnSearchReserveByDate.setOnClickListener {
+            val startDate = try {
+                inputDateFormat.parse(binding.tvStartTimeReserve.text.toString())
+            } catch (e: Exception) {
+                null
+            }
+
+            val endDate = try {
+                inputDateFormat.parse(binding.tvEndTimeReserve.text.toString())
+            } catch (e: Exception) {
+                null
+            }
+            reserveAdapter.filterByDateRange(startDate,endDate)
+        }
+
+        binding.btnResetFilter.setOnClickListener {
+            reserveAdapter.resetFilter()
         }
     }
 
-    private fun mostrarSelectorDeFecha() {
+    private fun mostrarSelectorDeFecha(type : Int) {
         val calendario = Calendar.getInstance()
         val year = calendario.get(Calendar.YEAR)
         val month = calendario.get(Calendar.MONTH)
@@ -97,7 +122,7 @@ class ShowReservationFragment @Inject constructor() : BaseFragment<ShowReservati
             R.style.CustomDatePickerTheme,
             { _, año, mesSeleccionado, diaSeleccionado ->
                 val fechaSeleccionada = "$diaSeleccionado/${mesSeleccionado + 1}/$año"
-                binding.tvStartTimeReserve.text = fechaSeleccionada
+                if (type == 0) binding.tvStartTimeReserve.text = fechaSeleccionada else binding.tvEndTimeReserve.text = fechaSeleccionada
             },
             year, month, day
         )

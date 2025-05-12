@@ -1,6 +1,7 @@
 package com.upc.stockvision.presentation.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,10 +17,11 @@ class ProductMovementAdapter(
     val onClick: (productMovement: ProductMovementDTO) -> Unit
 ) : RecyclerView.Adapter<ProductMovementAdapter.ViewHolder>() {
 
+
     private var productMovementList: List<ProductMovementDTO> = emptyList()
     private var filteredList: MutableList<ProductMovementDTO> = mutableListOf()
 
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
 
     fun setReserves(productMovement: List<ProductMovementDTO>) {
         productMovementList = productMovement
@@ -45,18 +47,28 @@ class ProductMovementAdapter(
     }
 
     fun filterByDateRange(startDate: Date?, endDate: Date?) {
-        filteredList = productMovementList.filter { productMovement ->
+        Log.d("AdapterDebug", "StartDate: $startDate - EndDate: $endDate")
+
+        filteredList = productMovementList.filter { reserve ->
             val reserveDate: Date? = try {
-                dateFormat.parse(productMovement.movementDate)
+                dateFormat.parse(reserve.movementDate)
             } catch (e: Exception) {
+                Log.e("AdapterDebug", "Error parsing date: ${reserve.movementDate}")
                 null
             }
 
-            val afterStart = startDate?.let { reserveDate?.compareTo(it) ?: 1 >= 0 } ?: true
-            val beforeEnd = endDate?.let { reserveDate?.compareTo(it) ?: -1 <= 0 } ?: true
+            if (reserveDate == null) return@filter false
+
+            val afterStart = startDate == null || !reserveDate.before(startDate)
+            val beforeEnd = endDate == null || !reserveDate.after(endDate)
+
+            Log.d("AdapterDebug", "Checking: $reserveDate -> $afterStart && $beforeEnd")
 
             afterStart && beforeEnd
         }.toMutableList()
+
+        Log.d("AdapterDebug", "Filtered items: ${filteredList.size}")
+
         notifyDataSetChanged()
     }
 

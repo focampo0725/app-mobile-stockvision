@@ -27,13 +27,17 @@ sealed class CreateProductMovementState{
     class CategoriesLoaded(val categoriesList: ResponseGenericDTO<CategoryDTO>) :
         CreateProductMovementState()
 
-    class ProductLoaded(val productList: ResponseGenericDTO<ProductDTO>) :
+    class ProductLoaded(val productList: ResponseGenericDTO<ProductOnDetailDTO>) :
         CreateProductMovementState()
     class WarehouseLoaded(val warehouseList: ResponseGenericDTO<WarehouseDTO>) :
         CreateProductMovementState()
 
     class AreaWarehouseLoaded(val areaWarehouseList: ResponseGenericDTO<AreaWarehouseDTO>) :
         CreateProductMovementState()
+
+    class TypeProductMovementLoaded(val typeProductMovementList: ResponseGenericDTO<TypeMovementDTO>) :
+        CreateProductMovementState()
+    class CreateProductMovementDetails(val messsage : String) : CreateProductMovementState()
 
 }
 
@@ -66,7 +70,8 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         doAsynTask({
             val prodcutList = stockVisionRepository.productsDao.getProductsByCategory(category)
             prodcutList.map { product ->
-                ProductDTO(
+                ProductOnDetailDTO(
+                    idProduct = product.id,
                     productName= product.productName,
                     categoryName = product.categoryName,
                     quantity = product.quantity,
@@ -83,6 +88,8 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
                 LCEState.Content(CreateProductMovementState.ProductLoaded(response))
         })
     }
+
+
 
 
     fun requestWarehouse() {
@@ -116,6 +123,68 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
                 ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
             renderState.value = LCEState.Content(CreateProductMovementState.AreaWarehouseLoaded(response))
         })
+    }
+
+    fun reqeustTypeMovement(){
+        val typeMovement = listOf(
+            TypeMovementDTO(1,"Traslado-Almacen lleno"),
+            TypeMovementDTO(1,"Error de Entrada"),
+            TypeMovementDTO(1,"Traslado-Salida")
+        )
+        val response = ResponseGenericDTO(content = typeMovement, isValid = true, exceptions = emptyList())
+        renderState.value = LCEState.Content(CreateProductMovementState.TypeProductMovementLoaded(response))
+    }
+
+    fun createMovement( creationUser : String, productName : String, initialWarehouse: String, initialAreaWarehouse: String, finalWarehouse: String, finalAreaWarehouse: String, amountMoved : Int, typeMovement: String) {
+        val productMovement = ProductMovement(
+            creationUser = creationUser,
+            productName = productName,
+            initialWarehouse = initialWarehouse,
+            initialAreaWarehouse = initialAreaWarehouse,
+            finalWarehouse = finalWarehouse,
+            finalAreaWarehouse = finalAreaWarehouse,
+            amountMoved = amountMoved,
+            typeMovement = typeMovement,
+            movementDate = Date() )
+
+        doAsync{
+            try {
+                stockVisionRepository.productMovementDao.insert(productMovement)
+                renderState.postValue(LCEState.Content(CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")))
+            } catch (e: Exception) {
+                context.logi("[EroorRegistro] -> $e")
+            }
+        }
+
+    }
+
+    fun updateProductMovement(idProduct : Int , productQuantity : Int ,warehouse: String, areaWarehouse: String,newProductQuantity : Int ){
+
+        doAsynTask({
+            val getProducts = stockVisionRepository.productsDao.getOnlyProduct(idProduct)
+            getProducts
+        },{
+            val newProductForMovement = Products(
+                productName= it.productName,
+                categoryName = it.categoryName,
+                quantity = newProductQuantity,
+                supplierName =  it.supplierName,
+                warehouse =  warehouse,
+                areaWarehouse =  areaWarehouse,
+                photo =  it.photo
+            )
+
+            doAsync{
+                try {
+                    stockVisionRepository.productsDao.updateQuantityForMovement(idProduct, productQuantity)
+                    stockVisionRepository.productsDao.insert(newProductForMovement)
+                } catch (e: Exception) {
+                    context.logi("[EroorRegistro] -> $e")
+                }
+            }
+        })
+
+
     }
 
     override val renderState: MutableLiveData<LCEState<CreateProductMovementState>>

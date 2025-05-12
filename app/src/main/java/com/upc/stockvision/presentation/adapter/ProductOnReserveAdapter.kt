@@ -8,13 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.upc.stockvision.databinding.ItemCategoryBinding
 import com.upc.stockvision.databinding.ItemProductReserveBinding
-import com.upc.stockvision.domain.dto.CategoryDTO
-import com.upc.stockvision.domain.dto.ProductDTO
+import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 
 
-class ProductOnReserveAdapter(private val context: Context, private var productList : List<ProductDTO>, val onClick : (productDTO: ProductDTO ) -> Unit) :
+class ProductOnReserveAdapter(private val context: Context, private var productList : List<ProductOnDetailDTO>, val onClick : (productDTO: ProductOnDetailDTO ) -> Unit) :
     RecyclerView.Adapter<ProductOnReserveAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {

@@ -1,6 +1,7 @@
 package com.upc.stockvision.presentation.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,9 @@ class ReserveAdapter(
     private var reserveList: List<ReserveAreaDTO> = emptyList()
     private var filteredList: MutableList<ReserveAreaDTO> = mutableListOf()
 
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+      private val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
 
     fun setReserves(reserves: List<ReserveAreaDTO>) {
         reserveList = reserves
@@ -43,20 +46,31 @@ class ReserveAdapter(
     }
 
     fun filterByDateRange(startDate: Date?, endDate: Date?) {
+        Log.d("AdapterDebug", "StartDate: $startDate - EndDate: $endDate")
+
         filteredList = reserveList.filter { reserve ->
             val reserveDate: Date? = try {
                 dateFormat.parse(reserve.createAt)
             } catch (e: Exception) {
+                Log.e("AdapterDebug", "Error parsing date: ${reserve.createAt}")
                 null
             }
 
-            val afterStart = startDate?.let { reserveDate?.compareTo(it) ?: 1 >= 0 } ?: true
-            val beforeEnd = endDate?.let { reserveDate?.compareTo(it) ?: -1 <= 0 } ?: true
+            if (reserveDate == null) return@filter false
+
+            val afterStart = startDate == null || !reserveDate.before(startDate)
+            val beforeEnd = endDate == null || !reserveDate.after(endDate)
+
+            Log.d("AdapterDebug", "Checking: $reserveDate -> $afterStart && $beforeEnd")
 
             afterStart && beforeEnd
         }.toMutableList()
+
+        Log.d("AdapterDebug", "Filtered items: ${filteredList.size}")
+
         notifyDataSetChanged()
     }
+
 
     fun resetFilter() {
         filteredList = reserveList.toMutableList()

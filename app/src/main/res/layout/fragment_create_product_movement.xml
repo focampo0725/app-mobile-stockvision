@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginHorizontal="25dp"
             android:background="@drawable/custom_input"
             android:clickable="true"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:text="Producto"
             android:textColor="@color/text_animation"
             android:textSize="16sp"
@@ -60,7 +60,7 @@
         <TextView
             android:id="@+id/tvProduct"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginHorizontal="25dp"
             android:background="@drawable/custom_input"
             android:clickable="true"
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:text="Almacen Inicial"
             android:textColor="@color/text_animation"
             android:textSize="16sp"
@@ -106,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="1dp"
             android:text="Zona Inicial"
             android:textColor="@color/text_animation"
             android:textSize="16sp"
@@ -139,7 +139,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
                     android:text="Cantidad del Producto"
                     android:textColor="@color/text_animation"
                     android:textSize="16sp"
@@ -167,7 +166,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="10dp"
                     android:text="Cantidad a mover"
                     android:textColor="@color/text_animation"
                     android:textSize="16sp"
@@ -192,7 +190,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/dotted_line"
             />
 
@@ -200,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:text="Almacenes Destino"
             android:textColor="@color/text_animation"
             android:textSize="16sp"
@@ -209,7 +207,7 @@
         <TextView
             android:id="@+id/tvFinalWarehouse"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginHorizontal="25dp"
             android:background="@drawable/custom_input"
             android:clickable="true"
@@ -229,7 +227,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
             android:text="Zonas Destino"
             android:textColor="@color/text_animation"
             android:textSize="16sp"
@@ -238,7 +235,7 @@
         <TextView
             android:id="@+id/tvFinalAreaWarehouse"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginHorizontal="25dp"
             android:background="@drawable/custom_input"
             android:clickable="true"
@@ -254,7 +251,33 @@
             android:paddingBottom="12dp"
             android:textSize="18sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="Razón del Movimiento"
+            android:textColor="@color/text_animation"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/tvTypeMovement"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="25dp"
+            android:background="@drawable/custom_input"
+            android:clickable="true"
+            android:drawableEnd="@drawable/ic_selector_right_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/purple_700"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:hint="Selecciona una Razón"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/btnCreatNewMovement"

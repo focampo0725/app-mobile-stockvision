@@ -16,11 +16,11 @@ class ProductMovement(
     val productName: String,
     @ColumnInfo(name = "initialWarehouse")
     val initialWarehouse: String,
-    @ColumnInfo(name = "initialWarehouse")
+    @ColumnInfo(name = "initialAreaWarehouse")
     val initialAreaWarehouse: String,
     @ColumnInfo(name = "finalWarehouse")
     val finalWarehouse: String,
-    @ColumnInfo(name = "finalWarehouse")
+    @ColumnInfo(name = "finalAreaWarehouse")
     val finalAreaWarehouse: String,
     @ColumnInfo(name = "amountMoved")
     val amountMoved: Int,

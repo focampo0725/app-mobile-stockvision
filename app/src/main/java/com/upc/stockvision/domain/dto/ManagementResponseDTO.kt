@@ -19,6 +19,13 @@ data class CategoryDTO(
     val categoryName : String
 )
 
+data class TypeMovementDTO(
+    @SerializedName("codeTypeMovement")
+    val codeTypeMovement : Int,
+    @SerializedName("typeMovementName")
+    val typeMovementName : String
+)
+
 data class SupplierDTO(
     @SerializedName("codeCategory")
     val codeSupplier : Int,

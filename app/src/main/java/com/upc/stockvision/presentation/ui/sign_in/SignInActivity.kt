@@ -24,7 +24,7 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
                 onNextActivity(HomeActivity::class.java,null,true)
             }
             is SignInState.FailderAuthentication ->{
-                showCustomToast("Bienvenido ${renderState.message}",SelectedIcon.WARNING)
+                showCustomToast("Erro: ${renderState.message}",SelectedIcon.WARNING)
             }
             else -> {}
         }

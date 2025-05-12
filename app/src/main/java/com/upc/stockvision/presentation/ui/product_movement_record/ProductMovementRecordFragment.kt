@@ -18,6 +18,7 @@ import com.upc.stockvision.domain.dto.ProductMovementDTO
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReserveAreaDTO
 import com.upc.stockvision.domain.entities.ProductMovement
+import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.adapter.ProductAdapter
@@ -30,7 +31,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProductMovementRecordFragment @Inject constructor() : BaseFragment<ProductMovementRecordViewModel, ProductMovementRecordState>() {
+class ProductMovementRecordFragment @Inject constructor(val appState: AppState) : BaseFragment<ProductMovementRecordViewModel, ProductMovementRecordState>() {
 
     val viewModel: ProductMovementRecordViewModel by viewModels()
     private lateinit var binding: FragmentProductMovementRecordBinding
@@ -76,24 +77,25 @@ class ProductMovementRecordFragment @Inject constructor() : BaseFragment<Product
 
             context?.toast("${it.productName} ")
         }
+        binding.rvProductMovement.adapter = productMovementAdapter
         viewModel.requestProductMovementList()
 
     }
 
     fun onInit(){
         binding.btnCalenderStartTime.setOnClickListener {
-            mostrarSelectorDeFecha()
+            mostrarSelectorDeFecha(0)
         }
 
         binding.btnCalenderEndTime.setOnClickListener {
-            mostrarSelectorDeFecha()
+            mostrarSelectorDeFecha(1)
         }
         binding.btnCreateMovement.setOnClickListener {
-
+            appState.onDrawCreateMovement?.invoke()
         }
     }
 
-    private fun mostrarSelectorDeFecha() {
+    private fun mostrarSelectorDeFecha(type : Int) {
         val calendario = Calendar.getInstance()
         val year = calendario.get(Calendar.YEAR)
         val month = calendario.get(Calendar.MONTH)
@@ -104,7 +106,7 @@ class ProductMovementRecordFragment @Inject constructor() : BaseFragment<Product
             R.style.CustomDatePickerTheme,
             { _, año, mesSeleccionado, diaSeleccionado ->
                 val fechaSeleccionada = "$diaSeleccionado/${mesSeleccionado + 1}/$año"
-                binding.tvStartTimeReserve.text = fechaSeleccionada
+                if (type == 0) binding.tvStartTimeReserve.text = fechaSeleccionada else binding.tvEndTimeReserve.text = fechaSeleccionada
             },
             year, month, day
         )

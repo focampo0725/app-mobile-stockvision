@@ -23,7 +23,7 @@ sealed class ReserveSpaceState{
     class CategoriesLoaded(val categoriesList: ResponseGenericDTO<CategoryDTO>) :
         ReserveSpaceState()
 
-    class ProductLoaded(val productList: ResponseGenericDTO<ProductDTO>) :
+    class ProductLoaded(val productList: ResponseGenericDTO<ProductOnDetailDTO>) :
         ReserveSpaceState()
     class WarehouseLoaded(val warehouseList: ResponseGenericDTO<WarehouseDTO>) :
         ReserveSpaceState()
@@ -64,7 +64,8 @@ class ReserveSpaceViewModel @Inject constructor(val stockVisionRepository : Stoc
         doAsynTask({
             val prodcutList = stockVisionRepository.productsDao.getProductsByCategory(category)
             prodcutList.map { product ->
-                ProductDTO(
+                ProductOnDetailDTO(
+                    idProduct = product.id,
                     productName= product.productName,
                     categoryName = product.categoryName,
                     quantity = product.quantity,

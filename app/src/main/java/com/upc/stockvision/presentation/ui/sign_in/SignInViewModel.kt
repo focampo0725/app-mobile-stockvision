@@ -39,7 +39,7 @@ class SignInViewModel @Inject constructor(private val stockVisionRepository: Sto
            }
 
        },{
-           renderState.postValue(LCEState.Content(SignInState.SuccessfulAuthentication("Usuario no encontrado")))
+           renderState.postValue(LCEState.Content(SignInState.FailderAuthentication("Usuario no encontrado")))
        })
         //ConsumoAPI
 //        stockVisionRepository.managementApi.getUser(identityDocument,password).applySchedulers().subscribeApp(

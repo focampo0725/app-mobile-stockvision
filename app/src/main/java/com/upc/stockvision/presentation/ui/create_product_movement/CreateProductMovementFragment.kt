@@ -9,21 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.databinding.FragmentCreateProductMovementBinding
+import com.upc.stockvision.infrastructure.AppState
+import com.upc.stockvision.infrastructure.extensions.showCustomToast
+import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseFragment
-import com.upc.stockvision.presentation.dialog.DialogAreaWarehouse
-import com.upc.stockvision.presentation.dialog.DialogCategory
-import com.upc.stockvision.presentation.dialog.DialogProduct
-import com.upc.stockvision.presentation.dialog.DialogWarehouse
+import com.upc.stockvision.presentation.dialog.*
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateProductMovementFragment @Inject constructor() : BaseFragment<CreateProductMovementViewModel, CreateProductMovementState>() {
+class CreateProductMovementFragment @Inject constructor(val appState: AppState) : BaseFragment<CreateProductMovementViewModel, CreateProductMovementState>() {
 
     val viewModel: CreateProductMovementViewModel by viewModels()
     private lateinit var binding: FragmentCreateProductMovementBinding
     var cantidadInicial = 0
+    var idProdcutSelected = 0
 
     override fun processRenderState(renderState: CreateProductMovementState, context: Context) {
         when(renderState){
@@ -36,6 +37,7 @@ class CreateProductMovementFragment @Inject constructor() : BaseFragment<CreateP
             is CreateProductMovementState.ProductLoaded -> {
                 DialogProduct(productList = renderState.productList){selectedProduct ->
                     binding.etFinalQuantity.text.clear()
+                    idProdcutSelected = selectedProduct.idProduct
                     binding.etFinalQuantity.hint = "cantidad"
                     binding.tvProduct.text = selectedProduct.productName
                     cantidadInicial = selectedProduct.quantity
@@ -48,13 +50,22 @@ class CreateProductMovementFragment @Inject constructor() : BaseFragment<CreateP
 
             is CreateProductMovementState.WarehouseLoaded -> {
                 DialogWarehouse(warehouseList = renderState.warehouseList) { selectedWarehouse ->
-                    binding.tvFinalAreaWarehouse.text = selectedWarehouse.warehouseName
+                    binding.tvFinalWarehouse.text = selectedWarehouse.warehouseName
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
             }
             is CreateProductMovementState.AreaWarehouseLoaded -> {
                 DialogAreaWarehouse(areaWarehouseList = renderState.areaWarehouseList) { selectedAreaWarehouse ->
                     binding.tvFinalAreaWarehouse.text = selectedAreaWarehouse.areaWarehouseName
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
+            }
+            is CreateProductMovementState.TypeProductMovementLoaded -> {
+                DialogTypeMovement(typeProductMovementList = renderState.typeProductMovementList) { selectedtypeMovement ->
+                    binding.tvTypeMovement.text = selectedtypeMovement.typeMovementName
+                }.show(parentFragmentManager, DialogTypeMovement.TAG)
+            }
+            is CreateProductMovementState.CreateProductMovementDetails -> {
+                context.showCustomToast(renderState.messsage, iconType = SelectedIcon.SUCCESS)
+                appState.onDrawMovement?.invoke()
             }
             else -> {}
         }
@@ -111,6 +122,17 @@ class CreateProductMovementFragment @Inject constructor() : BaseFragment<CreateP
         binding.tvFinalAreaWarehouse.setOnClickListener {
             viewModel.requestAreaWarehouse(binding.tvFinalWarehouse.text.toString())
         }
+        binding.tvTypeMovement.setOnClickListener {
+            viewModel.reqeustTypeMovement()
+        }
+
+        binding.btnCreatNewMovement.setOnClickListener {
+            viewModel.updateProductMovement(idProduct = idProdcutSelected, productQuantity = binding.tvInitialQuantity.text.toString().toInt(),binding.tvFinalWarehouse.text.toString(),binding.tvFinalAreaWarehouse.text.toString(), newProductQuantity = binding.etFinalQuantity.text.toString().toInt())
+            viewModel.createMovement("Franco Ocampo",binding.tvProduct.text.toString(),binding.tvInitialWarehouse.text.toString(),binding.tvInitialAreaWarehouse.text.toString(),binding.tvFinalWarehouse.text.toString(),binding.tvFinalAreaWarehouse.text.toString(),binding.etFinalQuantity.text.toString().toInt(),binding.tvTypeMovement.text.toString())
+
+        }
+
+
     }
 
 

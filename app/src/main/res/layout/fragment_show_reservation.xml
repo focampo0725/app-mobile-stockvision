@@ -109,24 +109,48 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSearchByDate"
+    <LinearLayout
+        android:id="@+id/llContainer"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:backgroundTint="#FF4500"
-        android:drawableRight="@drawable/ic_search_profile_24"
-        android:drawablePadding="8dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="10dp"
-        android:text="Filtrar por fecha"
-        android:textColor="@android:color/white"
-        app:cornerRadius="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/llDateContainer"
-        app:strokeColor="@color/black"
-        app:strokeWidth="2dp" />
+        >
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSearchReserveByDate"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:backgroundTint="#FF4500"
+            android:drawableRight="@drawable/ic_search_profile_24"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Filtrar"
+            android:textColor="@android:color/white"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginStart="30dp"
+            android:backgroundTint="#FF4500"
+            android:drawableRight="@drawable/ic_reset_64"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Resetear"
+            android:textColor="@android:color/white"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="2dp" />
+
+    </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvReserve"
@@ -138,14 +162,14 @@
         android:paddingHorizontal="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearchByDate"
+        app:layout_constraintTop_toBottomOf="@+id/llContainer"
         tools:itemCount="3"
         tools:listitem="@layout/item_reserve">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
-        android:id="@+id/btnNext"
+        android:id="@+id/btnCreateReserve"
         style="@style/StyleButtonPrimary"
         android:layout_width="wrap_content"
         android:layout_height="55dp"

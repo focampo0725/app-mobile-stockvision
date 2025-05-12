@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentIncomingProductBinding
 import com.upc.stockvision.databinding.FragmentReserveSpaceBinding
+import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseFragment
@@ -25,7 +26,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ReserveSpaceFragment @Inject constructor() : BaseFragment<ReserveSpaceViewModel, ReserveSpaceState>() {
+class ReserveSpaceFragment @Inject constructor(val appState: AppState) : BaseFragment<ReserveSpaceViewModel, ReserveSpaceState>() {
     val viewModel: ReserveSpaceViewModel by viewModels()
     private lateinit var binding: FragmentReserveSpaceBinding
 
@@ -56,6 +57,7 @@ class ReserveSpaceFragment @Inject constructor() : BaseFragment<ReserveSpaceView
             }
             is ReserveSpaceState.SuccessReserveRegister ->{
                 context.showCustomToast(renderState.message, SelectedIcon.SUCCESS)
+                appState.onDrawShowReserve?.invoke()
 
             }
             else -> {}
@@ -115,6 +117,7 @@ class ReserveSpaceFragment @Inject constructor() : BaseFragment<ReserveSpaceView
             val fechaDate: Date? = formato.parse(createAt)
             val days = binding.etDurationDays.text.toString().toInt()
             viewModel.registerReserve(category,product,quanty,warehouse,areaWarehouse,days,fechaDate!!)
+
         }
 
     }

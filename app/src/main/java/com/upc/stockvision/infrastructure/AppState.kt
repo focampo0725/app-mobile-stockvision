@@ -10,4 +10,12 @@ class AppState @Inject constructor(){
     var onDrawProductDetail: ((product : ProductOnDetailDTO) -> Unit) ?= null
 
     var onDrawinventoryControlFragment: (() -> Unit) ?= null
+
+    var onDrawCreateReserveArea: (() -> Unit) ?= null
+
+    var onDrawCreateMovement: (() -> Unit) ?= null
+
+    var onDrawMovement : (() -> Unit) ?= null
+
+    var onDrawShowReserve: (() -> Unit) ?= null
 }

@@ -68,7 +68,7 @@ class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
             showCustomToast("Usuario Registrado",SelectedIcon.SUCCESS)
             onNextActivity(SignInActivity::class.java,null,true)
         } else {
-            showCustomToast("Usuario Registrado",SelectedIcon.WARNING)
+            showCustomToast("Erro en la contraseña",SelectedIcon.WARNING)
         }
     }
 }

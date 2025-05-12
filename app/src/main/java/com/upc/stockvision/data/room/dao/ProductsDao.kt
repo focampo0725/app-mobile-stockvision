@@ -10,6 +10,9 @@ interface ProductsDao : BaseDao<Products> {
     @Query("SELECT * FROM Products")
     fun getAll(): List<Products>
 
+    @Query("SELECT * FROM Products WHERE id = :idProduct")
+    fun getOnlyProduct(idProduct : Int): Products
+
     @Query("SELECT * FROM Products WHERE categoryName = :categoryName")
     fun getProductsByCategory(categoryName: String): List<Products>
 
@@ -37,4 +40,7 @@ interface ProductsDao : BaseDao<Products> {
         areaWarehouse: String?,
         photo: String?
     )
+
+    @Query("""UPDATE Products SET quantity = :quantity  WHERE id = :id""")
+    fun updateQuantityForMovement(id : Int, quantity: Int)
 }
