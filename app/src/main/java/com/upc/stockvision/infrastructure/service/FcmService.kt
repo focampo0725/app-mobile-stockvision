@@ -17,6 +17,7 @@ import com.upc.stockvision.StockVisionApp
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.databinding.CustomAlertIncomingProductBinding
 import com.upc.stockvision.domain.entities.Notifications
+import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.infrastructure.extensions.doAsync
@@ -63,7 +64,7 @@ class FcmService : FirebaseMessagingService() {
                     stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
                 },{
                     doAsync{
-                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,56))
+                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
                     }
 
                 })
@@ -73,10 +74,11 @@ class FcmService : FirebaseMessagingService() {
                 setTextViewText(R.id.tvAlmacen, messageParts?.get(1) ?: "")
                 setTextViewText(R.id.tvArea, messageParts?.get(2) ?: "")
                 doAsynTask({
-                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
+                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(3)!!)
                 },{
                     doAsync{
-                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,56))
+                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
+                        stockVisionRepository.reserveAreaDao.insert(ReserveArea(categoryName = it.categoryName,productName =  it.productName, quantity =it.quantity,warehouseName =  it.warehouse,areaWarehouseName = it.areaWarehouse, durationDays = 2))
                     }
 
                 })

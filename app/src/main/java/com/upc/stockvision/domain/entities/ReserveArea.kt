@@ -15,7 +15,7 @@ class ReserveArea(
     @ColumnInfo(name = "quantity") var quantity:  Int,
     @ColumnInfo(name = "warehouseName") var warehouseName:  String,
     @ColumnInfo(name = "areaWarehouseName") var areaWarehouseName:  String,
-    @ColumnInfo(name = "createAt") var createAt: Date,
+    @ColumnInfo(name = "createAt") var createAt: Date = Date(),
     @ColumnInfo(name = "durationDays") var durationDays:  Int,
 ) {
 
