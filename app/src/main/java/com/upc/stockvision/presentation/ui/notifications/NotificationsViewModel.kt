@@ -14,13 +14,15 @@ import com.upc.stockvision.infrastructure.extensions.logi
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
+import com.upc.stockvision.presentation.ui.show_reservation.ShowReservationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 sealed class NotificationsState{
-
+    class NotificationLoaded(val notificationList : List<NotificationDTO>) : NotificationsState()
 
 }
 
@@ -31,6 +33,30 @@ class NotificationsViewModel @Inject constructor(val stockVisionRepository : Sto
     @Inject
     @ApplicationContext
     lateinit var context: Context
+
+    fun requestReserveList() {
+        doAsynTask({
+            val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+            val listNotifications = stockVisionRepository.notificationsDao.getAllNotificatios()
+            listNotifications.map { notification ->
+                NotificationDTO(
+                    typeNotification = notification.typeNotification,
+                    title = notification.title,
+                    productName = notification.productName,
+                    quantity = notification.quantity,
+                    warehouseName = notification.warehouseName,
+                    warehouseArea = notification.warehouseArea,
+                    date = formato.format(notification.createAT)
+                )
+            }
+        }, {
+            renderState.value = LCEState.Content(NotificationsState.NotificationLoaded(it))
+        })
+    }
+
+
+
     override val renderState: MutableLiveData<LCEState<NotificationsState>>
         get() = getLiveData()
 }

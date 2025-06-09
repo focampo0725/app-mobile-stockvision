@@ -13,6 +13,8 @@ interface IdentityUserDao : BaseDao<IdentityUser> {
     @Query("SELECT * FROM identityUser WHERE identityUser = :identityUser LIMIT 1")
     fun searchUser(identityUser: String): IdentityUser?
 
+    @Query("UPDATE identityUser SET password = :newPassword WHERE identityUser = :identityUser")
+    fun updatePassword(identityUser: String, newPassword: String)
 
     @Query("DELETE FROM IdentityUser")
     fun deleteAll()

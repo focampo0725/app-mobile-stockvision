@@ -54,5 +54,9 @@ class RoomModule {
 
     @Singleton
     @Provides
+    fun provideNotificationsDao(stockVisionDB:StockVisionDB) = stockVisionDB.notificationsDao()
+
+    @Singleton
+    @Provides
     fun provideCategoryDao(stockVisionDB:StockVisionDB) = stockVisionDB.categoryDao()
 }

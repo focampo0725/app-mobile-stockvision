@@ -14,10 +14,21 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.upc.stockvision.R
 import com.upc.stockvision.StockVisionApp
+import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.databinding.CustomAlertIncomingProductBinding
+import com.upc.stockvision.domain.entities.Notifications
+import com.upc.stockvision.infrastructure.AppState
+import com.upc.stockvision.infrastructure.extensions.doAsynTask
+import com.upc.stockvision.infrastructure.extensions.doAsync
 import com.upc.stockvision.presentation.ui.home.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FcmService : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var stockVisionRepository: StockVisionRepository
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         showNotification(message)
@@ -42,21 +53,53 @@ class FcmService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(NotificationManager::class.java)
 
-        val remoteView: RemoteViews = if (fragmentToOpen == "0") {
-            // Inflamos la vista para el fragmento 1
-            RemoteViews(packageName, R.layout.custom_alert_incoming_product).apply {
+        val remoteView: RemoteViews = when (fragmentToOpen) {
+            "0" -> RemoteViews(packageName, R.layout.custom_alert_incoming_product).apply {
                 setTextViewText(R.id.tvIncomingProduct, messageParts?.get(1) ?: "")
                 setTextViewText(R.id.tvIncomingDate, messageParts?.get(2) ?: "")
                 setTextViewText(R.id.tvIncomingQuantity, messageParts?.get(3) ?: "")
+
+                doAsynTask({
+                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
+                },{
+                    doAsync{
+                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,56))
+                    }
+
+                })
+
             }
-        } else {
-            // Inflamos la vista para el fragmento 2
-            RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
-//                setTextViewText(R.id.tvReserveArea, messageParts?.get(1) ?: "")
+            "1" -> RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
                 setTextViewText(R.id.tvAlmacen, messageParts?.get(1) ?: "")
                 setTextViewText(R.id.tvArea, messageParts?.get(2) ?: "")
+                doAsynTask({
+                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
+                },{
+                    doAsync{
+                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,56))
+                    }
+
+                })
+            }
+            "2" -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
+                setTextViewText(R.id.tvLowStockProduct, messageParts?.get(1) ?: "")
+                doAsynTask({
+                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
+                },{
+                    doAsync{
+                        stockVisionRepository.notificationsDao.insert(Notifications(2,"",it.productName,it.warehouse,it.areaWarehouse,3))
+                    }
+
+                })
+
+
+            }
+
+            else -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
+                setTextViewText(R.id.tvLowStockProduct, "Mensaje no reconocido")
             }
         }
+
 
 
 

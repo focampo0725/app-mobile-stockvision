@@ -21,8 +21,8 @@ class ProductAdapter(private val context: Context , val onClick : (productDetail
     private var productList: List<ProductOnDetailDTO> = emptyList()
     private var filteredList: MutableList<ProductOnDetailDTO> = mutableListOf()
 
-    fun setProduct(dispatch: List<ProductOnDetailDTO>) {
-        productList = dispatch
+    fun setProduct(product: List<ProductOnDetailDTO>) {
+        productList = product
         filteredList = productList.toMutableList()
         notifyDataSetChanged()
     }

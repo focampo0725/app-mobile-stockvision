@@ -13,6 +13,10 @@ interface ProductsDao : BaseDao<Products> {
     @Query("SELECT * FROM Products WHERE id = :idProduct")
     fun getOnlyProduct(idProduct : Int): Products
 
+    @Query("SELECT * FROM Products WHERE productName = :productName")
+    fun getProductByName(productName: String): Products
+
+
     @Query("SELECT * FROM Products WHERE categoryName = :categoryName")
     fun getProductsByCategory(categoryName: String): List<Products>
 

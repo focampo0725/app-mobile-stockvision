@@ -28,6 +28,9 @@ class PasswordChangeActivity : BaseActivity<PasswordChangeViewModel, PasswordCha
                 is PasswordChangeState.FailedSearchUser ->{
                     showCustomToast(renderState.message, SelectedIcon.WARNING)
                 }
+                is PasswordChangeState.UpdatePassword ->{
+
+                }
                 else -> {}
             }
         }
@@ -51,7 +54,7 @@ class PasswordChangeActivity : BaseActivity<PasswordChangeViewModel, PasswordCha
             }
 
             binding.btnConfirmChange.setOnClickListener {
-
+                viewModel.updatePasswordIfValid(binding.etUserIdentityChange.text.toString().trim(),binding.etPasswordChange.text.toString().trim(),binding.etConfirmPasswordChange.text.toString().trim())
             }
 
         }

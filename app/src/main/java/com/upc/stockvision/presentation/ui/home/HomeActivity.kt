@@ -23,6 +23,7 @@ import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
 import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
 import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragment
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
+import com.upc.stockvision.presentation.ui.notifications.NotificationsFragment
 import com.upc.stockvision.presentation.ui.product_movement_record.ProductMovementRecordFragment
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationFragment
 import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceFragment
@@ -44,19 +45,18 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var inventoryControlFragment: InventoryControlFragment
     @Inject
     lateinit var reserveSpaceFragment: ReserveSpaceFragment
-
     @Inject
     lateinit var homePresentationFragment: HomePresentationFragment
     @Inject
     lateinit var detailProductFragment: DetailProductFragment
     @Inject
     lateinit var showReservationFragment: ShowReservationFragment
-
     @Inject
     lateinit var createProductMovementFragment: CreateProductMovementFragment
-
     @Inject
     lateinit var productMovementRecordFragment: ProductMovementRecordFragment
+    @Inject
+    lateinit var notificationsFragment: NotificationsFragment
     @Inject
     lateinit var appState: AppState
 
@@ -90,7 +90,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
-//                    updateTitle(item.title.toString())
+//                    removeCurrentFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, homePresentationFragment)
                         .addToBackStack(null)
@@ -98,12 +98,14 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 }
                 R.id.nav_item2 -> {
                     updateTitle(item.title.toString())
+                    removeCurrentFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, productRegistrationFragment)
                         .addToBackStack(null)
                         .commit()
                 }
                 R.id.nav_item3 -> {
+                    removeCurrentFragment()
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, incomingProductFragment)
@@ -111,6 +113,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                         .commit()
                 }
                 R.id.nav_item4 -> {
+                    removeCurrentFragment()
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, showReservationFragment)
@@ -118,6 +121,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                         .commit()
                 }
                 R.id.nav_item5 -> {
+                    removeCurrentFragment()
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, inventoryControlFragment)
@@ -125,6 +129,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                         .commit()
                 }
                 R.id.nav_item6 -> {
+                    removeCurrentFragment()
                     updateTitle(item.title.toString())
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.content_frame, productMovementRecordFragment)
@@ -142,6 +147,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         binding.toolbar.setNavigationOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START) // Abre el Navigation Drawer
         }
+
     }
 
     fun loadNotification(){
@@ -159,9 +165,6 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 .commit()
         }
     }
-
-
-
     // Inflar el menú de la Toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu) // Asegúrate de que esto sea correcto
@@ -173,8 +176,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         return when (item.itemId) {
 
             R.id.action_notification -> {
-                // Acción al hacer clic en la campana
-                Toast.makeText(this, "Campana clickeada", Toast.LENGTH_SHORT).show()
+                replaceFragment(notificationsFragment,null)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -185,7 +187,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         currentFragment?.let {
             supportFragmentManager.beginTransaction()
                 .remove(it)
-                .commitNow()
+                .commit()
         }
     }
     private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
@@ -194,6 +196,17 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         val transaction = fragmentManager.beginTransaction()
         fragment.arguments = args
         transaction.replace(R.id.content_frame, fragment)
+            .addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun replaceFragmentArea(fragment: Fragment, args: Bundle? = null) {
+        removeCurrentFragment()
+        val fragmentManager = supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        fragment.arguments = args
+        transaction.replace(R.id.content_frame, fragment)
+            .addToBackStack(null)
         transaction.commit()
     }
 

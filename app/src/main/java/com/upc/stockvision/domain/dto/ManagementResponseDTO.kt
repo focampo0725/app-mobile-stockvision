@@ -2,6 +2,7 @@ package com.upc.stockvision.domain.dto
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
+import java.util.Date
 
 data class IdentityUserDTO(
     @SerializedName("name")
@@ -106,4 +107,14 @@ data class ProductMovementDTO(
     val typeMovement: String,
     val movementDate : String
 
+)
+
+data class NotificationDTO(
+    val typeNotification : Int,
+    val title : String,
+    val productName : String,
+    val warehouseName : String,
+    val warehouseArea : String,
+    val quantity : Int,
+    val date: String
 )

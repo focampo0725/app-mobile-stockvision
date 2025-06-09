@@ -10,6 +10,7 @@ import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.home.HomeActivity
+import com.upc.stockvision.presentation.ui.password_change.PasswordChangeActivity
 import com.upc.stockvision.presentation.ui.sign_up.SignUpActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +42,7 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
 
     fun init(){
         binding.tvRecoverdPassword.setOnClickListener {
-            showCustomToast("Not Implemented",SelectedIcon.WARNING)
+            onNextActivity(PasswordChangeActivity::class.java,null,true)
         }
         binding.btnRegister.setOnClickListener {
             onNextActivity(SignUpActivity::class.java,null,true)

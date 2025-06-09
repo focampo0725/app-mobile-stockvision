@@ -90,6 +90,8 @@ class ShowReservationFragment @Inject constructor(val appState: AppState) : Base
         }
         binding.btnCreateReserve.setOnClickListener {
             appState.onDrawCreateReserveArea?.invoke()
+
+
         }
         binding.btnSearchReserveByDate.setOnClickListener {
             val startDate = try {

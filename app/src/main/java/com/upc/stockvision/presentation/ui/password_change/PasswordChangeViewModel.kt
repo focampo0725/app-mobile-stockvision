@@ -19,6 +19,7 @@ import javax.inject.Inject
 sealed class PasswordChangeState {
     class SuccessfulSearchUser(val name: String , val surnames: String) : PasswordChangeState()
     class FailedSearchUser(val message : String) : PasswordChangeState()
+    class UpdatePassword(val message : String) : PasswordChangeState()
 }
 
 @SuppressLint("StaticFieldLeak")
@@ -45,6 +46,30 @@ class PasswordChangeViewModel @Inject constructor(private val stockVisionReposit
             renderState.postValue(LCEState.Content(PasswordChangeState.FailedSearchUser("Usuario no existe")))
         })
     }
+
+    fun updatePasswordIfValid(
+        identityUser: String,
+        oldPassword: String,
+        newPassword: String,
+    ) {
+        doAsynTask({
+            val user = stockVisionRepository.identityUserDao.searchUser(identityUser)
+            if (user != null && user.password == oldPassword) {
+                stockVisionRepository.identityUserDao.updatePassword(identityUser, newPassword)
+                true
+            } else {
+                false
+            }
+        }, { success ->
+            if (success){
+                renderState.postValue(LCEState.Content(PasswordChangeState.UpdatePassword("Contraña Actualizada")))
+            }else{
+                renderState.postValue(LCEState.Content(PasswordChangeState.UpdatePassword("Contraña Actual no coincide")))
+            }
+
+        })
+    }
+
 
     override val renderState: MutableLiveData<LCEState<PasswordChangeState>>
         get() = getLiveData()

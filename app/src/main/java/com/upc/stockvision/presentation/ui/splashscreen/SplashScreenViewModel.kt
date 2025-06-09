@@ -1,6 +1,7 @@
 package com.upc.stockvision.presentation.ui.splashscreen
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -8,8 +9,7 @@ import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.R
 import com.upc.stockvision.data.repository.StockVisionRepository
-import com.upc.stockvision.domain.dto.IdentityUserDTO
-import com.upc.stockvision.domain.dto.IdentityUserPopulateDTO
+
 import com.upc.stockvision.domain.entities.*
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsync
@@ -21,6 +21,8 @@ import com.upc.stockvision.presentation.ui.sign_in.SignInActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 sealed class SplashScreenState {
@@ -161,25 +163,19 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             Products("Pantalón Estilo Jogger", "Pantalones", 60, "TERMINAL BLOCK", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.jogger_sur_in))),
 
 
-
-            // Almacén Este
-            // Categoría: Camisetas
-//            Products("Camiseta de Algodón", "Camisetas", 20, "WIPER BLADE", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Camiseta sin Mangas", "Camisetas", 25, "FILTER.ELEC", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Camiseta Ajustada", "Camisetas", 15, "MOUNT.ASSY.E", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//
-//            // Categoría: Pantalones
-//            Products("Pantalón Recto", "Pantalones", 18, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Pantalón de Vestir", "Pantalones", 30, "TERMINAL BLOCK", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Jeans Rasgados", "Pantalones", 22, "AIR SCND", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//
-//            // Categoría: Chaquetas
-//            Products("Chaqueta de Lana", "Chaquetas", 12, "CORE.HOC(DMO)", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Chaqueta Casual", "Chaquetas", 18, "NUT.HEX.SLOT (DMO)", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-//            Products("Abrigo Corto", "Chaquetas", 10, "ROLLER CHAIN (DMO)", "Almacén Este", "Zona Calzado", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp)))
-
         )
 
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val specificDate: Date = dateFormat.parse("07/06/2025")
+
+        val listNotifications = listOf(
+            Notifications(0, "Producto Entrante", "Camiseta Deportiva", "Almacén Central", "Zona Ropa Mujer", 15,specificDate),
+            Notifications(1, "Reserva", "Camiseta Deportiva", "Almacén Central", "Zona Ropa Mujer", 15,specificDate),
+            Notifications(2, "Stock Bajo", "Chaqueta Bomber", "Almacén Norte", "Zona Ropa Hombre", 4, specificDate),
+            Notifications(2, "Stock Bajo", "Cazadora de Cuero", "Almacén Central", "Zona Ropa Mujer", 2,specificDate),
+            Notifications(2, "Stock Bajo", "Pantalón Casual", "Almacén Central", "Zona Ropa Mujer", 2,specificDate)
+        )
 
 
 
@@ -190,6 +186,8 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.categoryDao.deleteAll()
             stockVisionRepository.warehouseDao.deleteAll()
             stockVisionRepository.areaWarehouseDao.deleteAll()
+            stockVisionRepository.notificationsDao.deleteAllSequence()
+            stockVisionRepository.notificationsDao.deleteAll()
 
             stockVisionRepository.supplierDao.insertAll(listSupplier)
             stockVisionRepository.productsDao.insertAll(listProducts)
@@ -197,6 +195,7 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.categoryDao.insertAll(listCategory)
             stockVisionRepository.warehouseDao.insertAll(listWarehouse)
             stockVisionRepository.areaWarehouseDao.insertAll(listAreaWarehouse)
+            stockVisionRepository.notificationsDao.insertAll(listNotifications)
         }
     }
 

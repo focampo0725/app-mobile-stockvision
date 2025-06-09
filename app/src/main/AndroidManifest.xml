@@ -21,7 +21,7 @@
         android:theme="@style/Theme.StockVision"
         tools:targetApi="31">
         <activity
-            android:name=".PasswordChangeActivity"
+            android:name=".presentation.ui.password_change.PasswordChangeActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.home.HomeActivity"

@@ -20,19 +20,11 @@ import java.util.*
 import javax.inject.Inject
 
 sealed class ReserveSpaceState{
-    class CategoriesLoaded(val categoriesList: ResponseGenericDTO<CategoryDTO>) :
-        ReserveSpaceState()
-
-    class ProductLoaded(val productList: ResponseGenericDTO<ProductOnDetailDTO>) :
-        ReserveSpaceState()
-    class WarehouseLoaded(val warehouseList: ResponseGenericDTO<WarehouseDTO>) :
-        ReserveSpaceState()
-
-    class AreaWarehouseLoaded(val areaWarehouseList: ResponseGenericDTO<AreaWarehouseDTO>) :
-        ReserveSpaceState()
-
-    class SuccessReserveRegister(val message: String) :
-        ReserveSpaceState()
+    class CategoriesLoaded(val categoriesList: ResponseGenericDTO<CategoryDTO>) : ReserveSpaceState()
+    class ProductLoaded(val productList: ResponseGenericDTO<ProductOnDetailDTO>) : ReserveSpaceState()
+    class WarehouseLoaded(val warehouseList: ResponseGenericDTO<WarehouseDTO>) : ReserveSpaceState()
+    class AreaWarehouseLoaded(val areaWarehouseList: ResponseGenericDTO<AreaWarehouseDTO>) : ReserveSpaceState()
+    class SuccessReserveRegister(val message: String) : ReserveSpaceState()
 
 }
 

@@ -23,9 +23,7 @@ import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.adapter.ProductAdapter
 import com.upc.stockvision.presentation.adapter.ProductMovementAdapter
-import com.upc.stockvision.presentation.adapter.ReserveAdapter
-import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
-import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceViewModel
+
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
