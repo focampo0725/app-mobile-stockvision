@@ -153,11 +153,13 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
                 isCheked = true
                 context?.logi("[TESTCHECK] -> isChecked : $isCheked")
                 context?.toast("Hola Checked")
+                binding.tvSwitchDescription.text ="Desactivar Modificación"
                 binding.vfActivateProductEdition.showNext()
                 loadProductOnEditData()
             } else {
                 isCheked = false
                 context?.logi("[TESTCHECK] -> isChecked : $isCheked")
+                binding.tvSwitchDescription.text ="Activar Modificación"
                 binding.vfActivateProductEdition.showPrevious()
                 binding.vfEditProduct.displayedChild = 0
             }

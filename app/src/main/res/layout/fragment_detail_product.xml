@@ -25,6 +25,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tvSwitchDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Activar Modificación"
@@ -95,17 +96,16 @@
                     android:src="@drawable/box_referential" />
 
                 <!-- CardView con info del producto -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
+                <FrameLayout
+                    android:id="@+id/cardViewReplacement"
                     android:layout_width="match_parent"
-                    android:layout_marginHorizontal="30dp"
                     android:layout_height="350dp"
                     android:layout_below="@id/ivProductPhotoInfo"
+                    android:layout_marginHorizontal="30dp"
                     android:layout_marginTop="-30dp"
                     android:layout_centerHorizontal="true"
-                    android:backgroundTint="@android:color/transparent"
-                    app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp">
+                    android:clipToOutline="true"
+                    android:background="@drawable/rounded_background_blur">
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -203,7 +203,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="Zona de almacén:"
+                                android:text="Zona:"
                                 android:textSize="18sp"
                                 android:textColor="#FFFFFF"
                                 android:textStyle="bold" />
@@ -279,7 +279,7 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </FrameLayout>
             </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
