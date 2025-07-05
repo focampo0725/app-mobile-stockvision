@@ -22,6 +22,7 @@ class RoomModule {
     @Provides
     fun provideTodoDao(stockVisionDB:StockVisionDB) = stockVisionDB.todoDao()
 
+
     @Singleton
     @Provides
     fun provideSessionDao(stockVisionDB:StockVisionDB) = stockVisionDB.sessionDao()
@@ -32,7 +33,7 @@ class RoomModule {
 
     @Singleton
     @Provides
-    fun provideProductsDao(stockVisionDB:StockVisionDB) = stockVisionDB.productsDao()
+    fun provideProductsDao(stockVisionDB:StockVisionDB) = stockVisionDB.productDao()
 
     @Singleton
     @Provides
@@ -59,4 +60,8 @@ class RoomModule {
     @Singleton
     @Provides
     fun provideCategoryDao(stockVisionDB:StockVisionDB) = stockVisionDB.categoryDao()
+
+    @Singleton
+    @Provides
+    fun provideProductStockDao(stockVisionDB:StockVisionDB) = stockVisionDB.productStockDao()
 }

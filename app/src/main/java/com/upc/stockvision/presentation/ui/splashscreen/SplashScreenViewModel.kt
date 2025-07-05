@@ -61,19 +61,20 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 
     fun populateData(){
 
-        val listSupplier = listOf(
-            Supplier("MOUNT.ASSY.E", 101),
-            Supplier("CHAIN.ROLLER.ANSI-35.5FT", 102),
-            Supplier("TERMINAL BLOCK", 103),
-            Supplier("FILTER.ELEC", 104),
-            Supplier("MOUNT.ASSY.E", 105),
-            Supplier("AIR SCND", 106),
-            Supplier("CORE.HOC(DMO)", 107),
-            Supplier("NUT.HEX.SLOT (DMO)", 108),
-            Supplier("ROLLER CHAIN (DMO)", 109),
-            Supplier("WIPER BLADE", 110)
 
+        val suppliersToInsert = listOf(
+            Supplier(supplierName = "MOUNT.ASSY.E", supplierCode = 1001),
+            Supplier(supplierName = "CHAIN.ROLLER.ANSI-35.5FT", supplierCode = 1002),
+            Supplier(supplierName = "TERMINAL BLOCK", supplierCode = 1003),
+            Supplier(supplierName = "FILTER.ELEC", supplierCode = 1004),
+            Supplier(supplierName = "AIR SCND", supplierCode = 1005),
+            Supplier(supplierName = "CORE.HOC(DMO)", supplierCode = 1006),
+            Supplier(supplierName = "NUT.HEX.SLOT (DMO)", supplierCode = 1007),
+            Supplier(supplierName = "ROLLER CHAIN (DMO)", supplierCode = 1008),
+            Supplier(supplierName = "WIPER BLAD", supplierCode = 1009)
         )
+
+
 
         val listUser = listOf(
             IdentityUser("14785236", "Lucia", "Perez", "Mendoza", "123"),
@@ -82,88 +83,71 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             IdentityUser("87654321", "José", "Martínez", "Diaz", "951")
         )
 
-        val listCategory = listOf(
-            Category("Camisetas", 1),
-            Category("Pantalones", 2),
-            Category("Chaquetas", 3),
-            Category("Tops", 3),
-            Category("Zapatos", 4),
-            Category("Accesorios", 6),
-            Category("Conjuntos", 6)
+        val categoriesToInsert = listOf(
+            Category(categoryName = "Camisetas", categoryCode = 2001),
+            Category(categoryName = "Pantalones", categoryCode = 2002),
+            Category(categoryName = "Chaquetas", categoryCode = 2003),
+            Category(categoryName = "Tops", categoryCode = 2004),
+            Category(categoryName = "Zapatos", categoryCode = 2005),
+            Category(categoryName = "Accesorios", categoryCode = 2006),
+            Category(categoryName = "Conjuntos", categoryCode = 2007)
         )
 
-        val listWarehouse = listOf(
-            Warehouse("Almacén Central", 1),
-            Warehouse("Almacén Norte", 2),
-            Warehouse("Almacén Sur", 3),
-            Warehouse("Almacén Este", 4),
-            Warehouse("Almacén Oeste", 5)
+        val warehousesToInsert = listOf(
+            Warehouse(warehouseName = "Almacén Central", warehouseCode = "ALM-C001"),
+            Warehouse(warehouseName = "Almacén Norte", warehouseCode = "ALM-N001"),
+            Warehouse(warehouseName = "Almacén Sur", warehouseCode = "ALM-S001"),
+            Warehouse(warehouseName = "Almacén Este", warehouseCode = "ALM-E001"),
+            Warehouse(warehouseName = "Almacén Oeste", warehouseCode = "ALM-O001")
+        )
+        val areaWarehousesToInsert = listOf(
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas A", areaWarehouseCode = "ZC-CAM-A", warehouseReference = "ALM-C001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Pantalones B", areaWarehouseCode = "ZC-PAN-B", warehouseReference = "ALM-C001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas C", areaWarehouseCode = "ZC-CHA-C", warehouseReference = "ALM-C001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZN-ZAP-A", warehouseReference = "ALM-N001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Accesorios B", areaWarehouseCode = "ZN-ACC-B", warehouseReference = "ALM-N001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos A", areaWarehouseCode = "ZS-CONJ-A", warehouseReference = "ALM-S001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZS-CAM-B", warehouseReference = "ALM-S001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Tops C", areaWarehouseCode = "ZS-TOPS-C", warehouseReference = "ALM-S001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas D", areaWarehouseCode = "ZS-CHA-D", warehouseReference = "ALM-S001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZE-ZAP-A", warehouseReference = "ALM-E001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZE-CAM-B", warehouseReference = "ALM-E001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Accesorios A", areaWarehouseCode = "ZO-ACC-A", warehouseReference = "ALM-O001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos B", areaWarehouseCode = "ZO-CONJ-B", warehouseReference = "ALM-O001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Pantalones C", areaWarehouseCode = "ZO-PAN-C", warehouseReference = "ALM-O001")
         )
 
-        val listAreaWarehouse = listOf(
-            AreaWarehouse("Zona Ropa Hombre", 21, 1),
-            AreaWarehouse("Zona Ropa Mujer", 22, 1),
-            AreaWarehouse("Zona Ropa Infantil", 23, 2),
-            AreaWarehouse("Zona Calzado", 24, 3),
-            AreaWarehouse("Zona Accesorios", 25, 4),
-            AreaWarehouse("Zona Ropa Deportiva", 26, 5)
+//        Product("Circus Enterizo Short", "Conjuntos",10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo))),
+
+        val productsToInsert = listOf(
+            Product(productName = "Blusa manga farol satén", photo = "", categoryCode = "2004", supplierCode = "1001"),
+            Product(productName = "Pantalón palazo mujer", photo = "", categoryCode = "2002", supplierCode = "1002"),
+            Product(productName = "Short denim con bordado", photo = "", categoryCode = "2002", supplierCode = "1003"),
+            Product(productName = "Polo manga corta stretch", photo = "", categoryCode = "2001", supplierCode = "1004"),
+            Product(productName = "Falda acampanada de lino", photo = "", categoryCode = "2006", supplierCode = "1005"),
+            Product(productName = "Casaca rompeviento impermeable", photo = "", categoryCode = "2003", supplierCode = "1006"),
+            Product(productName = "Ropa de bebé enterizo polar", photo = "", categoryCode = "2007", supplierCode = "1007"),
+            Product(productName = "Casaca jean oversize", photo = "", categoryCode = "2003", supplierCode = "1008"),
+            Product(productName = "Short deportivo de licra", photo = "", categoryCode = "2002", supplierCode = "1009"),
+            Product(productName = "Falda midi plisada", photo = "", categoryCode = "2006", supplierCode = "1003"),
+            Product(productName = "Ropa de bebé con gorro", photo = "", categoryCode = "2007", supplierCode = "1001")
         )
 
-        val listProducts = listOf(
-            Products("Circus Enterizo Short", "Conjuntos",10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo))),
-            Products("Dos piezas", "Chaquetas",50, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.conjunto_pieza))),
-            Products("SHEIN Tie Back", "Conjuntos",10, "WIPER BLADE", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.tie_back))),
-
-            Products("Striped Cropped", "Tops",40, "WIPER BLADE", "Almacén Norte", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cropp))),
-            Products("Cross Wrap Solid", "Tops",20, "WIPER BLADE", "Almacén Norte", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.solid))),
-            Products("Top rayas negras", "Tops",50, "WIPER BLADE", "Almacén Norte", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.rayas_negras))),
-            Products("Camiseta Básica", "Camisetas", 10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", "imagen1_base64"),
-            Products("Camiseta Deportiva", "Camisetas", 15, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Central", "Zona Ropa Mujer", "imagen2_base64"),
-            Products("Camiseta Cuello V", "Camisetas", 12, "TERMINAL BLOCK", "Almacén Central", "Zona Ropa Mujer", "imagen3_base64"),
-
-            //
-            Products("Camiseta Básica", "Camisetas", 10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_basica))),
-            Products("Camiseta Deportiva", "Camisetas", 15, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_deportiva))),
-            Products("Camiseta Cuello V", "Camisetas", 12, "TERMINAL BLOCK", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_v))),
-
-            // Categoría: Pantalones
-            Products("Pantalón Casual", "Pantalones", 18, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.pantalon_casual))),
-            Products("Pantalón Chino", "Pantalones", 22, "AIR SCND", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.pantalon_chino))),
-            Products("Jeans Ajustados", "Pantalones", 20, "CORE.HOC(DMO)", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.ajustados))),
-
-            // Categoría: Chaquetas
-            Products("Chaqueta Estilo Urbano", "Chaquetas", 10, "FILTER.ELEC", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.chaqueta_urbano))),
-            Products("Abrigo Invierno", "Chaquetas", 14, "NUT.HEX.SLOT (DMO)", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.abrigo_mujer_inv))),
-            Products("Cazadora de Cuero", "Chaquetas", 8, "ROLLER CHAIN (DMO)", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.cazadora_mujer))),
-
-            // Almacén Norte
-            // Categoría: Camisetas
-            Products("Camiseta Casual", "Camisetas", 30, "WIPER BLADE", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_casual))),
-            Products("Camiseta Deportiva", "Camisetas", 25, "FILTER.ELEC", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_deportiva_ho))),
-            Products("Camiseta Manga Larga", "Camisetas", 10, "MOUNT.ASSY.E", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_larga_h))),
-
-            // Categoría: Pantalones
-            Products("Pantalón Cargo", "Pantalones", 35, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.p_cargo_nor))),
-            Products("Pantalón Deportivo", "Pantalones", 40, "TERMINAL BLOCK", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.deportivo_h_no))),
-            Products("Pantalón Formal", "Pantalones", 22, "AIR SCND", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.formal_h_no))),
-
-            // Categoría: Chaquetas
-            Products("Chaqueta Bomber", "Chaquetas", 5, "FILTER.ELEC", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.bomber_h_no))),
-            Products("Chaqueta Pluma", "Chaquetas", 10, "NUT.HEX.SLOT (DMO)", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.pluma_h_no))),
-            Products("Chaleco Outdoor", "Chaquetas", 8, "ROLLER CHAIN (DMO)", "Almacén Norte", "Zona Ropa Hombre", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.outdoor_h_no))),
-
-            // Almacén Sur
-            // Categoría: Camisetas
-            Products("Camiseta Estampada", "Camisetas", 40, "WIPER BLADE", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.camiseta_sur_in))),
-            Products("Camiseta Básica", "Camisetas", 35, "FILTER.ELEC", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.basica_sur_in))),
-            Products("Camiseta de Cuello Alto", "Camisetas", 12, "MOUNT.ASSY.E", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.alto_sur_in))),
-
-            // Categoría: Pantalones
-            Products("Pantalón Corto", "Pantalones", 50, "CHAIN.ROLLER.ANSI-35.5FT", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.corto_sur_in))),
-            Products("Pantalón Estilo Jogger", "Pantalones", 60, "TERMINAL BLOCK", "Almacén Sur", "Zona Ropa Infantil", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.jogger_sur_in))),
-
-
+        val productStockToInsert = listOf(
+            ProductStock(productId = 1, areaCode = "ZC-CAM-A", stock = 40),
+            ProductStock(productId = 2, areaCode = "ZO-PAN-C", stock = 35),
+            ProductStock(productId = 3, areaCode = "ZE-ZAP-A", stock = 15),
+            ProductStock(productId = 4, areaCode = "ZN-ZAP-A", stock = 50),
+            ProductStock(productId = 5, areaCode = "ZN-ACC-B", stock = 30),
+            ProductStock(productId = 6, areaCode = "ZN-ZAP-A", stock = 25),
+            ProductStock(productId = 7, areaCode = "ZS-TOPS-C", stock = 12),
+            ProductStock(productId = 8, areaCode = "ZC-CHA-C", stock = 18),
+            ProductStock(productId = 9, areaCode = "ZE-CAM-B", stock = 22),
+            ProductStock(productId = 10, areaCode = "ZO-CONJ-B", stock = 28),
+            ProductStock(productId = 11, areaCode = "ZS-CHA-D", stock = 14)
         )
+
+
 
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -188,14 +172,16 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.areaWarehouseDao.deleteAll()
             stockVisionRepository.notificationsDao.deleteAllSequence()
             stockVisionRepository.notificationsDao.deleteAll()
+            stockVisionRepository.productStockDao.deleteAll()
 
-            stockVisionRepository.supplierDao.insertAll(listSupplier)
-            stockVisionRepository.productsDao.insertAll(listProducts)
+            stockVisionRepository.supplierDao.insertAll(suppliersToInsert)
+            stockVisionRepository.productsDao.insertAll(productsToInsert)
             stockVisionRepository.identityUserDao.insertAll(listUser)
-            stockVisionRepository.categoryDao.insertAll(listCategory)
-            stockVisionRepository.warehouseDao.insertAll(listWarehouse)
-            stockVisionRepository.areaWarehouseDao.insertAll(listAreaWarehouse)
+            stockVisionRepository.categoryDao.insertAll(categoriesToInsert)
+            stockVisionRepository.warehouseDao.insertAll(warehousesToInsert)
+            stockVisionRepository.areaWarehouseDao.insertAll(areaWarehousesToInsert)
             stockVisionRepository.notificationsDao.insertAll(listNotifications)
+            stockVisionRepository.productStockDao.insertAll(productStockToInsert)
         }
     }
 

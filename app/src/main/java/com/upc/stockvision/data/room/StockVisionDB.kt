@@ -9,20 +9,23 @@ import com.upc.stockvision.domain.entities.*
     Todo::class,
     Session::class,
     IdentityUser::class,
-    Products::class,
+    Product::class,
     AreaWarehouse::class,
     Supplier::class,
     Warehouse::class,
     ReserveArea::class,
     Category::class,
     ProductMovement::class,
-    Notifications::class
+    Notifications::class,
+    ProductStock::class
 ], version = 1)
 abstract class StockVisionDB : RoomDatabase() {
+
     abstract fun todoDao() : TodoDao
+    abstract fun productStockDao() : ProductStockDao
     abstract fun sessionDao() : SignInDao
     abstract fun identityUserDao() : IdentityUserDao
-    abstract fun productsDao() : ProductsDao
+    abstract fun productDao() : ProductDao
     abstract fun areaWarehouseDao() : AreaWarehouseDao
     abstract fun warehouseDao() : WarehouseDao
     abstract fun supplierDao() : SupplierDao

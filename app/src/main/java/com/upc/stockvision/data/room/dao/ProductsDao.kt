@@ -2,29 +2,29 @@ package com.upc.stockvision.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.upc.stockvision.domain.entities.Products
-import com.upc.stockvision.domain.entities.Supplier
+import com.upc.stockvision.domain.entities.Product
+
 
 @Dao
-interface ProductsDao : BaseDao<Products> {
-    @Query("SELECT * FROM Products")
-    fun getAll(): List<Products>
+interface ProductDao : BaseDao<Product> {
+    @Query("SELECT * FROM Product")
+    fun getAll(): List<Product>
 
-    @Query("SELECT * FROM Products WHERE id = :idProduct")
-    fun getOnlyProduct(idProduct : Int): Products
+    @Query("SELECT * FROM Product WHERE id = :idProduct")
+    fun getOnlyProduct(idProduct : Int): Product
 
-    @Query("SELECT * FROM Products WHERE productName = :productName")
-    fun getProductByName(productName: String): Products
+    @Query("SELECT * FROM Product WHERE productName = :productName")
+    fun getProductByName(productName: String): Product
 
 
-    @Query("SELECT * FROM Products WHERE categoryName = :categoryName")
-    fun getProductsByCategory(categoryName: String): List<Products>
+    @Query("SELECT * FROM Product WHERE categoryName = :categoryName")
+    fun getProductsByCategory(categoryName: String): List<Product>
 
-    @Query("DELETE FROM Products")
+    @Query("DELETE FROM Product")
     fun deleteAll()
 
     @Query("""
-        UPDATE Products 
+        UPDATE Product 
         SET productName = COALESCE(:productName, productName),
             categoryName = COALESCE(:categoryName, categoryName),
             quantity = COALESCE(:quantity, quantity),
@@ -45,6 +45,6 @@ interface ProductsDao : BaseDao<Products> {
         photo: String?
     )
 
-    @Query("""UPDATE Products SET quantity = :quantity  WHERE id = :id""")
+    @Query("""UPDATE Product SET quantity = :quantity  WHERE id = :id""")
     fun updateQuantityForMovement(id : Int, quantity: Int)
 }

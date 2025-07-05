@@ -1,27 +1,39 @@
 package com.upc.stockvision.domain.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.upc.stockvision.data.room.converter.TimeConverter
 
-@Entity(tableName = Products.TABLE_NAME)
-@TypeConverters(TimeConverter::class)
-class Products(
-    @ColumnInfo(name = "productName") var productName: String,
-    @ColumnInfo(name = "categoryName") var categoryName: String,
-    @ColumnInfo(name = "quantity") var quantity: Int,
-    @ColumnInfo(name = "supplierName") var supplierName: String,
-    @ColumnInfo(name = "warehouse") var warehouse: String,
-    @ColumnInfo(name = "areaWarehouse") var areaWarehouse: String,
-    @ColumnInfo(name = "photo") var photo: String,
-){
-    companion object {
-        const val TABLE_NAME = "Products"
-    }
+@Entity(
+    tableName = "Product",
+    foreignKeys = [
+        ForeignKey(
+            entity = Category::class,
+            parentColumns = ["categoryCode"],
+            childColumns = ["category_code"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Supplier::class,
+            parentColumns = ["supplierCode"],
+            childColumns = ["supplier_code"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("category_code"), Index("supplier_code")]
+)
+data class Product(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int = 0
+    val id: Int = 0,
 
-}
+    @ColumnInfo(name = "productName")
+    val productName: String,
+
+    @ColumnInfo(name = "photo")
+    val photo: String,
+
+    @ColumnInfo(name = "category_code")
+    val categoryCode: String,
+
+    @ColumnInfo(name = "supplier_code")
+    val supplierCode: String
+)

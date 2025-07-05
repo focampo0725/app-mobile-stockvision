@@ -1,20 +1,33 @@
 package com.upc.stockvision.domain.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity(tableName = AreaWarehouse.TABLE_NAME)
-class AreaWarehouse(
-    @ColumnInfo(name = "areaWarehouseName") var areaWarehouseName:  String,
-    @ColumnInfo(name = "areaWarehouseCode") var areaWarehouseCode:  Int,
-    @ColumnInfo(name = "warehouseReference") var warehouseReference:  Int
-) {
-    companion object {
-        const val TABLE_NAME = "AreaWarehouse"
-    }
-
+@Entity(
+    tableName = "AreaWarehouse",
+    foreignKeys = [
+        ForeignKey(
+            entity = Warehouse::class,
+            parentColumns = ["warehouseCode"],
+            childColumns = ["warehouseReference"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [
+        Index(value = ["warehouseReference"]),
+        Index(value = ["areaWarehouseCode"], unique = true) // ← ahora es único
+    ]
+)
+data class AreaWarehouse(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int = 0
-}
+    val id: Int = 0,
+
+    @ColumnInfo(name = "areaWarehouseName")
+    val areaWarehouseName: String,
+
+    @ColumnInfo(name = "areaWarehouseCode")
+    val areaWarehouseCode: String, // ← este es UNIQUE
+
+    @ColumnInfo(name = "warehouseReference")
+    val warehouseReference: String
+)

@@ -1,7 +1,10 @@
 package com.upc.stockvision.presentation.ui.detail_reserve_space
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,8 @@ import androidx.fragment.app.viewModels
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentDetailProductBinding
 import com.upc.stockvision.databinding.FragmentDetailReserveBinding
+import com.upc.stockvision.domain.dto.ProductOnDetailDTO
+import com.upc.stockvision.domain.dto.ReserveDetailDTO
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.ui.detail_product.DetailProductState
@@ -22,6 +27,7 @@ import javax.inject.Inject
 class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFragment<DetailReserveViewModel, DetailReserveState>() {
     val viewModel: DetailReserveViewModel by viewModels()
     private lateinit var binding : FragmentDetailReserveBinding
+    private lateinit var reserve: ReserveDetailDTO
     override fun processRenderState(renderState: DetailReserveState, context: Context) {
 
     }
@@ -39,6 +45,33 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
         binding = FragmentDetailReserveBinding.inflate(inflater, container,false)
         return binding.root
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupViewModel(viewModel = viewModel)
+        initView()
 
+    }
+
+    fun initView(){
+        loadReserveDetailsData()
+    }
+    fun base64ToBitmap(base64String: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    private fun loadReserveDetailsData() {
+        binding.tvProductName.text = ""
+        binding.tvWarehouse.text = ""
+        binding.tvAreaWarehouse.text = ""
+        binding.tvArrivalDate.text = ""
+        binding.tvQuantity.text = ""
+        val bitmap = base64ToBitmap("")
+        binding.ivProductPhotoPhoto.setImageBitmap(bitmap)
+    }
 
 }

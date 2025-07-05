@@ -33,8 +33,8 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
     lateinit var context: Context
     fun requestProductList() {
         doAsynTask({
-            val listCategory = stockVisionRepository.productsDao.getAll()
-            listCategory.map { product ->
+            val listProduct = stockVisionRepository.productsDao.getAll()
+            listProduct.map { product ->
                 ProductOnDetailDTO(
                     idProduct = product.id,
                     productName = product.productName,

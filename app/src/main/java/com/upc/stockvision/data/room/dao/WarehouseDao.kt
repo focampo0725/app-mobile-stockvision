@@ -11,7 +11,7 @@ interface WarehouseDao : BaseDao<Warehouse>{
     fun getAll(): List<Warehouse>
 
     @Query("SELECT warehouseCode FROM Warehouse WHERE warehouseName = :name")
-    fun getWarehouseCodeByName(name: String): Int
+    fun getWarehouseCodeByName(name: String): String
 
     @Query("DELETE FROM Warehouse")
     fun deleteAll()

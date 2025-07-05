@@ -43,7 +43,7 @@ data class WarehouseDTO(
 
 data class AreaWarehouseDTO(
     @SerializedName("codeCategory")
-    val codeAreaWarehouse : Int,
+    val codeAreaWarehouse : String,
     @SerializedName("categoryName")
     val areaWarehouseName : String
 ): Serializable
@@ -66,6 +66,25 @@ data class ProductDTO(
 ): Serializable
 
 data class ProductOnDetailDTO(
+    @SerializedName("idProduct")
+    val idProduct: Int,
+    @SerializedName("productName")
+    val productName: String,
+    @SerializedName("categoryName")
+    val categoryName: String,
+    @SerializedName("quantity")
+    val quantity: Int,
+    @SerializedName("supplierName")
+    val supplierName: String,
+    @SerializedName("warehouse")
+    val warehouse: String,
+    @SerializedName("areaWarehouse")
+    val areaWarehouse: String,
+    @SerializedName("photo")
+    val photo: String
+): Serializable
+
+data class ReserveDetailDTO(
     @SerializedName("idProduct")
     val idProduct: Int,
     @SerializedName("productName")
