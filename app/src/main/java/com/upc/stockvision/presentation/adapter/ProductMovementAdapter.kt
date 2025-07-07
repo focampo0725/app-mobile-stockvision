@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.upc.stockvision.databinding.ItemMovementBinding
-import com.upc.stockvision.databinding.ItemReserveBinding
 import com.upc.stockvision.domain.dto.ProductMovementDTO
-import com.upc.stockvision.domain.dto.ReserveAreaDTO
 import java.text.SimpleDateFormat
 import java.util.*
 

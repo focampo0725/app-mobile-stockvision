@@ -3,6 +3,7 @@ package com.upc.stockvision.domain.entities
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import com.upc.stockvision.data.room.converter.TimeConverter
+
 import java.util.*
 
 @Entity(
@@ -15,7 +16,7 @@ import java.util.*
     indices = [Index("product_id"), Index("initial_area_id"), Index("final_area_id")]
 )
 @TypeConverters(TimeConverter::class)
-data class ProductMovement(
+class ProductMovement(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
@@ -28,8 +29,14 @@ data class ProductMovement(
     @ColumnInfo(name = "amountInitial")
     val amountInitial: Int,
 
+    @ColumnInfo(name = "amountFinalInitialArea")
+    val amountFinalInitialArea: Int,
+
     @ColumnInfo(name = "final_area_id")
     val finalAreaId: String,
+
+    @ColumnInfo(name = "amountInitialFinalArea")
+    val amountInitialFinalArea: Int,
 
     @ColumnInfo(name = "amountMoved")
     val amountMoved: Int,

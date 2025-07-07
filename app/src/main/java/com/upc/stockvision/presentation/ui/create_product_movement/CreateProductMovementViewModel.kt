@@ -1,24 +1,17 @@
 package com.upc.stockvision.presentation.ui.create_product_movement
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.domain.entities.ProductMovement
-import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ProductStock
-import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
-import com.upc.stockvision.infrastructure.extensions.doAsync
-import com.upc.stockvision.infrastructure.extensions.logi
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
-import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlState
-import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
-import com.upc.stockvision.presentation.ui.reserve_space.ReserveSpaceState
-import com.upc.stockvision.presentation.ui.show_reservation.ShowReservationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
@@ -127,83 +120,56 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         amountMoved: Int,
         typeMovement: String
     ) {
-        doAsynTask({
+        val productStockDao = stockVisionRepository.productStockDao
+        val movementDao = stockVisionRepository.productMovementDao
 
-            // 1. Restar cantidad en el área de origen
-            val originStock = stockVisionRepository.productStockDao.getByProductAndArea(productId, initialAreaId)
+        // Obtener stock en área de origen
+        val stockOrigin = productStockDao.getByProductAndArea(productId, initialAreaId)
+            ?: throw IllegalStateException("No hay stock en el área de origen.")
 
-            originStock?.let {
-                it.stock -= amountMoved
-                stockVisionRepository.productStockDao.update(it)
-            }
+        val stockInicialOrigen = stockOrigin.stock
+        stockOrigin.stock -= amountMoved
+        productStockDao.update(stockOrigin)
+        val stockFinalOrigen = stockOrigin.stock
 
-            // 2. Sumar o insertar en el área de destino
-            val destinationStock = stockVisionRepository.productStockDao
-                .getByProductAndArea(productId, finalAreaId)
+        // Obtener stock en área destino
+        val stockDestino = productStockDao.getByProductAndArea(productId, finalAreaId)
+        val stockInicialDestino = stockDestino?.stock ?: 0
 
-            if (destinationStock != null) {
-                destinationStock.stock += amountMoved
-                stockVisionRepository.productStockDao.update(destinationStock)
-            } else {
-                stockVisionRepository.productStockDao.insert(
-                    ProductStock(
-                        productId = productId,
-                        areaCode = finalAreaId,
-                        stock = amountMoved
-                    )
-                )
-            }
-
-            // 3. Registrar movimiento
-            val movement = ProductMovement(
+        if (stockDestino != null) {
+            stockDestino.stock += amountMoved
+            productStockDao.update(stockDestino)
+        } else {
+            val nuevoStock = ProductStock(
                 productId = productId,
-                initialAreaId = initialAreaId,
-                amountInitial = originStock?.stock!!,
-                finalAreaId = finalAreaId,
-                amountMoved = amountMoved,
-                typeMovement = typeMovement
+                areaCode = finalAreaId,
+                stock = amountMoved
             )
+            productStockDao.insert(nuevoStock)
+        }
 
-            stockVisionRepository.productMovementDao.insert(movement)
+        val movement = ProductMovement(
+            productId = productId,
+            initialAreaId = initialAreaId,
+            amountInitial = stockInicialOrigen,
+            amountFinalInitialArea = stockFinalOrigen,
+            finalAreaId = finalAreaId,
+            amountInitialFinalArea = stockInicialDestino,
+            amountMoved = amountMoved,
+            typeMovement = typeMovement,
+            movementDate = Date()
+        )
 
-        }, {
-            renderState.postValue(
-                LCEState.Content(
-                    CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")
-                )
+        movementDao.insert(movement)
+
+        renderState.postValue(
+            LCEState.Content(
+                CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")
             )
-        })
+        )
     }
 
 
-    fun updateProductMovement(idProduct : Int , productQuantity : Int ,warehouse: String, areaWarehouse: String,newProductQuantity : Int ){
-
-//        doAsynTask({
-//            val getProducts = stockVisionRepository.productsDao.getOnlyProduct(idProduct)
-//            getProducts
-//        },{
-//            val newProductForMovement = Products(
-//                productName= it.productName,
-//                categoryName = it.categoryName,
-//                quantity = newProductQuantity,
-//                supplierName =  it.supplierName,
-//                warehouse =  warehouse,
-//                areaWarehouse =  areaWarehouse,
-//                photo =  it.photo
-//            )
-//
-//            doAsync{
-//                try {
-//                    stockVisionRepository.productsDao.updateQuantityForMovement(idProduct, productQuantity)
-//                    stockVisionRepository.productsDao.insert(newProductForMovement)
-//                } catch (e: Exception) {
-//                    context.logi("[EroorRegistro] -> $e")
-//                }
-//            }
-//        })
-
-
-    }
 
     override val renderState: MutableLiveData<LCEState<CreateProductMovementState>>
         get() = getLiveData()

@@ -72,24 +72,16 @@ data class ProductOnDetailDTO(
     val photo: String
 ): Serializable
 
-data class ReserveDetailDTO(
-    @SerializedName("idProduct")
-    val idProduct: Int,
-    @SerializedName("productName")
+data class ReservationDetailDTO(
+    val reservationId: Int,
     val productName: String,
-    @SerializedName("categoryName")
-    val categoryName: String,
-    @SerializedName("quantity")
-    val quantity: Int,
-    @SerializedName("supplierName")
-    val supplierName: String,
-    @SerializedName("warehouse")
-    val warehouse: String,
-    @SerializedName("areaWarehouse")
-    val areaWarehouse: String,
-    @SerializedName("photo")
-    val photo: String
-): Serializable
+    val photo: String,
+    val quantityReserved: Int,
+    val areaWarehouseName: String,
+    val warehouseName: String,
+    val arrivalDate: String
+)
+
 
 data class ReserveAreaDTO(
     val id: Int,

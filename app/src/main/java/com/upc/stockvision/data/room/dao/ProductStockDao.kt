@@ -1,9 +1,7 @@
 package com.upc.stockvision.data.room.dao
 
 import androidx.room.*
-import com.upc.stockvision.domain.entities.IdentityUser
 import com.upc.stockvision.domain.entities.ProductStock
-import com.upc.stockvision.domain.entities.Todo
 
 @Dao
 interface ProductStockDao : BaseDao<ProductStock>  {

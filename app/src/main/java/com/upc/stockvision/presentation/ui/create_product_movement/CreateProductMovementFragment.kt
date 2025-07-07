@@ -26,6 +26,7 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
     private lateinit var binding: FragmentCreateProductMovementBinding
     var initialQuantity = 0
     var idProdcutSelected = 0
+    var finalAreaWarehouseCode : String ?= null
     var categoryCode : String ?= null
 
     override fun processRenderState(renderState: CreateProductMovementState, context: Context) {
@@ -59,6 +60,7 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
             is CreateProductMovementState.AreaWarehouseLoaded -> {
                 DialogAreaWarehouse(areaWarehouseList = renderState.areaWarehouseList) { selectedAreaWarehouse ->
                     binding.tvFinalAreaWarehouse.text = selectedAreaWarehouse.areaWarehouseName
+                    finalAreaWarehouseCode = selectedAreaWarehouse.codeAreaWarehouse
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
             }
             is CreateProductMovementState.TypeProductMovementLoaded -> {
@@ -135,8 +137,12 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
         }
 
         binding.btnCreatNewMovement.setOnClickListener {
-            viewModel.updateProductMovement(idProduct = idProdcutSelected, productQuantity = binding.tvInitialQuantity.text.toString().toInt(),binding.tvFinalWarehouse.text.toString(),binding.tvFinalAreaWarehouse.text.toString(), newProductQuantity = binding.etFinalQuantity.text.toString().toInt())
-            viewModel.createMovement("Franco Ocampo",binding.tvProduct.text.toString(),binding.tvInitialWarehouse.text.toString(),binding.tvInitialAreaWarehouse.text.toString(),binding.tvFinalWarehouse.text.toString(),binding.tvFinalAreaWarehouse.text.toString(),binding.etFinalQuantity.text.toString().toInt(),binding.tvTypeMovement.text.toString())
+//            productId: Int,
+//            initialAreaId: String,
+//            finalAreaId: String,
+//            amountMoved: Int,
+//            typeMovement: String
+            viewModel.createMovement(idProdcutSelected,"",finalAreaWarehouseCode!!,binding.etFinalQuantity.text.toString().toInt(),binding.tvTypeMovement.text.toString())
 
         }
 

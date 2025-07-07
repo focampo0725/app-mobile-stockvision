@@ -1,5 +1,6 @@
 package com.upc.stockvision.data.room
 
+import ProductMovement
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.upc.stockvision.data.room.dao.*

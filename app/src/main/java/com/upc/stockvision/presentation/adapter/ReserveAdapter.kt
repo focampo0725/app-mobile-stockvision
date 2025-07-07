@@ -6,23 +6,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.upc.stockvision.databinding.ItemReserveBinding
-import com.upc.stockvision.domain.dto.ReserveAreaDTO
+import com.upc.stockvision.domain.dto.ReservationDetailDTO
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ReserveAdapter(
     private val context: Context,
-    val onClick: (reserve: ReserveAreaDTO) -> Unit
+    val onClick: (reserve: ReservationDetailDTO) -> Unit
 ) : RecyclerView.Adapter<ReserveAdapter.ViewHolder>() {
 
-    private var reserveList: List<ReserveAreaDTO> = emptyList()
-    private var filteredList: MutableList<ReserveAreaDTO> = mutableListOf()
+    private var reserveList: List<ReservationDetailDTO> = emptyList()
+    private var filteredList: MutableList<ReservationDetailDTO> = mutableListOf()
 
 //    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
       private val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
 
-    fun setReserves(reserves: List<ReserveAreaDTO>) {
+    fun setReserves(reserves: List<ReservationDetailDTO>) {
         reserveList = reserves
         filteredList = reserveList.toMutableList()
         notifyDataSetChanged()
@@ -50,9 +50,9 @@ class ReserveAdapter(
 
         filteredList = reserveList.filter { reserve ->
             val reserveDate: Date? = try {
-                dateFormat.parse(reserve.createAt)
+                dateFormat.parse(reserve.arrivalDate)
             } catch (e: Exception) {
-                Log.e("AdapterDebug", "Error parsing date: ${reserve.createAt}")
+                Log.e("AdapterDebug", "Error parsing date: ${reserve.arrivalDate}")
                 null
             }
 
