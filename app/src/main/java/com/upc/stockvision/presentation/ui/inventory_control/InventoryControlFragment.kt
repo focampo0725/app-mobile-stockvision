@@ -37,6 +37,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
 
     private lateinit var productList: List<ProductOnDetailDTO>
     private lateinit var productAdapter: ProductAdapter
+    var warehouseCode : String ?= null
 
     override fun processRenderState(renderState: InventoryControlState, context: Context) {
         when(renderState){
@@ -56,6 +57,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
                 DialogWarehouse(warehouseList = renderState.warehouseList){selectedWarehouse ->
                     binding.tvWarehouseControlProduct.text = selectedWarehouse.warehouseName
                     val warehouse = binding.tvWarehouseControlProduct.text.toString()
+                    warehouseCode = selectedWarehouse.codeWarehouse
                     applyFilter(warehouse, null, null)
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
             }
@@ -88,7 +90,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
         binding.rvProducts.adapter = productAdapter
         
         binding.tvCategory.setOnClickListener {
-            viewModel.requestCategoryLista()
+            viewModel.requestCategoryLista(warehouseCode)
         }
         binding.tvWarehouseControlProduct.setOnClickListener {
             viewModel.requestWarehouse()

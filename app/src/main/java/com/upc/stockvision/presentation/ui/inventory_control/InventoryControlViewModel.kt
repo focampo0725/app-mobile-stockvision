@@ -33,23 +33,12 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
     lateinit var context: Context
     fun requestProductList() {
         doAsynTask({
-            val listProduct = stockVisionRepository.productsDao.getAll()
-            listProduct.map { product ->
-                ProductOnDetailDTO(
-                    idProduct = product.id,
-                    productName = product.productName,
-                    categoryName = product.categoryName,
-                    quantity = product.quantity,
-                    supplierName = product.supplierName,
-                    warehouse = product.warehouse,
-                    areaWarehouse = product.areaWarehouse,
-                    photo = product.photo
-                )
-            }
+            stockVisionRepository.productsDao.getAllProductDetails()
         }, {
             renderState.value = LCEState.Content(InventoryControlState.ProductLoaded(it))
         })
     }
+
 
     fun requestWarehouse() {
         doAsynTask({
@@ -67,9 +56,9 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
         })
     }
 
-    fun requestCategoryLista() {
+    fun requestCategoryLista(warehouseCode: String? = null) {
         doAsynTask({
-            val listCategory = stockVisionRepository.categoryDao.getAll()
+            val listCategory = stockVisionRepository.categoryDao.getCategoriesByWarehouseOrAll(warehouseCode)
             listCategory.map { category ->
                 CategoryDTO(
                     codeCategory = category.categoryCode,
@@ -83,6 +72,7 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
                 LCEState.Content(InventoryControlState.CategoriesLoaded(response))
         })
     }
+
 
 
 

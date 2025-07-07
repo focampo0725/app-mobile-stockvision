@@ -1,7 +1,6 @@
 package com.upc.stockvision.domain.entities
 
 import androidx.room.*
-import com.upc.stockvision.data.room.converter.TimeConverter
 
 @Entity(
     tableName = "Product",

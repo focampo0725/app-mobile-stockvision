@@ -17,5 +17,5 @@ data class Category(
     val categoryName: String,
 
     @ColumnInfo(name = "categoryCode")
-    val categoryCode: Int
+    val categoryCode: String
 )

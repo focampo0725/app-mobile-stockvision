@@ -63,15 +63,15 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 
 
         val suppliersToInsert = listOf(
-            Supplier(supplierName = "MOUNT.ASSY.E", supplierCode = 1001),
-            Supplier(supplierName = "CHAIN.ROLLER.ANSI-35.5FT", supplierCode = 1002),
-            Supplier(supplierName = "TERMINAL BLOCK", supplierCode = 1003),
-            Supplier(supplierName = "FILTER.ELEC", supplierCode = 1004),
-            Supplier(supplierName = "AIR SCND", supplierCode = 1005),
-            Supplier(supplierName = "CORE.HOC(DMO)", supplierCode = 1006),
-            Supplier(supplierName = "NUT.HEX.SLOT (DMO)", supplierCode = 1007),
-            Supplier(supplierName = "ROLLER CHAIN (DMO)", supplierCode = 1008),
-            Supplier(supplierName = "WIPER BLAD", supplierCode = 1009)
+            Supplier(supplierName = "MOUNT.ASSY.E", supplierCode = "1001"),
+            Supplier(supplierName = "CHAIN.ROLLER.ANSI-35.5FT", supplierCode = "1002"),
+            Supplier(supplierName = "TERMINAL BLOCK", supplierCode = "1003"),
+            Supplier(supplierName = "FILTER.ELEC", supplierCode = "1004"),
+            Supplier(supplierName = "AIR SCND", supplierCode = "1005"),
+            Supplier(supplierName = "CORE.HOC(DMO)", supplierCode = "1006"),
+            Supplier(supplierName = "NUT.HEX.SLOT (DMO)", supplierCode = "1007"),
+            Supplier(supplierName = "ROLLER CHAIN (DMO)", supplierCode = "1008"),
+            Supplier(supplierName = "WIPER BLAD", supplierCode = "1009")
         )
 
 
@@ -84,13 +84,13 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
         )
 
         val categoriesToInsert = listOf(
-            Category(categoryName = "Camisetas", categoryCode = 2001),
-            Category(categoryName = "Pantalones", categoryCode = 2002),
-            Category(categoryName = "Chaquetas", categoryCode = 2003),
-            Category(categoryName = "Tops", categoryCode = 2004),
-            Category(categoryName = "Zapatos", categoryCode = 2005),
-            Category(categoryName = "Accesorios", categoryCode = 2006),
-            Category(categoryName = "Conjuntos", categoryCode = 2007)
+            Category(categoryName = "Camisetas", categoryCode = "2001"),
+            Category(categoryName = "Pantalones", categoryCode = "2002"),
+            Category(categoryName = "Chaquetas", categoryCode = "2003"),
+            Category(categoryName = "Tops", categoryCode = "2004"),
+            Category(categoryName = "Zapatos", categoryCode = "2005"),
+            Category(categoryName = "Accesorios", categoryCode = "2006"),
+            Category(categoryName = "Conjuntos", categoryCode = "2007")
         )
 
         val warehousesToInsert = listOf(
@@ -146,6 +146,10 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             ProductStock(productId = 10, areaCode = "ZO-CONJ-B", stock = 28),
             ProductStock(productId = 11, areaCode = "ZS-CHA-D", stock = 14)
         )
+        val reserveToInsert = listOf(
+            ReserveArea(productId = 1, areaId = "ZC-CAM-A", quantity = 10, arrivalDate = "2025-07-08"),
+            ReserveArea(productId = 9, areaId = "ZE-CAM-B", quantity = 5, arrivalDate = "2025-07-10")
+        )
 
 
 
@@ -165,23 +169,26 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 
         doAsync{
             stockVisionRepository.supplierDao.deleteAll()
+            stockVisionRepository.categoryDao.deleteAll()
             stockVisionRepository.productsDao.deleteAll()
             stockVisionRepository.identityUserDao.deleteAll()
-            stockVisionRepository.categoryDao.deleteAll()
             stockVisionRepository.warehouseDao.deleteAll()
             stockVisionRepository.areaWarehouseDao.deleteAll()
             stockVisionRepository.notificationsDao.deleteAllSequence()
             stockVisionRepository.notificationsDao.deleteAll()
             stockVisionRepository.productStockDao.deleteAll()
+            stockVisionRepository.reserveAreaDao.deleteAll()
 
             stockVisionRepository.supplierDao.insertAll(suppliersToInsert)
+            stockVisionRepository.categoryDao.insertAll(categoriesToInsert)
             stockVisionRepository.productsDao.insertAll(productsToInsert)
             stockVisionRepository.identityUserDao.insertAll(listUser)
-            stockVisionRepository.categoryDao.insertAll(categoriesToInsert)
             stockVisionRepository.warehouseDao.insertAll(warehousesToInsert)
             stockVisionRepository.areaWarehouseDao.insertAll(areaWarehousesToInsert)
             stockVisionRepository.notificationsDao.insertAll(listNotifications)
             stockVisionRepository.productStockDao.insertAll(productStockToInsert)
+            stockVisionRepository.reserveAreaDao.insertAll(reserveToInsert)
+
         }
     }
 

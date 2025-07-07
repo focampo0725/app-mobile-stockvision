@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask

@@ -64,7 +64,7 @@ class FcmService : FirebaseMessagingService() {
                     stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
                 },{
                     doAsync{
-                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
+//                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
                     }
 
                 })
@@ -77,8 +77,8 @@ class FcmService : FirebaseMessagingService() {
                     stockVisionRepository.productsDao.getProductByName(messageParts?.get(3)!!)
                 },{
                     doAsync{
-                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
-                        stockVisionRepository.reserveAreaDao.insert(ReserveArea(categoryName = it.categoryName,productName =  it.productName, quantity =it.quantity,warehouseName =  it.warehouse,areaWarehouseName = it.areaWarehouse, durationDays = 2))
+//                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
+//                        stockVisionRepository.reserveAreaDao.insert(ReserveArea(categoryName = it.categoryName,productName =  it.productName, quantity =it.quantity,warehouseName =  it.warehouse,areaWarehouseName = it.areaWarehouse, durationDays = 2))
                     }
 
                 })
@@ -89,7 +89,7 @@ class FcmService : FirebaseMessagingService() {
                     stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
                 },{
                     doAsync{
-                        stockVisionRepository.notificationsDao.insert(Notifications(2,"",it.productName,it.warehouse,it.areaWarehouse,3))
+//                        stockVisionRepository.notificationsDao.insert(Notifications(2,"",it.productName,it.warehouse,it.areaWarehouse,3))
                     }
 
                 })

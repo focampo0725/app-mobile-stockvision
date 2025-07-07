@@ -7,7 +7,8 @@ import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
+import com.upc.stockvision.domain.entities.ProductStock
 import com.upc.stockvision.infrastructure.extensions.*
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
@@ -75,6 +76,7 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
                 LCEState.Content(ProductRegistrationState.CategoriesLoaded(response))
         })
     }
+
     fun requestSupplier() {
         doAsynTask({
             val listCategory = stockVisionRepository.supplierDao.getAll()
@@ -90,6 +92,7 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
             renderState.value = LCEState.Content(ProductRegistrationState.ProductsLoaded(response))
         })
     }
+
     fun requestWarehouse() {
         doAsynTask({
             val listCategory = stockVisionRepository.warehouseDao.getAll()
@@ -105,6 +108,7 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
             renderState.value = LCEState.Content(ProductRegistrationState.WarehouseLoaded(response))
         })
     }
+
     fun requestAreaWarehouse(warehose: String) {
         doAsynTask({
             val areaWarehouse = stockVisionRepository.warehouseDao.getWarehouseCodeByName(warehose)
@@ -119,38 +123,55 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
         }, {
             val response =
                 ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
-            renderState.value = LCEState.Content(ProductRegistrationState.AreaWarehouseLoaded(response))
+            renderState.value =
+                LCEState.Content(ProductRegistrationState.AreaWarehouseLoaded(response))
         })
     }
 
-    fun registerProduct(productName: String, categoryName: String, quanty: Int, supplierName: String, warehouse: String, areaWarehouse: String, photo: String) {
-        val product = Products(
-            productName= productName,
-            categoryName = categoryName,
-            quantity = quanty,
-            supplierName =  supplierName,
-            warehouse =  warehouse,
-            areaWarehouse =  areaWarehouse,
-            photo =  photo
-        )
+
+    fun registerProduct(productName: String, categoryCode: String, quantity: Int, supplierCode: String, areaWarehouseCode: String, photo: String
+    ) {
         doAsync {
             try {
-                stockVisionRepository.productsDao.insert(product)
-                renderState.postValue(LCEState.Content(ProductRegistrationState.SuccessProductRegister("Producto registrado")))
+                val product = Product(
+                    productName = productName,
+                    categoryCode = categoryCode,
+                    supplierCode = supplierCode,
+                    photo = photo
+                )
+
+                // Inserta el producto y obtiene el ID autogenerado
+                val productId = stockVisionRepository.productsDao.insert(product).toInt()
+
+                // Crea y registra el stock en la zona seleccionada
+                val productStock = ProductStock(
+                    productId = productId,
+                    areaCode = areaWarehouseCode, // este es el areaWarehouseCode (clave única en AreaWarehouse)
+                    stock = quantity
+                )
+                stockVisionRepository.productStockDao.insert(productStock)
+
+                renderState.postValue(
+                    LCEState.Content(
+                        ProductRegistrationState.SuccessProductRegister("Producto registrado correctamente")
+                    )
+                )
             } catch (e: Exception) {
-                context.logi("[EroorRegistro] -> $e")
+                context.logi("[ErrorRegistroProducto] -> $e")
             }
         }
     }
 
 
-    fun bitmapToBase64(bitmap: Bitmap): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
-    }
 
-    override val renderState: MutableLiveData<LCEState<ProductRegistrationState>>
+        fun bitmapToBase64(bitmap: Bitmap): String {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val byteArray = byteArrayOutputStream.toByteArray()
+            return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        }
+
+        override val renderState: MutableLiveData<LCEState<ProductRegistrationState>>
         get() = getLiveData()
+
 }

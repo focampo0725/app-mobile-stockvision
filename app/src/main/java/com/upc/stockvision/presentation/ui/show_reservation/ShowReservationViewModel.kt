@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
@@ -35,23 +35,23 @@ class ShowReservationViewModel @Inject constructor(val stockVisionRepository : S
     lateinit var context: Context
 
     fun requestReserveList() {
-        doAsynTask({
-            val listCategory = stockVisionRepository.reserveAreaDao.getAllReserve()
-            listCategory.map { reserve ->
-                ReserveAreaDTO(
-                    id = reserve.id,
-                    categoryName = reserve.categoryName,
-                    productName = reserve.productName,
-                    quantity = reserve.quantity,
-                    warehouseName = reserve.warehouseName,
-                    areaWarehouseName = reserve.areaWarehouseName,
-                    createAt = reserve.createAt.toString(),
-                    durationDays = reserve.durationDays
-                )
-            }
-        }, {
-            renderState.value = LCEState.Content(ShowReservationState.ReserveLoaded(it))
-        })
+//        doAsynTask({
+//            val listCategory = stockVisionRepository.reserveAreaDao.getAllReserve()
+//            listCategory.map { reserve ->
+//                ReserveAreaDTO(
+//                    id = reserve.id,
+//                    categoryName = reserve.categoryName,
+//                    productName = reserve.productName,
+//                    quantity = reserve.quantity,
+//                    warehouseName = reserve.warehouseName,
+//                    areaWarehouseName = reserve.areaWarehouseName,
+//                    createAt = reserve.createAt.toString(),
+//                    durationDays = reserve.durationDays
+//                )
+//            }
+//        }, {
+//            renderState.value = LCEState.Content(ShowReservationState.ReserveLoaded(it))
+//        })
     }
 
     override val renderState: MutableLiveData<LCEState<ShowReservationState>>

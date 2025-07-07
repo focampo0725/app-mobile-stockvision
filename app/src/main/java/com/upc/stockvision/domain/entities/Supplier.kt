@@ -17,5 +17,5 @@ data class Supplier(
     val supplierName: String,
 
     @ColumnInfo(name = "supplierCode")
-    val supplierCode: Int
+    val supplierCode: String
 )

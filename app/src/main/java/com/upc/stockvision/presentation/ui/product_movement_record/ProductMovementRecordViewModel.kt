@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.domain.entities.ProductMovement
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
@@ -37,25 +37,25 @@ class ProductMovementRecordViewModel @Inject constructor(val stockVisionReposito
     lateinit var context: Context
 
     fun requestProductMovementList() {
-        doAsynTask({
-            val listCategory = stockVisionRepository.productMovementDao.getAllProductMovement()
-            listCategory.map { productMovement ->
-                ProductMovementDTO(
-                    idMovemet = productMovement.id,
-                    creationUser = productMovement.creationUser,
-                    productName = productMovement.productName,
-                    initialWarehouse = productMovement.initialWarehouse,
-                    initialAreaWarehouse = productMovement.initialAreaWarehouse,
-                    finalWarehouse = productMovement.finalWarehouse,
-                    finalAreaWarehouse = productMovement.finalAreaWarehouse,
-                    amountMoved = productMovement.amountMoved,
-                    typeMovement = productMovement.typeMovement,
-                    movementDate = productMovement.typeMovement
-                )
-            }
-        }, {
-            renderState.value = LCEState.Content(ProductMovementRecordState.ProductMovementLoaded(it))
-        })
+//        doAsynTask({
+//            val listCategory = stockVisionRepository.productMovementDao.getAllProductMovement()
+//            listCategory.map { productMovement ->
+//                ProductMovementDTO(
+//                    idMovemet = productMovement.id,
+//                    creationUser = productMovement.creationUser,
+//                    productName = productMovement.productName,
+//                    initialWarehouse = productMovement.initialWarehouse,
+//                    initialAreaWarehouse = productMovement.initialAreaWarehouse,
+//                    finalWarehouse = productMovement.finalWarehouse,
+//                    finalAreaWarehouse = productMovement.finalAreaWarehouse,
+//                    amountMoved = productMovement.amountMoved,
+//                    typeMovement = productMovement.typeMovement,
+//                    movementDate = productMovement.typeMovement
+//                )
+//            }
+//        }, {
+//            renderState.value = LCEState.Content(ProductMovementRecordState.ProductMovementLoaded(it))
+//        })
     }
 
     override val renderState: MutableLiveData<LCEState<ProductMovementRecordState>>

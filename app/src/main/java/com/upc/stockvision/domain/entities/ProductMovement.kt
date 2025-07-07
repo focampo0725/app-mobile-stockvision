@@ -9,8 +9,8 @@ import java.util.*
     tableName = "ProductMovement",
     foreignKeys = [
         ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["product_id"], onDelete = CASCADE),
-        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["id"], childColumns = ["initial_area_id"], onDelete = CASCADE),
-        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["id"], childColumns = ["final_area_id"], onDelete = CASCADE)
+        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["initial_area_id"], onDelete = CASCADE),
+        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["final_area_id"], onDelete = CASCADE)
     ],
     indices = [Index("product_id"), Index("initial_area_id"), Index("final_area_id")]
 )
@@ -19,17 +19,17 @@ data class ProductMovement(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    @ColumnInfo(name = "creationUser")
-    val creationUser: String,
-
     @ColumnInfo(name = "product_id")
     val productId: Int,
 
     @ColumnInfo(name = "initial_area_id")
-    val initialAreaId: Int,
+    val initialAreaId: String,
+
+    @ColumnInfo(name = "amountInitial")
+    val amountInitial: Int,
 
     @ColumnInfo(name = "final_area_id")
-    val finalAreaId: Int,
+    val finalAreaId: String,
 
     @ColumnInfo(name = "amountMoved")
     val amountMoved: Int,

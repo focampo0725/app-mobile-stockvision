@@ -5,7 +5,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
@@ -53,26 +53,26 @@ class ReserveSpaceViewModel @Inject constructor(val stockVisionRepository : Stoc
     }
 
     fun requestProductList(category: String){
-        doAsynTask({
-            val prodcutList = stockVisionRepository.productsDao.getProductsByCategory(category)
-            prodcutList.map { product ->
-                ProductOnDetailDTO(
-                    idProduct = product.id,
-                    productName= product.productName,
-                    categoryName = product.categoryName,
-                    quantity = product.quantity,
-                    supplierName = product.supplierName,
-                    warehouse = product.warehouse,
-                    areaWarehouse = product.areaWarehouse,
-                    photo = product.photo,
-                )
-            }
-        }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
-            renderState.value =
-                LCEState.Content(ReserveSpaceState.ProductLoaded(response))
-        })
+//        doAsynTask({
+//            val prodcutList = stockVisionRepository.productsDao.getProductsByCategory(category)
+//            prodcutList.map { product ->
+//                ProductOnDetailDTO(
+//                    idProduct = product.id,
+//                    productName= product.productName,
+//                    categoryName = product.categoryName,
+//                    quantity = product.quantity,
+//                    supplierName = product.supplierName,
+//                    warehouse = product.warehouse,
+//                    areaWarehouse = product.areaWarehouse,
+//                    photo = product.photo,
+//                )
+//            }
+//        }, {
+//            val response =
+//                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
+//            renderState.value =
+//                LCEState.Content(ReserveSpaceState.ProductLoaded(response))
+//        })
     }
 
 
@@ -110,22 +110,22 @@ class ReserveSpaceViewModel @Inject constructor(val stockVisionRepository : Stoc
     }
 
     fun registerReserve(categoryName : String,productName : String,quantity : Int, warehouseName : String , areaWarehouseName : String , durationDays : Int , createAt : Date){
-        val reserve = ReserveArea(
-            categoryName = categoryName,
-            productName =  productName,
-            quantity = quantity,
-            warehouseName = warehouseName,
-            areaWarehouseName = areaWarehouseName,
-            createAt = createAt,
-            durationDays = durationDays)
-        doAsync{
-            try {
-                stockVisionRepository.reserveAreaDao.insert(reserve)
-                renderState.postValue(LCEState.Content(ReserveSpaceState.SuccessReserveRegister("Reserva registrada")))
-            } catch (e: Exception) {
-                context.logi("[EroorRegistro] -> $e")
-            }
-        }
+//        val reserve = ReserveArea(
+//            categoryName = categoryName,
+//            productName =  productName,
+//            quantity = quantity,
+//            warehouseName = warehouseName,
+//            areaWarehouseName = areaWarehouseName,
+//            createAt = createAt,
+//            durationDays = durationDays)
+//        doAsync{
+//            try {
+//                stockVisionRepository.reserveAreaDao.insert(reserve)
+//                renderState.postValue(LCEState.Content(ReserveSpaceState.SuccessReserveRegister("Reserva registrada")))
+//            } catch (e: Exception) {
+//                context.logi("[EroorRegistro] -> $e")
+//            }
+//        }
     }
 
     override val renderState: MutableLiveData<LCEState<ReserveSpaceState>>

@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.domain.entities.ProductMovement
-import com.upc.stockvision.domain.entities.Products
+import com.upc.stockvision.domain.entities.Product
+import com.upc.stockvision.domain.entities.ProductStock
 import com.upc.stockvision.domain.entities.ReserveArea
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
@@ -66,30 +67,14 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         })
     }
 
-    fun requestProductList(category: String){
+    fun requestProductList(categoryCode: String) {
         doAsynTask({
-            val prodcutList = stockVisionRepository.productsDao.getProductsByCategory(category)
-            prodcutList.map { product ->
-                ProductOnDetailDTO(
-                    idProduct = product.id,
-                    productName= product.productName,
-                    categoryName = product.categoryName,
-                    quantity = product.quantity,
-                    supplierName = product.supplierName,
-                    warehouse = product.warehouse,
-                    areaWarehouse = product.areaWarehouse,
-                    photo = product.photo,
-                )
-            }
+            stockVisionRepository.productsDao.getProductsByCategory(categoryCode)
         }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
-            renderState.value =
-                LCEState.Content(CreateProductMovementState.ProductLoaded(response))
+            val response = ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
+            renderState.value = LCEState.Content(CreateProductMovementState.ProductLoaded(response))
         })
     }
-
-
 
 
     fun requestWarehouse() {
@@ -135,54 +120,87 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         renderState.value = LCEState.Content(CreateProductMovementState.TypeProductMovementLoaded(response))
     }
 
-    fun createMovement( creationUser : String, productName : String, initialWarehouse: String, initialAreaWarehouse: String, finalWarehouse: String, finalAreaWarehouse: String, amountMoved : Int, typeMovement: String) {
-        val productMovement = ProductMovement(
-            creationUser = creationUser,
-            productName = productName,
-            initialWarehouse = initialWarehouse,
-            initialAreaWarehouse = initialAreaWarehouse,
-            finalWarehouse = finalWarehouse,
-            finalAreaWarehouse = finalAreaWarehouse,
-            amountMoved = amountMoved,
-            typeMovement = typeMovement,
-            movementDate = Date() )
+    fun createMovement(
+        productId: Int,
+        initialAreaId: String,
+        finalAreaId: String,
+        amountMoved: Int,
+        typeMovement: String
+    ) {
+        doAsynTask({
 
-        doAsync{
-            try {
-                stockVisionRepository.productMovementDao.insert(productMovement)
-                renderState.postValue(LCEState.Content(CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")))
-            } catch (e: Exception) {
-                context.logi("[EroorRegistro] -> $e")
+            // 1. Restar cantidad en el área de origen
+            val originStock = stockVisionRepository.productStockDao.getByProductAndArea(productId, initialAreaId)
+
+            originStock?.let {
+                it.stock -= amountMoved
+                stockVisionRepository.productStockDao.update(it)
             }
-        }
 
+            // 2. Sumar o insertar en el área de destino
+            val destinationStock = stockVisionRepository.productStockDao
+                .getByProductAndArea(productId, finalAreaId)
+
+            if (destinationStock != null) {
+                destinationStock.stock += amountMoved
+                stockVisionRepository.productStockDao.update(destinationStock)
+            } else {
+                stockVisionRepository.productStockDao.insert(
+                    ProductStock(
+                        productId = productId,
+                        areaCode = finalAreaId,
+                        stock = amountMoved
+                    )
+                )
+            }
+
+            // 3. Registrar movimiento
+            val movement = ProductMovement(
+                productId = productId,
+                initialAreaId = initialAreaId,
+                amountInitial = originStock?.stock!!,
+                finalAreaId = finalAreaId,
+                amountMoved = amountMoved,
+                typeMovement = typeMovement
+            )
+
+            stockVisionRepository.productMovementDao.insert(movement)
+
+        }, {
+            renderState.postValue(
+                LCEState.Content(
+                    CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")
+                )
+            )
+        })
     }
+
 
     fun updateProductMovement(idProduct : Int , productQuantity : Int ,warehouse: String, areaWarehouse: String,newProductQuantity : Int ){
 
-        doAsynTask({
-            val getProducts = stockVisionRepository.productsDao.getOnlyProduct(idProduct)
-            getProducts
-        },{
-            val newProductForMovement = Products(
-                productName= it.productName,
-                categoryName = it.categoryName,
-                quantity = newProductQuantity,
-                supplierName =  it.supplierName,
-                warehouse =  warehouse,
-                areaWarehouse =  areaWarehouse,
-                photo =  it.photo
-            )
-
-            doAsync{
-                try {
-                    stockVisionRepository.productsDao.updateQuantityForMovement(idProduct, productQuantity)
-                    stockVisionRepository.productsDao.insert(newProductForMovement)
-                } catch (e: Exception) {
-                    context.logi("[EroorRegistro] -> $e")
-                }
-            }
-        })
+//        doAsynTask({
+//            val getProducts = stockVisionRepository.productsDao.getOnlyProduct(idProduct)
+//            getProducts
+//        },{
+//            val newProductForMovement = Products(
+//                productName= it.productName,
+//                categoryName = it.categoryName,
+//                quantity = newProductQuantity,
+//                supplierName =  it.supplierName,
+//                warehouse =  warehouse,
+//                areaWarehouse =  areaWarehouse,
+//                photo =  it.photo
+//            )
+//
+//            doAsync{
+//                try {
+//                    stockVisionRepository.productsDao.updateQuantityForMovement(idProduct, productQuantity)
+//                    stockVisionRepository.productsDao.insert(newProductForMovement)
+//                } catch (e: Exception) {
+//                    context.logi("[EroorRegistro] -> $e")
+//                }
+//            }
+//        })
 
 
     }

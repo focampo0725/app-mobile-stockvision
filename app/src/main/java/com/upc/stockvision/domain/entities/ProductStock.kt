@@ -27,5 +27,5 @@ import androidx.room.*
 data class ProductStock(
     @ColumnInfo(name = "product_id") val productId: Int,
     @ColumnInfo(name = "area_code") val areaCode: String,
-    @ColumnInfo(name = "stock") val stock: Int
+    @ColumnInfo(name = "stock") var stock: Int
 )

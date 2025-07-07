@@ -14,9 +14,7 @@ data class IdentityUserDTO(
 )
 
 data class CategoryDTO(
-    @SerializedName("codeCategory")
-    val codeCategory : Int,
-    @SerializedName("categoryName")
+    val codeCategory : String,
     val categoryName : String
 )
 
@@ -29,15 +27,13 @@ data class TypeMovementDTO(
 
 data class SupplierDTO(
     @SerializedName("codeCategory")
-    val codeSupplier : Int,
+    val codeSupplier : String,
     @SerializedName("categoryName")
     val supplierName : String
 ): Serializable
 
 data class WarehouseDTO(
-    @SerializedName("codeCategory")
-    val codeWarehouse : Int,
-    @SerializedName("categoryName")
+    val codeWarehouse : String,
     val warehouseName : String
 ): Serializable
 
@@ -66,21 +62,13 @@ data class ProductDTO(
 ): Serializable
 
 data class ProductOnDetailDTO(
-    @SerializedName("idProduct")
     val idProduct: Int,
-    @SerializedName("productName")
     val productName: String,
-    @SerializedName("categoryName")
     val categoryName: String,
-    @SerializedName("quantity")
     val quantity: Int,
-    @SerializedName("supplierName")
     val supplierName: String,
-    @SerializedName("warehouse")
     val warehouse: String,
-    @SerializedName("areaWarehouse")
     val areaWarehouse: String,
-    @SerializedName("photo")
     val photo: String
 ): Serializable
 

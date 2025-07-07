@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.upc.stockvision.databinding.FragmentCreateProductMovementBinding
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
+import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.dialog.*
@@ -23,14 +24,16 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
 
     val viewModel: CreateProductMovementViewModel by viewModels()
     private lateinit var binding: FragmentCreateProductMovementBinding
-    var cantidadInicial = 0
+    var initialQuantity = 0
     var idProdcutSelected = 0
+    var categoryCode : String ?= null
 
     override fun processRenderState(renderState: CreateProductMovementState, context: Context) {
         when(renderState){
             is CreateProductMovementState.CategoriesLoaded -> {
                 DialogCategory(categotyList = renderState.categoriesList) { selectedCategory ->
                     binding.tvCategory.text = selectedCategory.categoryName
+                    categoryCode = selectedCategory.codeCategory
                 }.show(parentFragmentManager, DialogCategory.TAG)
 
             }
@@ -40,8 +43,8 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
                     idProdcutSelected = selectedProduct.idProduct
                     binding.etFinalQuantity.hint = "cantidad"
                     binding.tvProduct.text = selectedProduct.productName
-                    cantidadInicial = selectedProduct.quantity
-                    binding.tvInitialQuantity.text = cantidadInicial.toString()
+                    initialQuantity = selectedProduct.quantity
+                    binding.tvInitialQuantity.text = initialQuantity.toString()
                     binding.tvInitialWarehouse.text = selectedProduct.warehouse
                     binding.tvInitialAreaWarehouse.text = selectedProduct.areaWarehouse
 
@@ -99,9 +102,9 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
 
                 // Si el EditText está vacío o es 0, mostrar la cantidad inicial
                 if (texto.isEmpty() || cantidadRestar == 0) {
-                    binding.tvInitialQuantity.text = cantidadInicial.toString()
+                    binding.tvInitialQuantity.text = initialQuantity.toString()
                 } else {
-                    val resultado = cantidadInicial - cantidadRestar
+                    val resultado = initialQuantity - cantidadRestar
                     binding.tvInitialQuantity.text = resultado.toString()
                 }
             }
@@ -114,7 +117,12 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
         }
 
         binding.tvProduct.setOnClickListener {
-            viewModel.requestProductList(binding.tvCategory.text.toString())
+            if(binding.tvCategory.text.toString().isEmpty() || categoryCode == null){
+                context?.toast("Selecciona primero una categoria")
+                return@setOnClickListener
+            }
+            viewModel.requestProductList(categoryCode!!)
+
         }
         binding.tvFinalWarehouse.setOnClickListener {
             viewModel.requestWarehouse()

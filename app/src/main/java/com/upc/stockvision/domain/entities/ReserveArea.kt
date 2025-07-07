@@ -9,7 +9,7 @@ import java.util.*
     tableName = "ReserveArea",
     foreignKeys = [
         ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["product_id"], onDelete = CASCADE),
-        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["id"], childColumns = ["area_id"], onDelete = CASCADE)
+        ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["area_id"], onDelete = CASCADE)
     ],
     indices = [Index("product_id"), Index("area_id")]
 )
@@ -22,14 +22,15 @@ data class ReserveArea(
     val productId: Int,
 
     @ColumnInfo(name = "area_id")
-    val areaId: Int,
+    val areaId: String,
 
     @ColumnInfo(name = "quantity")
     val quantity: Int,
 
+    @ColumnInfo(name = "arrivalDate")
+    val arrivalDate: String,
+
     @ColumnInfo(name = "createAt")
     val createAt: Date = Date(),
 
-    @ColumnInfo(name = "durationDays")
-    val durationDays: Int
 )

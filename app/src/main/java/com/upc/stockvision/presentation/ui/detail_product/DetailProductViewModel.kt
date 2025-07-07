@@ -110,14 +110,14 @@ class DetailProductViewModel @Inject constructor(val stockVisionRepository: Stoc
         areaWarehouse: String? = null,
         photo: String? = null
     ) {
-        doAsync {
-            try {
-                stockVisionRepository.productsDao.updateProduct(id, productName, categoryName, quantity, supplierName, warehouse, areaWarehouse, photo)
-                renderState.postValue(LCEState.Content(DetailProductState.SuccessProductUpdate("Producto Actualizado Correctamente")))
-            } catch (e: Exception) {
-                context.logi("[EroorRegistro] -> $e")
-            }
-        }
+//        doAsync {
+//            try {
+//                stockVisionRepository.productsDao.updateProduct(id, productName, categoryName, quantity, supplierName, warehouse, areaWarehouse, photo)
+//                renderState.postValue(LCEState.Content(DetailProductState.SuccessProductUpdate("Producto Actualizado Correctamente")))
+//            } catch (e: Exception) {
+//                context.logi("[EroorRegistro] -> $e")
+//            }
+//        }
 
     }
 

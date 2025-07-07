@@ -8,22 +8,15 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentProductRegistrationBinding
-import com.upc.stockvision.domain.dto.CategoryDTO
-import com.upc.stockvision.domain.dto.ResponseGenericDTO
 import com.upc.stockvision.infrastructure.extensions.showCustomToast
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.SelectedIcon
@@ -42,6 +35,9 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
 
     private val REQUEST_IMAGE_CAPTURE = 1
     var photo: String? = null
+    var categoryCode: String? = null
+    var areaWarehouseCode: String? = null
+    var supplierCode : String?= null
 
     override fun processRenderState(renderState: ProductRegistrationState, context: Context) {
         when(renderState){
@@ -64,6 +60,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             is ProductRegistrationState.AreaWarehouseLoaded ->{
                 DialogAreaWarehouse(areaWarehouseList = renderState.areaWarehouseList){selectedAreaWarehouse ->
                     binding.tvAreaWarehouse.text = selectedAreaWarehouse.areaWarehouseName
+
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
             }
             is ProductRegistrationState.SuccessProductRegister ->{
@@ -114,14 +111,14 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
 
         binding.btnRegisterProduct.setOnClickListener {
             val productName = binding.etProductName.text.toString().trim()
-            val category = binding.tvCategory.text.toString().trim()
+            val categoryName = binding.tvCategory.text.toString().trim()
             val quantity = binding.etAmount.text.toString().trim().toInt()
             val supplier = binding.tvSupplier.text.toString().trim()
             val warehouse = binding.tvWarehouse.text.toString().trim()
             val areaWarehouse = binding.tvAreaWarehouse.text.toString().trim()
 
             if (productName.isEmpty() ||
-                category.isEmpty() ||
+                categoryName.isEmpty() ||
                 supplier.isEmpty() ||
                 warehouse.isEmpty() ||
                 areaWarehouse.isEmpty()) {
@@ -129,10 +126,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
                 return@setOnClickListener
             }
 
-
-
-
-            viewModel.registerProduct(productName, category, quantity, supplier, warehouse, areaWarehouse, photo!!)
+            viewModel.registerProduct(productName, categoryCode!!, quantity, supplierCode!!, areaWarehouseCode!!, photo!!)
         }
 
 
