@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -45,27 +46,39 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
     var editPhoto: String? = null
     var isCheked : Boolean = false
 
+    //codigos para el update
+    var categoryCode :String ?= null
+    var warehouseCode :String ?= null
+    var areaWarehouseCode :String ?= null
+
+    //datos iniciales
+    var initialProductName = ""
+    var initialAmount = 0
+
+    //viewFliper
+    val isOnInitialView: Boolean
+        get() = binding.vfEditProduct.displayedChild == 0
+
     override fun processRenderState(renderState: DetailProductState, context: Context) {
         when(renderState){
             is DetailProductState.CategoriesLoadedOnUpdate ->{
                 DialogCategory(categotyList = renderState.categoryOnLoadedList) { selectedCategory ->
                     binding.tvCategoryOnUpdate.text = selectedCategory.categoryName
+                    categoryCode = selectedCategory.codeCategory
                 }.show(parentFragmentManager, DialogCategory.TAG)
 
             }
-            is DetailProductState.SupplierLoadedOnUpdate ->{
-                DialogSupplier(supplierList = renderState.supplierOnUpdateList){selectedSupplier ->
-                    binding.tvSupplierOnUpdate.text = selectedSupplier.supplierName
-                }.show(parentFragmentManager, DialogSupplier.TAG)
-            }
+
             is DetailProductState.WarehouseLoadedOnUpdate ->{
                 DialogWarehouse(warehouseList = renderState.warehouseOnUpdateList){selectedWarehouse ->
                     binding.tvWarehouseOnUpdate.text = selectedWarehouse.warehouseName
+                    warehouseCode = selectedWarehouse.codeWarehouse
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
             }
             is DetailProductState.AreaWarehouseLoadedOnUpdate ->{
                 DialogAreaWarehouse(areaWarehouseList = renderState.areaWarehouseOnUpdateList){selectedAreaWarehouse ->
                     binding.tvAreaWarehouseOnUpdate.text = selectedAreaWarehouse.areaWarehouseName
+                    areaWarehouseCode = selectedAreaWarehouse.codeAreaWarehouse
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
             }
             is DetailProductState.SuccessProductUpdate ->{
@@ -101,6 +114,7 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
         setupViewModel(viewModel = viewModel)
         initView()
 
+
     }
 
     fun initView(){
@@ -118,11 +132,11 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
 //            }
 //        }
 
+//        viewModel.updateProduct(product.idProduct,,binding.tvCategoryOnUpdate.text.toString(),binding.etAmountOnUpdate.text.toString().trim().toInt()
+//            ,binding.tvSupplierOnUpdate.text.toString(),binding.tvWarehouseOnUpdate.text.toString(),binding.tvAreaWarehouseOnUpdate.text.toString(),editPhoto)
 
-        binding.btnUpdateProduct.setOnClickListener {
-            viewModel.updateProduct(product.idProduct,binding.etProductNameOnUpdate.text.toString().trim(),binding.tvCategoryOnUpdate.text.toString(),binding.etAmountOnUpdate.text.toString().trim().toInt()
-            ,binding.tvSupplierOnUpdate.text.toString(),binding.tvWarehouseOnUpdate.text.toString(),binding.tvAreaWarehouseOnUpdate.text.toString(),editPhoto)
-        }
+
+
         binding.btnNextViewOnUpdate.setOnClickListener {
             binding.vfEditProduct.showNext()
         }
@@ -135,16 +149,20 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
             viewModel.requestCategoryListOnUpdate()
         }
 
-        binding.tvSupplierOnUpdate.setOnClickListener {
-            viewModel.requestSupplierOnUpdate()
-        }
-
         binding.tvWarehouseOnUpdate.setOnClickListener {
-            viewModel.requestWarehouseOnUpdate()
+            if (categoryCode!= null){
+                viewModel.requestWarehouseOnUpdate(categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar una categoría")
+            }
         }
 
         binding.tvAreaWarehouseOnUpdate.setOnClickListener {
-            viewModel.requestAreaWarehouseOnUpdate(binding.tvAreaWarehouseOnUpdate.text.toString().trim())
+            if (warehouseCode != null && categoryCode != null){
+                viewModel.requestAreaWarehouseOnUpdate(warehouseCode!!,categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar un Almacén")
+            }
         }
 
         binding.sCUpdateProduct.setOnCheckedChangeListener { _, isChecked ->
@@ -152,7 +170,6 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
             if (isChecked) {
                 isCheked = true
                 context?.logi("[TESTCHECK] -> isChecked : $isCheked")
-                context?.toast("Hola Checked")
                 binding.tvSwitchDescription.text ="Desactivar Modificación"
                 binding.vfActivateProductEdition.showNext()
                 loadProductOnEditData()
@@ -166,6 +183,10 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
         }
 
         loadProductDetailsData()
+        binding.apply {
+            initialProductName = etProductNameOnUpdate.text.toString()
+            initialAmount = etAmountOnUpdate.text.toString().toIntOrNull() ?: 0
+        }
         binding.btnBack.setOnClickListener {
             context?.logi("[TESTCHECK] -> isChecked btnBack: $isCheked")
             if (isCheked){
@@ -175,6 +196,41 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
 
             appState.onDrawinventoryControlFragment?.invoke()
         }
+        binding.cbByTransfer.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (!isChecked && !isOnInitialView) {
+                // Bloquear desmarcado si no estás en la vista inicial
+                buttonView.isChecked = true
+                Toast.makeText(requireContext(), "Regresa a la vista anterior para desmarcar", Toast.LENGTH_SHORT).show()
+                return@setOnCheckedChangeListener
+            }
+
+            if (isChecked) {
+                // Activar modo traslado
+                binding.btnNextViewOnUpdate.visibility = View.VISIBLE
+                binding.btnUpdateProduct.visibility = View.GONE
+
+                binding.etProductNameOnUpdate.setText(initialProductName)
+                binding.etAmountOnUpdate.setText(initialAmount.toString())
+
+                binding.etProductNameOnUpdate.isEnabled = false
+                binding.etAmountOnUpdate.isEnabled = false
+            } else {
+                // Restaurar edición normal
+                binding.btnNextViewOnUpdate.visibility = View.GONE
+                binding.btnUpdateProduct.visibility = View.VISIBLE
+
+                binding.etProductNameOnUpdate.isEnabled = true
+                binding.etAmountOnUpdate.isEnabled = true
+            }
+        }
+
+        binding.btnUpdateProduct.setOnClickListener {
+            viewModel.updateByNameOrStock(product.idProduct,product.areaWarehouseCode,binding.etProductNameOnUpdate.text.toString().trim(),binding.etAmountOnUpdate.text.toString().trim().toInt())
+        }
+        binding.btnUpdateProductByError.setOnClickListener {
+            viewModel.updateCategoryAndRelocateStock(productCode =  product.idProduct,categoryCode = categoryCode?: product.categoryName,oldAreaId = product.areaWarehouseCode, newAreaId = areaWarehouseCode!!, quantity = product.quantity, typeMovement = "Error de entrada" )
+        }
+
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -213,7 +269,6 @@ class DetailProductFragment @Inject constructor(val appState: AppState): BaseFra
         val bitmap = base64ToBitmap(product.photo)
         binding.ivEditProduct.setImageBitmap(bitmap)
         binding.tvCategoryOnUpdate.text = product.categoryName
-        binding.tvSupplierOnUpdate.text = product.supplierName
         binding.tvWarehouseOnUpdate.text = product.warehouse
         binding.tvAreaWarehouseOnUpdate.text = product.areaWarehouse
         binding.etProductNameOnUpdate.setText(product.productName)

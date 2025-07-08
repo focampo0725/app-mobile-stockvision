@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
+import com.upc.stockvision.data.room.dao.ProductDao
 import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.domain.entities.Product
 import com.upc.stockvision.domain.entities.ProductStock
@@ -45,22 +46,9 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
     @ApplicationContext
     lateinit var context: Context
 
-//    fun requestCategoryList(){
-//        super.sendValue(LCEState.loading(true))
-//        stockVisionRepository.managementApi.getCategoryList().applySchedulers().subscribeApp(
-//            onSuccess = {
-//                super.sendValue(LCEState.loading(false))
-//                renderState.value = LCEState.Content(ProductRegistrationState.CategoriesLoaded(it))
-//            }, onError = {
-//                super.sendValue(LCEState.loading(false))
-//                context.showCustomToast("Error captred : $it",SelectedIcon.ERROR)
-//
-//            }
-//        )
-//
-//    }
 
-    fun requestCategoryLista() {
+
+    fun requestCategoryList() {
         doAsynTask({
             val listCategory = stockVisionRepository.categoryDao.getAll()
             listCategory.map { category ->
@@ -93,10 +81,10 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
         })
     }
 
-    fun requestWarehouse() {
+    fun requestWarehouse(categoryCode: String) {
         doAsynTask({
-            val listCategory = stockVisionRepository.warehouseDao.getAll()
-            listCategory.map { warehouse ->
+            val listWarehouse = stockVisionRepository.warehouseDao.getWarehousesByCategory(categoryCode)
+            listWarehouse.map { warehouse ->
                 WarehouseDTO(
                     codeWarehouse = warehouse.warehouseCode,
                     warehouseName = warehouse.warehouseName
@@ -105,16 +93,18 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
         }, {
             val response =
                 ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
-            renderState.value = LCEState.Content(ProductRegistrationState.WarehouseLoaded(response))
+            renderState.value =
+                LCEState.Content(ProductRegistrationState.WarehouseLoaded(response))
         })
     }
 
-    fun requestAreaWarehouse(warehose: String) {
-        doAsynTask({
-            val areaWarehouse = stockVisionRepository.warehouseDao.getWarehouseCodeByName(warehose)
 
-            val listCategory = stockVisionRepository.areaWarehouseDao.getAll(areaWarehouse)
-            listCategory.map { areawarehouse ->
+    fun requestAreaWarehouse(warehouseCode: String, categoryCode: String) {
+        doAsynTask({
+            val areas = stockVisionRepository.areaWarehouseDao
+                .getAreasByWarehouseAndCategory(warehouseCode, categoryCode)
+
+            areas.map { areawarehouse ->
                 AreaWarehouseDTO(
                     codeAreaWarehouse = areawarehouse.areaWarehouseCode,
                     areaWarehouseName = areawarehouse.areaWarehouseName
@@ -128,29 +118,52 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
         })
     }
 
+    fun generateUniqueProductCode(productsDao: ProductDao): String {
+        val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        var code: String
+        do {
+            val randomPart = (1..3)
+                .map { characters.random() }
+                .joinToString("")
+            code = "PRD-$randomPart"
+        } while (productsDao.countProductCode(code) > 0)  // bloqueante: espera el resultado
+        return code
+    }
 
-    fun registerProduct(productName: String, categoryCode: String, quantity: Int, supplierCode: String, areaWarehouseCode: String, photo: String
+    fun registerProduct(
+        productName: String,
+        categoryCode: String,
+        quantity: Int,
+        supplierCode: String,
+        areaWarehouseCode: String,
+        photo: String
     ) {
         doAsync {
             try {
+                // 1. Generar un código único para el producto
+                val productCode = generateUniqueProductCode(stockVisionRepository.productsDao) // Puedes usar UUID o un prefijo como PRD-XYZ
+
+                // 2. Crear el producto
                 val product = Product(
+                    productCode = productCode,
                     productName = productName,
                     categoryCode = categoryCode,
                     supplierCode = supplierCode,
                     photo = photo
                 )
 
-                // Inserta el producto y obtiene el ID autogenerado
-                val productId = stockVisionRepository.productsDao.insert(product).toInt()
+                // 3. Insertar el producto (no necesitas el ID)
+                stockVisionRepository.productsDao.insert(product)
 
-                // Crea y registra el stock en la zona seleccionada
+                // 4. Insertar el stock relacionado a ese producto
                 val productStock = ProductStock(
-                    productId = productId,
-                    areaCode = areaWarehouseCode, // este es el areaWarehouseCode (clave única en AreaWarehouse)
+                    productCode = productCode,
+                    areaCode = areaWarehouseCode,
                     stock = quantity
                 )
                 stockVisionRepository.productStockDao.insert(productStock)
 
+                // 5. Notificar éxito
                 renderState.postValue(
                     LCEState.Content(
                         ProductRegistrationState.SuccessProductRegister("Producto registrado correctamente")
@@ -162,9 +175,7 @@ class ProductRegistrationViewModel @Inject constructor(val stockVisionRepository
         }
     }
 
-
-
-        fun bitmapToBase64(bitmap: Bitmap): String {
+    fun bitmapToBase64(bitmap: Bitmap): String {
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
             val byteArray = byteArrayOutputStream.toByteArray()

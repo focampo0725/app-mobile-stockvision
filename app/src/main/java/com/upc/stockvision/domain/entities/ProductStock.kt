@@ -4,12 +4,12 @@ import androidx.room.*
 
 @Entity(
     tableName = "ProductStock",
-    primaryKeys = ["product_id", "area_code"],
+    primaryKeys = ["product_code", "area_code"],
     foreignKeys = [
         ForeignKey(
             entity = Product::class,
-            parentColumns = ["id"],
-            childColumns = ["product_id"],
+            parentColumns = ["productCode"],
+            childColumns = ["product_code"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
@@ -20,12 +20,13 @@ import androidx.room.*
         )
     ],
     indices = [
-        Index(value = ["product_id"]),
+        Index(value = ["product_code"]),
         Index(value = ["area_code"])
     ]
 )
 data class ProductStock(
-    @ColumnInfo(name = "product_id") val productId: Int,
+    @ColumnInfo(name = "product_code") val productCode: String,
     @ColumnInfo(name = "area_code") val areaCode: String,
     @ColumnInfo(name = "stock") var stock: Int
 )
+

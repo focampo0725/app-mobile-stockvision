@@ -18,11 +18,14 @@ import androidx.room.*
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("category_code"), Index("supplier_code")]
+    indices = [Index("category_code"), Index("supplier_code"), Index(value = ["productCode"], unique = true)]
 )
 data class Product(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+
+    @ColumnInfo(name = "productCode")
+    val productCode: String,
 
     @ColumnInfo(name = "productName")
     val productName: String,

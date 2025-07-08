@@ -40,21 +40,26 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
     }
 
 
-    fun requestWarehouse() {
+    fun requestWarehouse(categoryCode: String? = null) {
         doAsynTask({
-            val listCategory = stockVisionRepository.warehouseDao.getAll()
-            listCategory.map { warehouse ->
+            val warehouses = if (categoryCode.isNullOrEmpty()) {
+                stockVisionRepository.warehouseDao.getAll()
+            } else {
+                stockVisionRepository.warehouseDao.getWarehousesByCategory(categoryCode)
+            }
+
+            warehouses.map { warehouse ->
                 WarehouseDTO(
                     codeWarehouse = warehouse.warehouseCode,
                     warehouseName = warehouse.warehouseName
                 )
             }
         }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
+            val response = ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
             renderState.value = LCEState.Content(InventoryControlState.WarehouseLoaded(response))
         })
     }
+
 
     fun requestCategoryLista(warehouseCode: String? = null) {
         doAsynTask({

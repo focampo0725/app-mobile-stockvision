@@ -9,35 +9,37 @@ import java.util.*
 @Entity(
     tableName = "ProductMovement",
     foreignKeys = [
-        ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["product_id"], onDelete = CASCADE),
+        ForeignKey(entity = Product::class, parentColumns = ["productCode"], childColumns = ["product_code"], onDelete = CASCADE),
         ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["initial_area_id"], onDelete = CASCADE),
         ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["final_area_id"], onDelete = CASCADE)
     ],
-    indices = [Index("product_id"), Index("initial_area_id"), Index("final_area_id")]
+    indices = [Index("product_code"), Index("initial_area_id"), Index("final_area_id")]
 )
 @TypeConverters(TimeConverter::class)
-class ProductMovement(
+data class ProductMovement(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    @ColumnInfo(name = "product_id")
-    val productId: Int,
+    @ColumnInfo(name = "product_code")
+    val productCode: String,
 
     @ColumnInfo(name = "initial_area_id")
     val initialAreaId: String,
 
+    //cantidad inicial en la area inicial
     @ColumnInfo(name = "amountInitial")
     val amountInitial: Int,
 
+    //cantidad del area inicial despues del movimiento
     @ColumnInfo(name = "amountFinalInitialArea")
     val amountFinalInitialArea: Int,
 
     @ColumnInfo(name = "final_area_id")
     val finalAreaId: String,
-
+//cantidad inicial en el area que se trasladara si es que tuviese
     @ColumnInfo(name = "amountInitialFinalArea")
     val amountInitialFinalArea: Int,
-
+//cantidad movida
     @ColumnInfo(name = "amountMoved")
     val amountMoved: Int,
 
@@ -47,3 +49,4 @@ class ProductMovement(
     @ColumnInfo(name = "movementDate")
     val movementDate: Date = Date()
 )
+

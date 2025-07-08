@@ -37,6 +37,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
 
     private lateinit var productList: List<ProductOnDetailDTO>
     private lateinit var productAdapter: ProductAdapter
+    var categoryCode : String ?= null
     var warehouseCode : String ?= null
 
     override fun processRenderState(renderState: InventoryControlState, context: Context) {
@@ -49,6 +50,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
                 DialogCategory(categotyList = renderState.categoriesList) { selectedCategory ->
                     binding.tvCategory.text = selectedCategory.categoryName
                     val category = binding.tvCategory.text.toString()
+                    categoryCode = selectedCategory.codeCategory
                     applyFilter(null, category, null)
                 }.show(parentFragmentManager, DialogCategory.TAG)
 
@@ -93,7 +95,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
             viewModel.requestCategoryLista(warehouseCode)
         }
         binding.tvWarehouseControlProduct.setOnClickListener {
-            viewModel.requestWarehouse()
+            viewModel.requestWarehouse(categoryCode)
         }
         viewModel.requestProductList()
         setupFilters()
@@ -110,14 +112,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
-    private fun removeCurrentFragment() {
-        val currentFragment = parentFragmentManager.findFragmentById(R.id.content_frame)
-        currentFragment?.let {
-            parentFragmentManager.beginTransaction()
-                .remove(it)
-                .commitNow()
-        }
-    }
+
 
     private fun applyFilter(warehouse: String?, category: String?, productName: String?) {
         productAdapter.filterProducts(warehouse, category, productName)

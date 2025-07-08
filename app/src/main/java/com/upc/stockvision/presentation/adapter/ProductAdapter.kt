@@ -67,7 +67,7 @@ class ProductAdapter(private val context: Context , val onClick : (productDetail
     fun filterProducts(warehouse: String?, category: String?, productName: String?) {
         filteredList = productList.filter { product ->
             // Comprobamos cada campo de forma independiente y lo filtramos solo si no es nulo
-            val matchesWarehouse = warehouse?.let { product.warehouse == it } ?: true
+            val matchesWarehouse = warehouse?.let { product.warehouseCode == it } ?: true
             val matchesCategory = category?.let { product.categoryName == it } ?: true // Ajusta el nombre del campo si es necesario
             val matchesName = productName?.let { product.productName.contains(it, ignoreCase = true) } ?: true
 

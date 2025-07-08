@@ -21,7 +21,7 @@ import java.util.*
 import javax.inject.Inject
 
 sealed class ShowReservationState{
-    class ReserveLoaded(val reserveList : List<ReserveAreaDTO>) : ShowReservationState()
+    class ReserveLoaded(val reserveList : List<ReservationDetailDTO>) : ShowReservationState()
 
 
 }

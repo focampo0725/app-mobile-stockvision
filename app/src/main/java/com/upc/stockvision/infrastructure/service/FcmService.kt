@@ -56,33 +56,76 @@ class FcmService : FirebaseMessagingService() {
 
         val remoteView: RemoteViews = when (fragmentToOpen) {
             "0" -> RemoteViews(packageName, R.layout.custom_alert_incoming_product).apply {
-                setTextViewText(R.id.tvIncomingProduct, messageParts?.get(1) ?: "")
-                setTextViewText(R.id.tvIncomingDate, messageParts?.get(2) ?: "")
-                setTextViewText(R.id.tvIncomingQuantity, messageParts?.get(3) ?: "")
+                val productId = messageParts?.get(1)?.toIntOrNull() ?: return@apply
+                val arrivalDate = messageParts?.get(2) ?: return@apply
+                val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
 
                 doAsynTask({
-                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
-                },{
-                    doAsync{
-//                        stockVisionRepository.notificationsDao.insert(Notifications(0,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
+                    val product = stockVisionRepository.productsDao.getById(productId)
+                    val area = stockVisionRepository.areaWarehouseDao.getByCode(product.categoryCode)
+                    val warehouse = area?.let {
+                        stockVisionRepository.warehouseDao.getByCode(it.warehouseReference)
                     }
+                    Triple(product, area, warehouse)
+                }, { (product, area, warehouse) ->
+                    // Mostrar en notificación
+                    setTextViewText(R.id.tvIncomingProduct, product.productName)
+                    setTextViewText(R.id.tvArea, area?.areaWarehouseName ?: "Área desconocida")
+                    setTextViewText(R.id.tvAlmacen, warehouse?.warehouseName ?: "Almacén desconocido")
+                    setTextViewText(R.id.tvIncomingQuantity, quantity.toString())
+                    setTextViewText(R.id.tvIncomingDate, arrivalDate)
 
+                    // Guardar notificación
+                    doAsync {
+                        stockVisionRepository.notificationsDao.insert(
+                            Notifications(
+                                typeNotification = 0,
+                                productId = product.id,
+                                areaId = area?.areaWarehouseCode ?: "",
+                                quantity = quantity
+                            )
+                        )
+                    }
                 })
-
             }
+
             "1" -> RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
-                setTextViewText(R.id.tvAlmacen, messageParts?.get(1) ?: "")
-                setTextViewText(R.id.tvArea, messageParts?.get(2) ?: "")
-                doAsynTask({
-                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(3)!!)
-                },{
-                    doAsync{
-//                        stockVisionRepository.notificationsDao.insert(Notifications(1,"",it.productName,it.warehouse,it.areaWarehouse,it.quantity))
-//                        stockVisionRepository.reserveAreaDao.insert(ReserveArea(categoryName = it.categoryName,productName =  it.productName, quantity =it.quantity,warehouseName =  it.warehouse,areaWarehouseName = it.areaWarehouse, durationDays = 2))
-                    }
+                val areaCode = messageParts?.get(1) ?: return@apply
+                val productId = messageParts?.get(2)?.toIntOrNull() ?: return@apply
+                val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
+                val arrivalDate = messageParts?.get(4) ?: return@apply
 
+                // Consultar nombres desde la base de datos
+                doAsynTask({
+                    val area = stockVisionRepository.areaWarehouseDao.getByCode(areaCode)
+                    val warehouse = area?.let {
+                        stockVisionRepository.warehouseDao.getByCode(it.warehouseReference)
+                    }
+                    Pair(area?.areaWarehouseName ?: "Área desconocida", warehouse?.warehouseName ?: "Almacén desconocido")
+                }, { (areaName, warehouseName) ->
+                    // Pintar la notificación con nombres
+                    setTextViewText(R.id.tvArea, areaName)
+                    setTextViewText(R.id.tvAlmacen, warehouseName)
+
+                    // Insertar la reserva y notificación
+                    doAsync {
+                        val reserve = ReserveArea(
+                            productId = productId,
+                            areaId = areaCode,
+                            quantity = quantity,
+                            arrivalDate = arrivalDate
+                        )
+                        stockVisionRepository.reserveAreaDao.insert(reserve)
+
+                        val notification = Notifications(
+                            typeNotification = 1, productId = productId, areaId = areaCode, quantity = quantity
+                        )
+                        stockVisionRepository.notificationsDao.insert(notification)
+                    }
                 })
             }
+
+
             "2" -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
                 setTextViewText(R.id.tvLowStockProduct, messageParts?.get(1) ?: "")
                 doAsynTask({

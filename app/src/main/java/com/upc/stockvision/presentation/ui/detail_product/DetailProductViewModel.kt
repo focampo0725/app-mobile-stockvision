@@ -7,12 +7,15 @@ import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
+import com.upc.stockvision.domain.entities.ProductMovement
+import com.upc.stockvision.domain.entities.ProductStock
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.infrastructure.extensions.doAsync
 import com.upc.stockvision.infrastructure.extensions.logi
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
+import com.upc.stockvision.presentation.ui.create_product_movement.CreateProductMovementState
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,7 +24,6 @@ import javax.inject.Inject
 
 sealed class DetailProductState{
     class CategoriesLoadedOnUpdate (val categoryOnLoadedList : ResponseGenericDTO<CategoryDTO>) : DetailProductState()
-    class SupplierLoadedOnUpdate(val supplierOnUpdateList: ResponseGenericDTO<SupplierDTO>) : DetailProductState()
     class WarehouseLoadedOnUpdate(val warehouseOnUpdateList: ResponseGenericDTO<WarehouseDTO>) : DetailProductState()
     class AreaWarehouseLoadedOnUpdate(val areaWarehouseOnUpdateList: ResponseGenericDTO<AreaWarehouseDTO>) : DetailProductState()
     class SuccessProductUpdate(val message: String) : DetailProductState()
@@ -52,74 +54,97 @@ class DetailProductViewModel @Inject constructor(val stockVisionRepository: Stoc
                 LCEState.Content(DetailProductState.CategoriesLoadedOnUpdate(response))
         })
     }
-    fun requestSupplierOnUpdate() {
+
+    fun requestWarehouseOnUpdate(categoryCode: String) {
         doAsynTask({
-            val listCategory = stockVisionRepository.supplierDao.getAll()
-            listCategory.map { supplier ->
-                SupplierDTO(
-                    codeSupplier = supplier.supplierCode,
-                    supplierName = supplier.supplierName
-                )
-            }
-        }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
-            renderState.value = LCEState.Content(DetailProductState.SupplierLoadedOnUpdate(response))
-        })
-    }
-    fun requestWarehouseOnUpdate() {
-        doAsynTask({
-            val listCategory = stockVisionRepository.warehouseDao.getAll()
-            listCategory.map { warehouse ->
+            val listWarehouse = stockVisionRepository.warehouseDao.getWarehousesByCategory(categoryCode)
+            listWarehouse.map { warehouse ->
                 WarehouseDTO(
                     codeWarehouse = warehouse.warehouseCode,
                     warehouseName = warehouse.warehouseName
                 )
             }
         }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
+            val response = ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
             renderState.value = LCEState.Content(DetailProductState.WarehouseLoadedOnUpdate(response))
         })
     }
-    fun requestAreaWarehouseOnUpdate(warehose: String) {
+    fun requestAreaWarehouseOnUpdate(warehouseCode: String, categoryCode: String) {
         doAsynTask({
-            val areaWarehouse = stockVisionRepository.warehouseDao.getWarehouseCodeByName(warehose)
+            val areas = stockVisionRepository.areaWarehouseDao
+                .getAreasByWarehouseAndCategory(warehouseCode, categoryCode)
 
-            val listCategory = stockVisionRepository.areaWarehouseDao.getAll(areaWarehouse)
-            listCategory.map { areawarehouse ->
+            areas.map { areawarehouse ->
                 AreaWarehouseDTO(
                     codeAreaWarehouse = areawarehouse.areaWarehouseCode,
                     areaWarehouseName = areawarehouse.areaWarehouseName
                 )
             }
         }, {
-            val response =
-                ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
+            val response = ResponseGenericDTO(content = it, isValid = true, exceptions = emptyList())
             renderState.value = LCEState.Content(DetailProductState.AreaWarehouseLoadedOnUpdate(response))
         })
     }
 
-    fun updateProduct(
-        id: Int,
-        productName: String? = null,
-        categoryName: String? = null,
-        quantity: Int? = null,
-        supplierName: String? = null,
-        warehouse: String? = null,
-        areaWarehouse: String? = null,
-        photo: String? = null
-    ) {
-//        doAsync {
-//            try {
-//                stockVisionRepository.productsDao.updateProduct(id, productName, categoryName, quantity, supplierName, warehouse, areaWarehouse, photo)
-//                renderState.postValue(LCEState.Content(DetailProductState.SuccessProductUpdate("Producto Actualizado Correctamente")))
-//            } catch (e: Exception) {
-//                context.logi("[EroorRegistro] -> $e")
-//            }
-//        }
+
+    fun updateByNameOrStock(procuctCode : String,areaWarehouseCode : String,productName : String?, stock : Int?){
+        doAsync{
+
+            try {
+                stockVisionRepository.productsDao.updateProductData(productCode = procuctCode, productName = productName)
+                stockVisionRepository.productStockDao.updateStockData(productCode = procuctCode, areaId = areaWarehouseCode,stock)
+                renderState.postValue(LCEState.Content(DetailProductState.SuccessProductUpdate("Producto actualizado correctamente")))
+            } catch (e: Exception) {
+                context.logi("[ErrorUpdateProduct] -> $e")
+
+            }
+        }
 
     }
+
+    fun updateCategoryAndRelocateStock(
+        productCode: String,
+        categoryCode: String,
+        oldAreaId: String,
+        newAreaId: String,
+        quantity: Int,
+        typeMovement: String
+    ) {
+        doAsync {
+            try {
+                // 1. Eliminar el stock anterior
+                stockVisionRepository.productStockDao.deleteByProductAndArea(productCode, oldAreaId)
+
+                val productStock = ProductStock(productCode,newAreaId,quantity)
+                stockVisionRepository.productStockDao.insert(productStock)
+                stockVisionRepository.productsDao.updateCategory(productCode, categoryCode)
+
+
+                val movement = ProductMovement(
+                    productCode = productCode,
+                    initialAreaId = oldAreaId,
+                    amountInitial = quantity,
+                    amountFinalInitialArea = 0,
+                    finalAreaId = newAreaId,
+                    amountInitialFinalArea = 0,
+                    amountMoved = quantity,
+                    typeMovement = typeMovement
+
+                )
+                stockVisionRepository.productMovementDao.insert(movement)
+
+
+
+            } catch (e: Exception) {
+                context.logi("[ErrorReubicacion] -> $e")
+
+            }
+        }
+    }
+
+
+
+
 
     fun bitmapToBase64(bitmap: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()

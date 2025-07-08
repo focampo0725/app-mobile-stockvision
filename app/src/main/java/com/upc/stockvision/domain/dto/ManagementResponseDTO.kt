@@ -19,11 +19,12 @@ data class CategoryDTO(
 )
 
 data class TypeMovementDTO(
-    @SerializedName("codeTypeMovement")
     val codeTypeMovement : Int,
-    @SerializedName("typeMovementName")
     val typeMovementName : String
 )
+
+
+
 
 data class SupplierDTO(
     @SerializedName("codeCategory")
@@ -62,13 +63,15 @@ data class ProductDTO(
 ): Serializable
 
 data class ProductOnDetailDTO(
-    val idProduct: Int,
+    val idProduct: String,
     val productName: String,
     val categoryName: String,
     val quantity: Int,
     val supplierName: String,
     val warehouse: String,
+    val warehouseCode: String,
     val areaWarehouse: String,
+    val areaWarehouseCode: String,
     val photo: String
 ): Serializable
 

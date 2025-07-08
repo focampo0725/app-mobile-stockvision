@@ -35,24 +35,24 @@ class NotificationsViewModel @Inject constructor(val stockVisionRepository : Sto
     lateinit var context: Context
 
     fun requestReserveList() {
-        doAsynTask({
-            val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-
-            val listNotifications = stockVisionRepository.notificationsDao.getAllNotificatios()
-            listNotifications.map { notification ->
-                NotificationDTO(
-                    typeNotification = notification.typeNotification,
-                    title = notification.title,
-                    productName = notification.productName,
-                    quantity = notification.quantity,
-                    warehouseName = notification.warehouseName,
-                    warehouseArea = notification.warehouseArea,
-                    date = formato.format(notification.createAT)
-                )
-            }
-        }, {
-            renderState.value = LCEState.Content(NotificationsState.NotificationLoaded(it))
-        })
+//        doAsynTask({
+//            val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+//
+//            val listNotifications = stockVisionRepository.notificationsDao.getAllNotificatios()
+//            listNotifications.map { notification ->
+//                NotificationDTO(
+//                    typeNotification = notification.typeNotification,
+//                    title = notification.title,
+//                    productName = notification.productName,
+//                    quantity = notification.quantity,
+//                    warehouseName = notification.warehouseName,
+//                    warehouseArea = notification.warehouseArea,
+//                    date = formato.format(notification.createAT)
+//                )
+//            }
+//        }, {
+//            renderState.value = LCEState.Content(NotificationsState.NotificationLoaded(it))
+//        })
     }
 
 

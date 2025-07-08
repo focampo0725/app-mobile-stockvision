@@ -101,55 +101,58 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             Warehouse(warehouseName = "Almacén Oeste", warehouseCode = "ALM-O001")
         )
         val areaWarehousesToInsert = listOf(
-            AreaWarehouse(areaWarehouseName = "ZONA Camisetas A", areaWarehouseCode = "ZC-CAM-A", warehouseReference = "ALM-C001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Pantalones B", areaWarehouseCode = "ZC-PAN-B", warehouseReference = "ALM-C001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas C", areaWarehouseCode = "ZC-CHA-C", warehouseReference = "ALM-C001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZN-ZAP-A", warehouseReference = "ALM-N001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Accesorios B", areaWarehouseCode = "ZN-ACC-B", warehouseReference = "ALM-N001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos A", areaWarehouseCode = "ZS-CONJ-A", warehouseReference = "ALM-S001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZS-CAM-B", warehouseReference = "ALM-S001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Tops C", areaWarehouseCode = "ZS-TOPS-C", warehouseReference = "ALM-S001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas D", areaWarehouseCode = "ZS-CHA-D", warehouseReference = "ALM-S001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZE-ZAP-A", warehouseReference = "ALM-E001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZE-CAM-B", warehouseReference = "ALM-E001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Accesorios A", areaWarehouseCode = "ZO-ACC-A", warehouseReference = "ALM-O001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos B", areaWarehouseCode = "ZO-CONJ-B", warehouseReference = "ALM-O001"),
-            AreaWarehouse(areaWarehouseName = "ZONA Pantalones C", areaWarehouseCode = "ZO-PAN-C", warehouseReference = "ALM-O001")
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas A", areaWarehouseCode = "ZC-CAM-A", warehouseReference = "ALM-C001", categoryCode = "2001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Pantalones B", areaWarehouseCode = "ZC-PAN-B", warehouseReference = "ALM-C001", categoryCode = "2002"),
+            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas C", areaWarehouseCode = "ZC-CHA-C", warehouseReference = "ALM-C001", categoryCode = "2003"),
+            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZN-ZAP-A", warehouseReference = "ALM-N001", categoryCode = "2005"),
+            AreaWarehouse(areaWarehouseName = "ZONA Accesorios B", areaWarehouseCode = "ZN-ACC-B", warehouseReference = "ALM-N001", categoryCode = "2006"),
+            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos A", areaWarehouseCode = "ZS-CONJ-A", warehouseReference = "ALM-S001", categoryCode = "2007"),
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZS-CAM-B", warehouseReference = "ALM-S001", categoryCode = "2001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Tops C", areaWarehouseCode = "ZS-TOPS-C", warehouseReference = "ALM-S001", categoryCode = "2004"),
+            AreaWarehouse(areaWarehouseName = "ZONA Chaquetas D", areaWarehouseCode = "ZS-CHA-D", warehouseReference = "ALM-S001", categoryCode = "2003"),
+            AreaWarehouse(areaWarehouseName = "ZONA Zapatos A", areaWarehouseCode = "ZE-ZAP-A", warehouseReference = "ALM-E001", categoryCode = "2005"),
+            AreaWarehouse(areaWarehouseName = "ZONA Camisetas B", areaWarehouseCode = "ZE-CAM-B", warehouseReference = "ALM-E001", categoryCode = "2001"),
+            AreaWarehouse(areaWarehouseName = "ZONA Accesorios A", areaWarehouseCode = "ZO-ACC-A", warehouseReference = "ALM-O001", categoryCode = "2006"),
+            AreaWarehouse(areaWarehouseName = "ZONA Conjuntos B", areaWarehouseCode = "ZO-CONJ-B", warehouseReference = "ALM-O001", categoryCode = "2007"),
+            AreaWarehouse(areaWarehouseName = "ZONA Pantalones C", areaWarehouseCode = "ZO-PAN-C", warehouseReference = "ALM-O001", categoryCode = "2002")
         )
+
 
 //        Product("Circus Enterizo Short", "Conjuntos",10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo))),
 
         val productsToInsert = listOf(
-            Product(productName = "Blusa manga farol satén", photo = "", categoryCode = "2004", supplierCode = "1001"),
-            Product(productName = "Pantalón palazo mujer", photo = "", categoryCode = "2002", supplierCode = "1002"),
-            Product(productName = "Short denim con bordado", photo = "", categoryCode = "2002", supplierCode = "1003"),
-            Product(productName = "Polo manga corta stretch", photo = "", categoryCode = "2001", supplierCode = "1004"),
-            Product(productName = "Falda acampanada de lino", photo = "", categoryCode = "2006", supplierCode = "1005"),
-            Product(productName = "Casaca rompeviento impermeable", photo = "", categoryCode = "2003", supplierCode = "1006"),
-            Product(productName = "Ropa de bebé enterizo polar", photo = "", categoryCode = "2007", supplierCode = "1007"),
-            Product(productName = "Casaca jean oversize", photo = "", categoryCode = "2003", supplierCode = "1008"),
-            Product(productName = "Short deportivo de licra", photo = "", categoryCode = "2002", supplierCode = "1009"),
-            Product(productName = "Falda midi plisada", photo = "", categoryCode = "2006", supplierCode = "1003"),
-            Product(productName = "Ropa de bebé con gorro", photo = "", categoryCode = "2007", supplierCode = "1001")
+            Product(productName = "Blusa manga farol satén", photo = "", categoryCode = "2004", supplierCode = "1001", productCode = "PRD-A8K"),
+            Product(productName = "Pantalón palazo mujer", photo = "", categoryCode = "2002", supplierCode = "1002", productCode = "PRD-X3B"),
+            Product(productName = "Short denim con bordado", photo = "", categoryCode = "2002", supplierCode = "1003", productCode = "PRD-C1L"),
+            Product(productName = "Polo manga corta stretch", photo = "", categoryCode = "2001", supplierCode = "1004", productCode = "PRD-M6V"),
+            Product(productName = "Falda acampanada de lino", photo = "", categoryCode = "2006", supplierCode = "1005", productCode = "PRD-T4E"),
+            Product(productName = "Casaca rompeviento impermeable", photo = "", categoryCode = "2003", supplierCode = "1006", productCode = "PRD-Q9Y"),
+            Product(productName = "Ropa de bebé enterizo polar", photo = "", categoryCode = "2007", supplierCode = "1007", productCode = "PRD-B7K"),
+            Product(productName = "Casaca jean oversize", photo = "", categoryCode = "2003", supplierCode = "1008", productCode = "PRD-F2Z"),
+            Product(productName = "Short deportivo de licra", photo = "", categoryCode = "2002", supplierCode = "1009", productCode = "PRD-N5J"),
+            Product(productName = "Falda midi plisada", photo = "", categoryCode = "2006", supplierCode = "1003", productCode = "PRD-L8M"),
+            Product(productName = "Ropa de bebé con gorro", photo = "", categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X")
         )
 
+
         val productStockToInsert = listOf(
-            ProductStock(productId = 1, areaCode = "ZC-CAM-A", stock = 40),
-            ProductStock(productId = 2, areaCode = "ZO-PAN-C", stock = 35),
-            ProductStock(productId = 3, areaCode = "ZE-ZAP-A", stock = 15),
-            ProductStock(productId = 4, areaCode = "ZN-ZAP-A", stock = 50),
-            ProductStock(productId = 5, areaCode = "ZN-ACC-B", stock = 30),
-            ProductStock(productId = 6, areaCode = "ZN-ZAP-A", stock = 25),
-            ProductStock(productId = 7, areaCode = "ZS-TOPS-C", stock = 12),
-            ProductStock(productId = 8, areaCode = "ZC-CHA-C", stock = 18),
-            ProductStock(productId = 9, areaCode = "ZE-CAM-B", stock = 22),
-            ProductStock(productId = 10, areaCode = "ZO-CONJ-B", stock = 28),
-            ProductStock(productId = 11, areaCode = "ZS-CHA-D", stock = 14)
+            ProductStock(productCode = "PRD-A8K", areaCode = "ZS-TOPS-C", stock = 40),     // Blusa manga farol satén - Tops (2004)
+            ProductStock(productCode = "PRD-X3B", areaCode = "ZC-PAN-B", stock = 35),      // Pantalón palazo mujer - Pantalones (2002)
+            ProductStock(productCode = "PRD-C1L", areaCode = "ZO-PAN-C", stock = 20),      // Short denim - Pantalones (2002)
+            ProductStock(productCode = "PRD-M6V", areaCode = "ZE-CAM-B", stock = 50),      // Polo manga corta - Camisetas (2001)
+            ProductStock(productCode = "PRD-T4E", areaCode = "ZO-ACC-A", stock = 30),      // Falda lino - Accesorios (2006)
+            ProductStock(productCode = "PRD-Q9Y", areaCode = "ZC-CHA-C", stock = 25),      // Casaca rompeviento - Chaquetas (2003)
+            ProductStock(productCode = "PRD-B7K", areaCode = "ZS-CONJ-A", stock = 12),     // Ropa bebé polar - Conjuntos (2007)
+            ProductStock(productCode = "PRD-F2Z", areaCode = "ZS-CHA-D", stock = 18),      // Casaca jean - Chaquetas (2003)
+            ProductStock(productCode = "PRD-N5J", areaCode = "ZO-PAN-C", stock = 22),      // Short licra - Pantalones (2002)
+            ProductStock(productCode = "PRD-L8M", areaCode = "ZN-ACC-B", stock = 28),      // Falda midi - Accesorios (2006)
+            ProductStock(productCode = "PRD-Z3X", areaCode = "ZO-CONJ-B", stock = 14)      // Ropa bebé con gorro - Conjuntos (2007)
         )
-        val reserveToInsert = listOf(
-            ReserveArea(productId = 1, areaId = "ZC-CAM-A", quantity = 10, arrivalDate = "2025-07-08"),
-            ReserveArea(productId = 9, areaId = "ZE-CAM-B", quantity = 5, arrivalDate = "2025-07-10")
-        )
+
+//        val reserveToInsert = listOf(
+//            ReserveArea(productId = 1, areaId = "ZC-CAM-A", quantity = 10, arrivalDate = "2025-07-08"),
+//            ReserveArea(productId = 9, areaId = "ZE-CAM-B", quantity = 5, arrivalDate = "2025-07-10")
+//        )
 
 
 
@@ -157,13 +160,6 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val specificDate: Date = dateFormat.parse("07/06/2025")
 
-        val listNotifications = listOf(
-            Notifications(0, "Producto Entrante", "Camiseta Deportiva", "Almacén Central", "Zona Ropa Mujer", 15,specificDate),
-            Notifications(1, "Reserva", "Camiseta Deportiva", "Almacén Central", "Zona Ropa Mujer", 15,specificDate),
-            Notifications(2, "Stock Bajo", "Chaqueta Bomber", "Almacén Norte", "Zona Ropa Hombre", 4, specificDate),
-            Notifications(2, "Stock Bajo", "Cazadora de Cuero", "Almacén Central", "Zona Ropa Mujer", 2,specificDate),
-            Notifications(2, "Stock Bajo", "Pantalón Casual", "Almacén Central", "Zona Ropa Mujer", 2,specificDate)
-        )
 
 
 
@@ -185,9 +181,9 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.identityUserDao.insertAll(listUser)
             stockVisionRepository.warehouseDao.insertAll(warehousesToInsert)
             stockVisionRepository.areaWarehouseDao.insertAll(areaWarehousesToInsert)
-            stockVisionRepository.notificationsDao.insertAll(listNotifications)
+//            stockVisionRepository.notificationsDao.insertAll(listNotifications)
             stockVisionRepository.productStockDao.insertAll(productStockToInsert)
-            stockVisionRepository.reserveAreaDao.insertAll(reserveToInsert)
+
 
         }
     }

@@ -36,6 +36,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
     private val REQUEST_IMAGE_CAPTURE = 1
     var photo: String? = null
     var categoryCode: String? = null
+    var warehouseCode: String?= null
     var areaWarehouseCode: String? = null
     var supplierCode : String?= null
 
@@ -44,6 +45,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             is ProductRegistrationState.CategoriesLoaded ->{
                 DialogCategory(categotyList = renderState.categoriesList) { selectedCategory ->
                     binding.tvCategory.text = selectedCategory.categoryName
+                    categoryCode = selectedCategory.codeCategory
                 }.show(parentFragmentManager, DialogCategory.TAG)
 
             }
@@ -55,6 +57,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             is ProductRegistrationState.WarehouseLoaded ->{
                 DialogWarehouse(warehouseList = renderState.warehouseList){selectedWarehouse ->
                     binding.tvWarehouse.text = selectedWarehouse.warehouseName
+                    warehouseCode = selectedWarehouse.codeWarehouse
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
             }
             is ProductRegistrationState.AreaWarehouseLoaded ->{
@@ -94,7 +97,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
     }
     private fun onInit(){
         binding.tvCategory.setOnClickListener {
-            viewModel.requestCategoryLista()
+            viewModel.requestCategoryList()
         }
 
         binding.tvSupplier.setOnClickListener {
@@ -102,11 +105,20 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
         }
 
         binding.tvWarehouse.setOnClickListener {
-            viewModel.requestWarehouse()
+            if (categoryCode!= null){
+                viewModel.requestWarehouse(categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar una categoría")
+            }
+
         }
 
         binding.tvAreaWarehouse.setOnClickListener {
-            viewModel.requestAreaWarehouse(binding.tvWarehouse.text.toString().trim())
+            if (warehouseCode != null && categoryCode != null){
+                viewModel.requestAreaWarehouse(warehouseCode!!,categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar un Almacén")
+            }
         }
 
         binding.btnRegisterProduct.setOnClickListener {
@@ -121,7 +133,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
                 categoryName.isEmpty() ||
                 supplier.isEmpty() ||
                 warehouse.isEmpty() ||
-                areaWarehouse.isEmpty()) {
+                areaWarehouse.isEmpty() || photo == null) {
                 context?.toast("Completar los campos")
                 return@setOnClickListener
             }

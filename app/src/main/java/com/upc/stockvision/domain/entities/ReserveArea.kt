@@ -8,18 +8,18 @@ import java.util.*
 @Entity(
     tableName = "ReserveArea",
     foreignKeys = [
-        ForeignKey(entity = Product::class, parentColumns = ["id"], childColumns = ["product_id"], onDelete = CASCADE),
+        ForeignKey(entity = Product::class, parentColumns = ["productCode"], childColumns = ["product_code"], onDelete = CASCADE),
         ForeignKey(entity = AreaWarehouse::class, parentColumns = ["areaWarehouseCode"], childColumns = ["area_id"], onDelete = CASCADE)
     ],
-    indices = [Index("product_id"), Index("area_id")]
+    indices = [Index("product_code"), Index("area_id")]
 )
 @TypeConverters(TimeConverter::class)
 data class ReserveArea(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    @ColumnInfo(name = "product_id")
-    val productId: Int,
+    @ColumnInfo(name = "product_code")
+    val productCode: String,
 
     @ColumnInfo(name = "area_id")
     val areaId: String,
@@ -31,6 +31,6 @@ data class ReserveArea(
     val arrivalDate: String,
 
     @ColumnInfo(name = "createAt")
-    val createAt: Date = Date(),
-
+    val createAt: Date = Date()
 )
+
