@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.databinding.FragmentDetailReserveBinding
+import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReservationDetailDTO
 import com.upc.stockvision.infrastructure.AppState
+import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.presentation.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,7 +31,9 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        arguments?.let {
+            reserve = it.getSerializable(Constants.RESERVE_KEY) as ReservationDetailDTO
+        }
     }
 
     override fun onCreateView(
@@ -58,13 +62,15 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
             null
         }
     }
+
+
     private fun loadReserveDetailsData() {
-        binding.tvProductName.text = ""
-        binding.tvWarehouse.text = ""
-        binding.tvAreaWarehouse.text = ""
-        binding.tvArrivalDate.text = ""
-        binding.tvQuantity.text = ""
-        val bitmap = base64ToBitmap("")
+        binding.tvProductName.text = reserve.productName
+        binding.tvWarehouse.text = reserve.warehouseName
+        binding.tvAreaWarehouse.text = reserve.areaWarehouseName
+        binding.tvArrivalDate.text = reserve.arrivalDate.toString()
+        binding.tvQuantity.text = reserve.quantityReserved.toString()
+        val bitmap = base64ToBitmap(reserve.photo)
         binding.ivProductPhotoPhoto.setImageBitmap(bitmap)
     }
 

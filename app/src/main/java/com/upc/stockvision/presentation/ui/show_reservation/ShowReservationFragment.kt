@@ -65,8 +65,8 @@ class ShowReservationFragment @Inject constructor(val appState: AppState) : Base
 
         binding.rvReserve.layoutManager = LinearLayoutManager(requireContext())
         reserveAdapter = ReserveAdapter(requireContext()) {
-
-            context?.toast("${it.productName} ")
+            appState.onDrawReserveDetail?.invoke(it)
+            context?.toast("${it.reservationId} ")
         }
 
         binding.rvReserve.adapter = reserveAdapter
@@ -83,11 +83,11 @@ class ShowReservationFragment @Inject constructor(val appState: AppState) : Base
         binding.btnCalenderEndTime.setOnClickListener {
             mostrarSelectorDeFecha(1)
         }
-        binding.btnCreateReserve.setOnClickListener {
-            appState.onDrawCreateReserveArea?.invoke()
-
-
-        }
+//        binding.btnCreateReserve.setOnClickListener {
+//            appState.onDrawCreateReserveArea?.invoke()
+//
+//
+//        }
         binding.btnSearchReserveByDate.setOnClickListener {
             val startDate = try {
                 inputDateFormat.parse(binding.tvStartTimeReserve.text.toString())

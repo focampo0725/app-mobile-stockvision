@@ -168,21 +168,21 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/btnCreateReserve"
-        style="@style/StyleButtonPrimary"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="#FF4500"
-        android:paddingHorizontal="50dp"
-        android:text="Crear Reserva"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/btnCreateReserve"-->
+<!--        style="@style/StyleButtonPrimary"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="55dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginBottom="50dp"-->
+<!--        android:backgroundTint="#FF4500"-->
+<!--        android:paddingHorizontal="50dp"-->
+<!--        android:text="Crear Reserva"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

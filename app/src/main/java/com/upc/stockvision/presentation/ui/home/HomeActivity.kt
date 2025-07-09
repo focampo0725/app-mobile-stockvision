@@ -20,6 +20,7 @@ import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.presentation.BaseActivity
 import com.upc.stockvision.presentation.ui.create_product_movement.CreateProductMovementFragment
 import com.upc.stockvision.presentation.ui.detail_product.DetailProductFragment
+import com.upc.stockvision.presentation.ui.detail_reserve_space.DetailReserveFragment
 import com.upc.stockvision.presentation.ui.home_presentation.HomePresentationFragment
 import com.upc.stockvision.presentation.ui.incoming_product.IncomingProductFragment
 import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlFragment
@@ -51,6 +52,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     lateinit var detailProductFragment: DetailProductFragment
     @Inject
     lateinit var showReservationFragment: ShowReservationFragment
+    @Inject
+    lateinit var detailReserveFragment: DetailReserveFragment
     @Inject
     lateinit var createProductMovementFragment: CreateProductMovementFragment
     @Inject
@@ -90,6 +93,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         drawCreateMovement()
         drawDetailovement()
         DrawShowReserve()
+        drawReserveDetail()
         navigationView.setNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_item1 -> {
@@ -223,11 +227,21 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
 
     }
     fun drawProductMovementDetail() {
-        appState.onDrawProductDetail = {
+        appState.onDrawProductMovementDetail = {
             val args = Bundle().apply {
                 putSerializable(Constants.PRODUCT_MOVEMENT_KEY, it)
             }
             replaceFragment(detailProductMovementRecordFragment, args)
+        }
+
+    }
+
+    fun drawReserveDetail() {
+        appState.onDrawReserveDetail = {
+            val args = Bundle().apply {
+                putSerializable(Constants.RESERVE_KEY, it)
+            }
+            replaceFragment(detailReserveFragment, args)
         }
 
     }

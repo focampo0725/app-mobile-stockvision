@@ -35,23 +35,11 @@ class ShowReservationViewModel @Inject constructor(val stockVisionRepository : S
     lateinit var context: Context
 
     fun requestReserveList() {
-//        doAsynTask({
-//            val listCategory = stockVisionRepository.reserveAreaDao.getAllReserve()
-//            listCategory.map { reserve ->
-//                ReserveAreaDTO(
-//                    id = reserve.id,
-//                    categoryName = reserve.categoryName,
-//                    productName = reserve.productName,
-//                    quantity = reserve.quantity,
-//                    warehouseName = reserve.warehouseName,
-//                    areaWarehouseName = reserve.areaWarehouseName,
-//                    createAt = reserve.createAt.toString(),
-//                    durationDays = reserve.durationDays
-//                )
-//            }
-//        }, {
-//            renderState.value = LCEState.Content(ShowReservationState.ReserveLoaded(it))
-//        })
+        doAsynTask({
+            stockVisionRepository.reserveAreaDao.getReservationDetailById()
+        }, {
+            renderState.value = LCEState.Content(ShowReservationState.ReserveLoaded(it))
+        })
     }
 
     override val renderState: MutableLiveData<LCEState<ShowReservationState>>

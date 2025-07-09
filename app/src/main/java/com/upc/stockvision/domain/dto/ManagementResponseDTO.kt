@@ -80,10 +80,12 @@ data class ReservationDetailDTO(
     val productName: String,
     val photo: String,
     val quantityReserved: Int,
+    val areaWarehouseCode: String,
     val areaWarehouseName: String,
+    val warehouseCode: String,
     val warehouseName: String,
     val arrivalDate: Date
-)
+): Serializable
 
 
 
@@ -101,7 +103,7 @@ data class ProductMovementDTO(
     val amountMoved : Int,
     val typeMovement: String,
     val movementDate : Date
-)
+): Serializable
 
 data class NotificationDTO(
     val typeNotification : Int,
