@@ -50,7 +50,7 @@ class ReserveAdapter(
 
         filteredList = reserveList.filter { reserve ->
             val reserveDate: Date? = try {
-                dateFormat.parse(reserve.arrivalDate)
+                dateFormat.parse(reserve.arrivalDate.toString())
             } catch (e: Exception) {
                 Log.e("AdapterDebug", "Error parsing date: ${reserve.arrivalDate}")
                 null

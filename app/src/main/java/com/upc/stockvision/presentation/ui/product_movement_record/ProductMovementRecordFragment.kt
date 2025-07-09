@@ -12,16 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentProductMovementRecordBinding
-import com.upc.stockvision.databinding.FragmentReserveSpaceBinding
-import com.upc.stockvision.databinding.FragmentShowReservationBinding
 import com.upc.stockvision.domain.dto.ProductMovementDTO
-import com.upc.stockvision.domain.dto.ProductOnDetailDTO
-import com.upc.stockvision.domain.dto.ReserveAreaDTO
-import com.upc.stockvision.domain.entities.ProductMovement
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.presentation.BaseFragment
-import com.upc.stockvision.presentation.adapter.ProductAdapter
 import com.upc.stockvision.presentation.adapter.ProductMovementAdapter
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +66,7 @@ class ProductMovementRecordFragment @Inject constructor(val appState: AppState) 
         onInit()
         binding.rvProductMovement.layoutManager = LinearLayoutManager(requireContext())
         productMovementAdapter = ProductMovementAdapter(requireContext()) {
-
+            appState.onDrawProductMovementDetail?.invoke(it)
             context?.toast("${it.productName} ")
         }
         binding.rvProductMovement.adapter = productMovementAdapter

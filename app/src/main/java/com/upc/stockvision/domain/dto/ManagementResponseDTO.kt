@@ -82,33 +82,25 @@ data class ReservationDetailDTO(
     val quantityReserved: Int,
     val areaWarehouseName: String,
     val warehouseName: String,
-    val arrivalDate: String
+    val arrivalDate: Date
 )
 
 
-data class ReserveAreaDTO(
-    val id: Int,
-    val categoryName: String,
-    val productName: String,
-    val quantity: Int,
-    val warehouseName: String,
-    val areaWarehouseName: String,
-    val createAt: String,
-    val durationDays: Int
-)
 
 data class ProductMovementDTO(
     val idMovemet : Int,
-    val creationUser : String,
     val productName : String,
+    val photo : String,
     val initialWarehouse: String,
     val initialAreaWarehouse: String,
+    val quantityInitial : Int,
+    val quantityInitialArea : Int,
     val finalWarehouse: String,
     val finalAreaWarehouse: String,
+    val quantityInitialFinalArea : Int,
     val amountMoved : Int,
     val typeMovement: String,
-    val movementDate : String
-
+    val movementDate : Date
 )
 
 data class NotificationDTO(

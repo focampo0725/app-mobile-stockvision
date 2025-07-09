@@ -56,6 +56,8 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
     @Inject
     lateinit var productMovementRecordFragment: ProductMovementRecordFragment
     @Inject
+    lateinit var detailProductMovementRecordFragment: ProductMovementRecordFragment
+    @Inject
     lateinit var notificationsFragment: NotificationsFragment
     @Inject
     lateinit var appState: AppState
@@ -82,6 +84,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         val navigationView: NavigationView = binding.navView
         loadNotification()
         drawProductDetail()
+        drawProductMovementDetail()
         drawInventoryControlFromDetail()
         drawCreateReserveArea()
         drawCreateMovement()
@@ -216,6 +219,15 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 putSerializable(Constants.PRODUCT_KEY, it)
             }
             replaceFragment(detailProductFragment, args)
+        }
+
+    }
+    fun drawProductMovementDetail() {
+        appState.onDrawProductDetail = {
+            val args = Bundle().apply {
+                putSerializable(Constants.PRODUCT_MOVEMENT_KEY, it)
+            }
+            replaceFragment(detailProductMovementRecordFragment, args)
         }
 
     }

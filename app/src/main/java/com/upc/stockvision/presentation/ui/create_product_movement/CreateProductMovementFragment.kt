@@ -24,8 +24,12 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
 
     val viewModel: CreateProductMovementViewModel by viewModels()
     private lateinit var binding: FragmentCreateProductMovementBinding
+
+    var idProdcutSelected = ""
+    var finalWarehouseCode: String?= null
+    //Codigos para el insert
     var initialQuantity = 0
-    var idProdcutSelected = 0
+    var initialAreaWarehouseCode : String ?= null
     var finalAreaWarehouseCode : String ?= null
     var categoryCode : String ?= null
 
@@ -44,10 +48,11 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
                     idProdcutSelected = selectedProduct.idProduct
                     binding.etFinalQuantity.hint = "cantidad"
                     binding.tvProduct.text = selectedProduct.productName
-                    initialQuantity = selectedProduct.quantity
                     binding.tvInitialQuantity.text = initialQuantity.toString()
                     binding.tvInitialWarehouse.text = selectedProduct.warehouse
                     binding.tvInitialAreaWarehouse.text = selectedProduct.areaWarehouse
+                    initialQuantity = selectedProduct.quantity
+                    initialAreaWarehouseCode = selectedProduct.areaWarehouseCode
 
                 }.show(parentFragmentManager, DialogProduct.TAG)
             }
@@ -55,6 +60,7 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
             is CreateProductMovementState.WarehouseLoaded -> {
                 DialogWarehouse(warehouseList = renderState.warehouseList) { selectedWarehouse ->
                     binding.tvFinalWarehouse.text = selectedWarehouse.warehouseName
+                    finalWarehouseCode = selectedWarehouse.codeWarehouse
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
             }
             is CreateProductMovementState.AreaWarehouseLoaded -> {
@@ -127,23 +133,25 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
 
         }
         binding.tvFinalWarehouse.setOnClickListener {
-            viewModel.requestWarehouse()
+            if (categoryCode!= null){
+                viewModel.requestWarehouse(categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar una categoría")
+            }
         }
         binding.tvFinalAreaWarehouse.setOnClickListener {
-            viewModel.requestAreaWarehouse(binding.tvFinalWarehouse.text.toString())
+            if (finalWarehouseCode != null && categoryCode != null){
+                viewModel.requestAreaWarehouse(finalWarehouseCode!!,categoryCode!!)
+            }else{
+                context?.toast("Debe seleccionar un Almacén")
+            }
         }
         binding.tvTypeMovement.setOnClickListener {
             viewModel.reqeustTypeMovement()
         }
 
         binding.btnCreatNewMovement.setOnClickListener {
-//            productId: Int,
-//            initialAreaId: String,
-//            finalAreaId: String,
-//            amountMoved: Int,
-//            typeMovement: String
-            viewModel.createMovement(idProdcutSelected,"",finalAreaWarehouseCode!!,binding.etFinalQuantity.text.toString().toInt(),binding.tvTypeMovement.text.toString())
-
+            viewModel.createMovement(idProdcutSelected,initialAreaWarehouseCode!!,finalAreaWarehouseCode!!,binding.etFinalQuantity.text.toString().toInt(),binding.tvTypeMovement.text.toString())
         }
 
 

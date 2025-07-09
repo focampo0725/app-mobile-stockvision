@@ -6,11 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.upc.stockvision.R
-import com.upc.stockvision.databinding.ItemCategoryBinding
 import com.upc.stockvision.databinding.ItemNotificationsBinding
-import com.upc.stockvision.domain.dto.CategoryDTO
 import com.upc.stockvision.domain.dto.NotificationDTO
-import com.upc.stockvision.domain.dto.ReserveAreaDTO
 
 
 class NotificationAdapter(private val context: Context, val onClick : (category : NotificationDTO) -> Unit) :

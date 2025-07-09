@@ -61,7 +61,7 @@ class FcmService : FirebaseMessagingService() {
                 val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
 
                 doAsynTask({
-                    val product = stockVisionRepository.productsDao.getById(productId)
+                    val product = stockVisionRepository.productsDao.getByProductCode(productId.toString())
                     val area = stockVisionRepository.areaWarehouseDao.getByCode(product.categoryCode)
                     val warehouse = area?.let {
                         stockVisionRepository.warehouseDao.getByCode(it.warehouseReference)
@@ -70,20 +70,13 @@ class FcmService : FirebaseMessagingService() {
                 }, { (product, area, warehouse) ->
                     // Mostrar en notificación
                     setTextViewText(R.id.tvIncomingProduct, product.productName)
-                    setTextViewText(R.id.tvArea, area?.areaWarehouseName ?: "Área desconocida")
-                    setTextViewText(R.id.tvAlmacen, warehouse?.warehouseName ?: "Almacén desconocido")
                     setTextViewText(R.id.tvIncomingQuantity, quantity.toString())
                     setTextViewText(R.id.tvIncomingDate, arrivalDate)
 
                     // Guardar notificación
                     doAsync {
                         stockVisionRepository.notificationsDao.insert(
-                            Notifications(
-                                typeNotification = 0,
-                                productId = product.id,
-                                areaId = area?.areaWarehouseCode ?: "",
-                                quantity = quantity
-                            )
+                            Notifications(typeNotification = 0, productCode = product.productCode, areaId = area?.areaWarehouseCode ?: "", quantity = quantity)
                         )
                     }
                 })
@@ -91,11 +84,11 @@ class FcmService : FirebaseMessagingService() {
 
             "1" -> RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
                 val areaCode = messageParts?.get(1) ?: return@apply
-                val productId = messageParts?.get(2)?.toIntOrNull() ?: return@apply
+                val productId = messageParts?.get(2)?: return@apply
                 val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
                 val arrivalDate = messageParts?.get(4) ?: return@apply
 
-                // Consultar nombres desde la base de datos
+
                 doAsynTask({
                     val area = stockVisionRepository.areaWarehouseDao.getByCode(areaCode)
                     val warehouse = area?.let {
@@ -103,23 +96,20 @@ class FcmService : FirebaseMessagingService() {
                     }
                     Pair(area?.areaWarehouseName ?: "Área desconocida", warehouse?.warehouseName ?: "Almacén desconocido")
                 }, { (areaName, warehouseName) ->
-                    // Pintar la notificación con nombres
                     setTextViewText(R.id.tvArea, areaName)
                     setTextViewText(R.id.tvAlmacen, warehouseName)
 
-                    // Insertar la reserva y notificación
+
                     doAsync {
                         val reserve = ReserveArea(
-                            productId = productId,
+                            productCode = productId,
                             areaId = areaCode,
                             quantity = quantity,
                             arrivalDate = arrivalDate
                         )
                         stockVisionRepository.reserveAreaDao.insert(reserve)
 
-                        val notification = Notifications(
-                            typeNotification = 1, productId = productId, areaId = areaCode, quantity = quantity
-                        )
+                        val notification = Notifications(typeNotification = 1, productCode = productId, areaId = areaCode, quantity = quantity)
                         stockVisionRepository.notificationsDao.insert(notification)
                     }
                 })
@@ -127,12 +117,15 @@ class FcmService : FirebaseMessagingService() {
 
 
             "2" -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
+                val productId = messageParts?.get(1)?: return@apply
+                val areaCode = messageParts?.get(2)?: return@apply
                 setTextViewText(R.id.tvLowStockProduct, messageParts?.get(1) ?: "")
                 doAsynTask({
-                    stockVisionRepository.productsDao.getProductByName(messageParts?.get(1)!!)
+                    stockVisionRepository.productStockDao.getByProductAndArea(productId,areaCode)
                 },{
                     doAsync{
-//                        stockVisionRepository.notificationsDao.insert(Notifications(2,"",it.productName,it.warehouse,it.areaWarehouse,3))
+                        val notification = Notifications(typeNotification = 2, productCode = productId, areaId = areaCode, quantity = it!!.stock)
+                        stockVisionRepository.notificationsDao.insert(notification)
                     }
 
                 })

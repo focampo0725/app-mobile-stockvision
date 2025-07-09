@@ -12,6 +12,7 @@ import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
+import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
@@ -70,10 +71,10 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
     }
 
 
-    fun requestWarehouse() {
+    fun requestWarehouse(categoryCode: String) {
         doAsynTask({
-            val listCategory = stockVisionRepository.warehouseDao.getAll()
-            listCategory.map { warehouse ->
+            val listWarehouse = stockVisionRepository.warehouseDao.getWarehousesByCategory(categoryCode)
+            listWarehouse.map { warehouse ->
                 WarehouseDTO(
                     codeWarehouse = warehouse.warehouseCode,
                     warehouseName = warehouse.warehouseName
@@ -85,12 +86,13 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
             renderState.value = LCEState.Content(CreateProductMovementState.WarehouseLoaded(response))
         })
     }
-    fun requestAreaWarehouse(warehose: String) {
-        doAsynTask({
-            val areaWarehouse = stockVisionRepository.warehouseDao.getWarehouseCodeByName(warehose)
 
-            val listCategory = stockVisionRepository.areaWarehouseDao.getAll(areaWarehouse)
-            listCategory.map { areawarehouse ->
+    fun requestAreaWarehouse(warehouseCode: String, categoryCode: String) {
+        doAsynTask({
+            val areas = stockVisionRepository.areaWarehouseDao
+                .getAreasByWarehouseAndCategory(warehouseCode, categoryCode)
+
+            areas.map { areawarehouse ->
                 AreaWarehouseDTO(
                     codeAreaWarehouse = areawarehouse.areaWarehouseCode,
                     areaWarehouseName = areawarehouse.areaWarehouseName
@@ -103,61 +105,65 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         })
     }
 
+
     fun reqeustTypeMovement(){
         val typeMovement = listOf(
             TypeMovementDTO(1,"Traslado-Almacen lleno"),
-            TypeMovementDTO(1,"Error de Entrada"),
-            TypeMovementDTO(1,"Traslado-Salida")
+            TypeMovementDTO(2,"Error de Entrada"),
+            TypeMovementDTO(3,"Traslado-Salida")
         )
         val response = ResponseGenericDTO(content = typeMovement, isValid = true, exceptions = emptyList())
         renderState.value = LCEState.Content(CreateProductMovementState.TypeProductMovementLoaded(response))
     }
 
     fun createMovement(
-        productId: Int,
+        productId: String,
         initialAreaId: String,
         finalAreaId: String,
         amountMoved: Int,
         typeMovement: String
     ) {
-        val productStockDao = stockVisionRepository.productStockDao
+
         val movementDao = stockVisionRepository.productMovementDao
 
-        // Obtener stock en área de origen
-        val stockOrigin = productStockDao.getByProductAndArea(productId, initialAreaId)
+
+        val stockOrigin = stockVisionRepository.productStockDao.getByProductAndArea(productId, initialAreaId)
             ?: throw IllegalStateException("No hay stock en el área de origen.")
 
+
         val stockInicialOrigen = stockOrigin.stock
+        require(stockOrigin.stock >= amountMoved) {
+            "No hay suficiente stock para mover. Disponible: ${stockOrigin.stock}, requerido: $amountMoved"
+        }
         stockOrigin.stock -= amountMoved
-        productStockDao.update(stockOrigin)
+        stockVisionRepository.productStockDao.update(stockOrigin)
         val stockFinalOrigen = stockOrigin.stock
 
         // Obtener stock en área destino
-        val stockDestino = productStockDao.getByProductAndArea(productId, finalAreaId)
+        val stockDestino = stockVisionRepository.productStockDao.getByProductAndArea(productId, finalAreaId)
         val stockInicialDestino = stockDestino?.stock ?: 0
 
         if (stockDestino != null) {
             stockDestino.stock += amountMoved
-            productStockDao.update(stockDestino)
+            stockVisionRepository.productStockDao.update(stockDestino)
         } else {
-            val nuevoStock = ProductStock(
-                productId = productId,
+            val newProductStock = ProductStock(
+                productCode = productId,
                 areaCode = finalAreaId,
                 stock = amountMoved
             )
-            productStockDao.insert(nuevoStock)
+            stockVisionRepository.productStockDao.insert(newProductStock)
         }
 
         val movement = ProductMovement(
-            productId = productId,
+            productCode = productId,
             initialAreaId = initialAreaId,
             amountInitial = stockInicialOrigen,
             amountFinalInitialArea = stockFinalOrigen,
             finalAreaId = finalAreaId,
             amountInitialFinalArea = stockInicialDestino,
             amountMoved = amountMoved,
-            typeMovement = typeMovement,
-            movementDate = Date()
+            typeMovement = typeMovement
         )
 
         movementDao.insert(movement)

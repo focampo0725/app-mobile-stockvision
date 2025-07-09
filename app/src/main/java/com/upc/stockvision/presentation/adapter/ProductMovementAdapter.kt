@@ -10,16 +10,14 @@ import com.upc.stockvision.domain.dto.ProductMovementDTO
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ProductMovementAdapter(
-    private val context: Context,
-    val onClick: (productMovement: ProductMovementDTO) -> Unit
-) : RecyclerView.Adapter<ProductMovementAdapter.ViewHolder>() {
+class ProductMovementAdapter(private val context: Context, val onClick: (productMovement: ProductMovementDTO) -> Unit) : RecyclerView.Adapter<ProductMovementAdapter.ViewHolder>() {
 
 
     private var productMovementList: List<ProductMovementDTO> = emptyList()
     private var filteredList: MutableList<ProductMovementDTO> = mutableListOf()
 
     private val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+
 
     fun setReserves(productMovement: List<ProductMovementDTO>) {
         productMovementList = productMovement
@@ -49,7 +47,7 @@ class ProductMovementAdapter(
 
         filteredList = productMovementList.filter { reserve ->
             val reserveDate: Date? = try {
-                dateFormat.parse(reserve.movementDate)
+                dateFormat.parse(reserve.movementDate.toString())
             } catch (e: Exception) {
                 Log.e("AdapterDebug", "Error parsing date: ${reserve.movementDate}")
                 null

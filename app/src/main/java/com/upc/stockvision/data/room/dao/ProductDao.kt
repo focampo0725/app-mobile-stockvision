@@ -16,8 +16,6 @@ interface ProductDao : BaseDao<Product> {
     fun countProductCode(code: String): Int
 
 
-    @Query("SELECT * FROM Product WHERE productName = :productName")
-    fun getProductByName(productName: String): Product
     @Query("SELECT * FROM Product WHERE productCode = :productCode")
     fun getByProductCode(productCode: String): Product
 

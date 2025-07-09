@@ -38,7 +38,6 @@ class NotificationsFragment @Inject constructor(val appState: AppState) : BaseFr
 
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,7 +59,7 @@ class NotificationsFragment @Inject constructor(val appState: AppState) : BaseFr
             context?.toast("${it.typeNotification} ")
         }
         binding.rvNotifications.adapter = notificationAdapter
-        viewModel.requestReserveList()
+        viewModel.requestNotificationList()
     }
 
 
