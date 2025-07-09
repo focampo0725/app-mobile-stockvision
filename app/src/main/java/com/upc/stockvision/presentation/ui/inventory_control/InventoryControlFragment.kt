@@ -92,7 +92,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
         binding.rvProducts.adapter = productAdapter
         
         binding.tvCategory.setOnClickListener {
-            viewModel.requestCategoryLista(warehouseCode)
+            viewModel.requestCategoryLista()
         }
         binding.tvWarehouseControlProduct.setOnClickListener {
             viewModel.requestWarehouse(categoryCode)

@@ -10,7 +10,7 @@ interface CategoryDao : BaseDao<Category> {
     @Query("""
     SELECT DISTINCT c.* FROM Category c
     INNER JOIN Product p ON c.categoryCode = p.category_code
-    INNER JOIN ProductStock ps ON ps.product_id = p.id
+    INNER JOIN ProductStock ps ON ps.product_code = p.productCode
     INNER JOIN AreaWarehouse aw ON aw.areaWarehouseCode = ps.area_code
     INNER JOIN Warehouse w ON w.warehouseCode = aw.warehouseReference
     WHERE (:warehouseCode IS NULL OR w.warehouseCode = :warehouseCode)

@@ -63,6 +63,7 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
 
     fun requestCategoryLista(warehouseCode: String? = null) {
         doAsynTask({
+//            val listCategory = stockVisionRepository.categoryDao.getCategoriesByWarehouseOrAll(warehouseCode)
             val listCategory = stockVisionRepository.categoryDao.getCategoriesByWarehouseOrAll(warehouseCode)
             listCategory.map { category ->
                 CategoryDTO(

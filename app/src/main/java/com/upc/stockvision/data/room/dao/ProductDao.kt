@@ -27,7 +27,9 @@ interface ProductDao : BaseDao<Product> {
         ps.stock AS quantity,
         s.supplierName AS supplierName,
         w.warehouseName AS warehouse,
+        w.warehouseCode AS warehouseCode,
         aw.areaWarehouseName AS areaWarehouse,
+        aw.areaWarehouseCode AS areaWarehouseCode,
         p.photo AS photo
     FROM Product p
     INNER JOIN Category c ON p.category_code = c.categoryCode
@@ -56,8 +58,7 @@ interface ProductDao : BaseDao<Product> {
     INNER JOIN Supplier s ON p.supplier_code = s.supplierCode
     INNER JOIN ProductStock ps ON p.id = ps.product_code
     INNER JOIN AreaWarehouse aw ON ps.area_code = aw.areaWarehouseCode
-    INNER JOIN Warehouse w ON aw.warehouseReference = w.warehouseCode
-""")
+    INNER JOIN Warehouse w ON aw.warehouseReference = w.warehouseCode""")
     fun getAllProductDetails(): List<ProductOnDetailDTO>
 
 
