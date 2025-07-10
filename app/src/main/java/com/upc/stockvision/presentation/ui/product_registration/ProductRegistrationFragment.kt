@@ -52,6 +52,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             is ProductRegistrationState.ProductsLoaded ->{
                 DialogSupplier(supplierList = renderState.productList){selectedSupplier ->
                     binding.tvSupplier.text = selectedSupplier.supplierName
+                    supplierCode = selectedSupplier.codeSupplier
                 }.show(parentFragmentManager, DialogSupplier.TAG)
             }
             is ProductRegistrationState.WarehouseLoaded ->{
@@ -63,6 +64,7 @@ class ProductRegistrationFragment @Inject constructor() : BaseFragment<ProductRe
             is ProductRegistrationState.AreaWarehouseLoaded ->{
                 DialogAreaWarehouse(areaWarehouseList = renderState.areaWarehouseList){selectedAreaWarehouse ->
                     binding.tvAreaWarehouse.text = selectedAreaWarehouse.areaWarehouseName
+                    areaWarehouseCode = selectedAreaWarehouse.codeAreaWarehouse
 
                 }.show(parentFragmentManager, DialogAreaWarehouse.TAG)
             }

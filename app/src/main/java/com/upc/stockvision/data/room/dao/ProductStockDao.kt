@@ -15,6 +15,12 @@ interface ProductStockDao : BaseDao<ProductStock>  {
     fun getByProductAndArea(productCode: String, areaCode: String): ProductStock?
 
 
+    @Query("""
+    SELECT * FROM ProductStock
+    WHERE product_code = :productCode AND stock > 0
+""")
+    fun getByProduct(productCode: String): List<ProductStock>
+
     @Update
     fun update(productStock: ProductStock)
     @Query("DELETE FROM ProductStock")

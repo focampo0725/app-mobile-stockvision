@@ -36,6 +36,7 @@ class SignUpActivity : BaseActivity<SignUpViewModel, SignUpState>() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViewModel(viewModel)
+        immersiveScreen(window)
         onInit()
     }
 

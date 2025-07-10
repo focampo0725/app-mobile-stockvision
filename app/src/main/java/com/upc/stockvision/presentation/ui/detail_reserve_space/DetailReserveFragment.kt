@@ -8,6 +8,7 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.upc.stockvision.databinding.FragmentDetailReserveBinding
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
@@ -15,6 +16,9 @@ import com.upc.stockvision.domain.dto.ReservationDetailDTO
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.presentation.BaseFragment
+import com.upc.stockvision.presentation.dialog.DialogAreaWarehouse
+import com.upc.stockvision.presentation.dialog.DialogConfirmation
+import com.upc.stockvision.presentation.dialog.OnDialogListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -52,6 +56,18 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
 
     fun initView(){
         loadReserveDetailsData()
+        binding.btnBack.setOnClickListener {
+            appState.onDrawShowReserve?.invoke()
+        }
+        binding.btnMakeReservation.setOnClickListener {
+            DialogConfirmation("¿Estás seguro que deseas continuar?", object : OnDialogListener {
+                override fun onAceptar() {
+                    Toast.makeText(requireContext(), "Confirmado", Toast.LENGTH_SHORT).show()
+
+                }
+            }).show(parentFragmentManager, DialogConfirmation.TAG)
+
+        }
     }
     fun base64ToBitmap(base64String: String): Bitmap? {
         return try {

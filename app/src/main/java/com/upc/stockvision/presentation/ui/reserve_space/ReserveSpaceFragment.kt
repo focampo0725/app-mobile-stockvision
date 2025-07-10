@@ -58,7 +58,6 @@ class ReserveSpaceFragment @Inject constructor(val appState: AppState) : BaseFra
             is ReserveSpaceState.SuccessReserveRegister ->{
                 context.showCustomToast(renderState.message, SelectedIcon.SUCCESS)
                 appState.onDrawShowReserve?.invoke()
-
             }
             else -> {}
         }

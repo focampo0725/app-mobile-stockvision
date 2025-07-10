@@ -28,9 +28,9 @@ interface ReserveAreaDao : BaseDao<ReserveArea> {
         w.warehouseName AS warehouseName,
         r.arrivalDate
     FROM ReserveArea r
-    INNER JOIN Product p ON p.id = r.product_code
+    INNER JOIN Product p ON p.productCode = r.product_code
     INNER JOIN AreaWarehouse aw ON aw.areaWarehouseCode = r.area_id
     INNER JOIN Warehouse w ON w.warehouseCode = aw.warehouseReference""")
-    fun getReservationDetailById(): List<ReservationDetailDTO>
+    fun getReservationDetail(): List<ReservationDetailDTO>
 
 }

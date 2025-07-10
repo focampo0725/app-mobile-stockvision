@@ -36,7 +36,7 @@ class ShowReservationViewModel @Inject constructor(val stockVisionRepository : S
 
     fun requestReserveList() {
         doAsynTask({
-            stockVisionRepository.reserveAreaDao.getReservationDetailById()
+            stockVisionRepository.reserveAreaDao.getReservationDetail()
         }, {
             renderState.value = LCEState.Content(ShowReservationState.ReserveLoaded(it))
         })

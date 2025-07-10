@@ -5,8 +5,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
+import com.upc.stockvision.domain.entities.AreaWarehouse
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
+import com.upc.stockvision.infrastructure.extensions.doAsync
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
@@ -21,6 +23,9 @@ sealed class InventoryControlState{
         InventoryControlState()
 
     class WarehouseLoaded(val warehouseList: ResponseGenericDTO<WarehouseDTO>) :
+        InventoryControlState()
+
+    class AreaWarehouseList(val areaWarehouseList: List<InventoryControlViewModel.areaWareHouse>) :
         InventoryControlState()
 }
 
@@ -61,10 +66,10 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
     }
 
 
-    fun requestCategoryLista(warehouseCode: String? = null) {
+    fun requestCategoryLista() {
         doAsynTask({
 //            val listCategory = stockVisionRepository.categoryDao.getCategoriesByWarehouseOrAll(warehouseCode)
-            val listCategory = stockVisionRepository.categoryDao.getCategoriesByWarehouseOrAll(warehouseCode)
+            val listCategory = stockVisionRepository.categoryDao.getAll()
             listCategory.map { category ->
                 CategoryDTO(
                     codeCategory = category.categoryCode,
@@ -78,6 +83,28 @@ class InventoryControlViewModel @Inject constructor(val stockVisionRepository: S
                 LCEState.Content(InventoryControlState.CategoriesLoaded(response))
         })
     }
+
+    data class areaWareHouse(
+        val warehouseCode: String?,
+        val areaWarehoseCode : String?
+    )
+    fun onWarehouseSelected(warehouseCode: String?) {
+        doAsynTask({
+            stockVisionRepository.areaWarehouseDao.getAreasByWarehouse(warehouseCode?:"")
+        },{
+            val list  = it.map {
+                areaWareHouse(
+                    warehouseCode = it.warehouseReference,
+                    areaWarehoseCode = it.areaWarehouseCode
+                )
+            }
+
+            renderState.value =
+                LCEState.Content(InventoryControlState.AreaWarehouseList(list))
+        })
+
+    }
+
 
 
 

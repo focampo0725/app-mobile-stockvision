@@ -10,6 +10,8 @@ import com.upc.stockvision.domain.entities.ProductMovement
 import com.upc.stockvision.domain.entities.ProductStock
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
+import com.upc.stockvision.infrastructure.extensions.doAsync
+import com.upc.stockvision.infrastructure.extensions.logi
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
@@ -123,56 +125,59 @@ class CreateProductMovementViewModel @Inject constructor(val stockVisionReposito
         amountMoved: Int,
         typeMovement: String
     ) {
+        context.logi("datos para el movimiento -> $productId $initialAreaId  $finalAreaId  $amountMoved $typeMovement} ")
 
-        val movementDao = stockVisionRepository.productMovementDao
-
-
-        val stockOrigin = stockVisionRepository.productStockDao.getByProductAndArea(productId, initialAreaId)
-            ?: throw IllegalStateException("No hay stock en el área de origen.")
+        doAsync{
+            val movementDao = stockVisionRepository.productMovementDao
 
 
-        val stockInicialOrigen = stockOrigin.stock
-        require(stockOrigin.stock >= amountMoved) {
-            "No hay suficiente stock para mover. Disponible: ${stockOrigin.stock}, requerido: $amountMoved"
-        }
-        stockOrigin.stock -= amountMoved
-        stockVisionRepository.productStockDao.update(stockOrigin)
-        val stockFinalOrigen = stockOrigin.stock
+            val stockOrigin = stockVisionRepository.productStockDao.getByProductAndArea(productId, initialAreaId)
+                ?: throw IllegalStateException("No hay stock en el área de origen.")
 
-        // Obtener stock en área destino
-        val stockDestino = stockVisionRepository.productStockDao.getByProductAndArea(productId, finalAreaId)
-        val stockInicialDestino = stockDestino?.stock ?: 0
 
-        if (stockDestino != null) {
-            stockDestino.stock += amountMoved
-            stockVisionRepository.productStockDao.update(stockDestino)
-        } else {
-            val newProductStock = ProductStock(
+            val stockInicialOrigen = stockOrigin.stock
+            require(stockOrigin.stock >= amountMoved) {
+                "No hay suficiente stock para mover. Disponible: ${stockOrigin.stock}, requerido: $amountMoved"
+            }
+            stockOrigin.stock -= amountMoved
+            stockVisionRepository.productStockDao.update(stockOrigin)
+            val stockFinalOrigen = stockOrigin.stock
+
+            // Obtener stock en área destino
+            val stockDestino = stockVisionRepository.productStockDao.getByProductAndArea(productId, finalAreaId)
+            val stockInicialDestino = stockDestino?.stock ?: 0
+
+            if (stockDestino != null) {
+                stockDestino.stock += amountMoved
+                stockVisionRepository.productStockDao.update(stockDestino)
+            } else {
+                val newProductStock = ProductStock(
+                    productCode = productId,
+                    areaCode = finalAreaId,
+                    stock = amountMoved
+                )
+                stockVisionRepository.productStockDao.insert(newProductStock)
+            }
+
+            val movement = ProductMovement(
                 productCode = productId,
-                areaCode = finalAreaId,
-                stock = amountMoved
+                initialAreaId = initialAreaId,
+                amountInitial = stockInicialOrigen,
+                amountFinalInitialArea = stockFinalOrigen,
+                finalAreaId = finalAreaId,
+                amountInitialFinalArea = stockInicialDestino,
+                amountMoved = amountMoved,
+                typeMovement = typeMovement
             )
-            stockVisionRepository.productStockDao.insert(newProductStock)
+
+            movementDao.insert(movement)
+
+            renderState.postValue(
+                LCEState.Content(
+                    CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")
+                )
+            )
         }
-
-        val movement = ProductMovement(
-            productCode = productId,
-            initialAreaId = initialAreaId,
-            amountInitial = stockInicialOrigen,
-            amountFinalInitialArea = stockFinalOrigen,
-            finalAreaId = finalAreaId,
-            amountInitialFinalArea = stockInicialDestino,
-            amountMoved = amountMoved,
-            typeMovement = typeMovement
-        )
-
-        movementDao.insert(movement)
-
-        renderState.postValue(
-            LCEState.Content(
-                CreateProductMovementState.CreateProductMovementDetails("Registro exitoso")
-            )
-        )
     }
 
 

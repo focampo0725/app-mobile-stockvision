@@ -44,8 +44,8 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
             }
             is CreateProductMovementState.ProductLoaded -> {
                 DialogProduct(productList = renderState.productList){selectedProduct ->
-                    binding.etFinalQuantity.text.clear()
                     idProdcutSelected = selectedProduct.idProduct
+                    binding.etFinalQuantity.text.clear()
                     binding.etFinalQuantity.hint = "cantidad"
                     binding.tvProduct.text = selectedProduct.productName
                     binding.tvInitialQuantity.text = initialQuantity.toString()

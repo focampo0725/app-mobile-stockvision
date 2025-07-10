@@ -27,9 +27,7 @@ data class TypeMovementDTO(
 
 
 data class SupplierDTO(
-    @SerializedName("codeCategory")
     val codeSupplier : String,
-    @SerializedName("categoryName")
     val supplierName : String
 ): Serializable
 

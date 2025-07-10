@@ -75,6 +75,7 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViewModel(viewModel)
+        immersiveScreen(window)
         setSupportActionBar(binding.toolbar)
         closeApp()
         getSupportActionBar()?.setDisplayShowTitleEnabled(false);

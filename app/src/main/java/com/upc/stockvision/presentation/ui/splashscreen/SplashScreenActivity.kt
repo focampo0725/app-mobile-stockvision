@@ -44,6 +44,7 @@ class SplashScreenActivity : BaseActivity<SplashScreenViewModel, SplashScreenSta
         loadSlideInAnimation()
         loadScaleUpAnimation()
         viewModel.populateData()
+        immersiveScreen(window)
         Handler(Looper.getMainLooper()).postDelayed({
             viewModel.loadScreen()
         }, 2800)

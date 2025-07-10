@@ -37,6 +37,7 @@ class SignInActivity : BaseActivity<SignInViewModel,SignInState>() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupViewModel(viewModel)
+        immersiveScreen(window)
         init()
     }
 

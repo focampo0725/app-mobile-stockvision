@@ -68,21 +68,18 @@ abstract class BaseActivity <T:IViewModel<K>,K>: AppCompatActivity(), OnToGoNewA
     }
 
 
-    fun inmerviseScreen(window: Window) {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        )
-        window.addFlags(
-            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM or
-                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        )
+    fun immersiveScreen(window: Window) {
+        // Oculta la barra de navegación y status bar
         window.decorView.systemUiVisibility =
-            (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+            (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+
+        // Si ya lo aplicaste antes con FLAG_NOT_FOCUSABLE, asegúrate de quitarlo:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 
 

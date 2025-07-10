@@ -18,4 +18,6 @@ interface AreaWarehouseDao : BaseDao<AreaWarehouse> {
 
     @Query("DELETE FROM AreaWarehouse")
     fun deleteAll()
+    @Query("SELECT * FROM AreaWarehouse WHERE warehouseReference = :warehouseCode")
+    fun getAreasByWarehouse(warehouseCode: String):List<AreaWarehouse>
 }

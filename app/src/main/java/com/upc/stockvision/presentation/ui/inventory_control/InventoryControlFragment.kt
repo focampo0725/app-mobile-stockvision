@@ -51,17 +51,22 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
                     binding.tvCategory.text = selectedCategory.categoryName
                     val category = binding.tvCategory.text.toString()
                     categoryCode = selectedCategory.codeCategory
-                    applyFilter(null, category, null)
+                    applyFilter(emptyList(), category, null)
                 }.show(parentFragmentManager, DialogCategory.TAG)
 
             }
             is InventoryControlState.WarehouseLoaded ->{
                 DialogWarehouse(warehouseList = renderState.warehouseList){selectedWarehouse ->
                     binding.tvWarehouseControlProduct.text = selectedWarehouse.warehouseName
-                    val warehouse = binding.tvWarehouseControlProduct.text.toString()
+                    binding.tvWarehouseControlProduct.text.toString()
                     warehouseCode = selectedWarehouse.codeWarehouse
-                    applyFilter(warehouse, null, null)
+                    viewModel.onWarehouseSelected(selectedWarehouse.codeWarehouse)
+//                    applyFilter(warehouse, null, null)
                 }.show(parentFragmentManager, DialogWarehouse.TAG)
+            }
+            is InventoryControlState.AreaWarehouseList ->{
+
+                applyFilter(renderState.areaWarehouseList, null, null)
             }
         }
     }
@@ -105,7 +110,7 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
         binding.etProductName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val productName = s.toString()
-                applyFilter(null, null, productName)
+                applyFilter(emptyList(), null, productName)
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -114,8 +119,8 @@ class InventoryControlFragment @Inject constructor(val appState: AppState): Base
     }
 
 
-    private fun applyFilter(warehouse: String?, category: String?, productName: String?) {
-        productAdapter.filterProducts(warehouse, category, productName)
+    private fun applyFilter(areaList: List<InventoryControlViewModel.areaWareHouse>, category: String?, productName: String?) {
+        productAdapter.filterProducts(areaList, category, productName)
     }
 
 

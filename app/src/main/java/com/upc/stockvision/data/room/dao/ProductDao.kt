@@ -21,7 +21,7 @@ interface ProductDao : BaseDao<Product> {
 
     @Query("""
     SELECT 
-        p.id AS idProduct,
+        p.productCode AS idProduct,
         p.productName AS productName,
         c.categoryName AS categoryName,
         ps.stock AS quantity,
@@ -34,7 +34,7 @@ interface ProductDao : BaseDao<Product> {
     FROM Product p
     INNER JOIN Category c ON p.category_code = c.categoryCode
     INNER JOIN Supplier s ON p.supplier_code = s.supplierCode
-    INNER JOIN ProductStock ps ON p.id = ps.product_code
+    INNER JOIN ProductStock ps ON p.productCode = ps.product_code
     INNER JOIN AreaWarehouse aw ON ps.area_code = aw.areaWarehouseCode
     INNER JOIN Warehouse w ON aw.warehouseReference = w.warehouseCode
     WHERE p.category_code = :categoryCode""")

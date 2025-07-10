@@ -14,6 +14,7 @@ import com.upc.stockvision.databinding.ItemProductBinding
 import com.upc.stockvision.domain.dto.ProductDTO
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.infrastructure.extensions.toast
+import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlViewModel
 
 class ProductAdapter(private val context: Context , val onClick : (productDetail : ProductOnDetailDTO) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
@@ -64,18 +65,21 @@ class ProductAdapter(private val context: Context , val onClick : (productDetail
     }
 
     // Función para filtrar los productos según los parámetros no nulos
-    fun filterProducts(warehouse: String?, category: String?, productName: String?) {
+
+    fun filterProducts(areaList: List<InventoryControlViewModel.areaWareHouse>, category: String?, productName: String?) {
+        val validAreaCodes = areaList.map { it.areaWarehoseCode }
+
         filteredList = productList.filter { product ->
-            // Comprobamos cada campo de forma independiente y lo filtramos solo si no es nulo
-            val matchesWarehouse = warehouse?.let { product.warehouseCode == it } ?: true
-            val matchesCategory = category?.let { product.categoryName == it } ?: true // Ajusta el nombre del campo si es necesario
+            val matchesArea = if (validAreaCodes.isNotEmpty()) {
+                validAreaCodes.contains(product.areaWarehouseCode)
+            } else true
+
+            val matchesCategory = category?.let { product.categoryName == it } ?: true
             val matchesName = productName?.let { product.productName.contains(it, ignoreCase = true) } ?: true
 
-            // Si todos los filtros aplican (es decir, no son nulos y coinciden), el producto es válido
-            matchesWarehouse && matchesCategory && matchesName
+            matchesArea && matchesCategory && matchesName
         }.toMutableList()
 
-        // Actualizamos el RecyclerView con la lista filtrada
         notifyDataSetChanged()
     }
 

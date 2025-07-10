@@ -3,6 +3,7 @@ package com.upc.stockvision.infrastructure.service
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.infrastructure.extensions.doAsync
 import com.upc.stockvision.presentation.ui.home.HomeActivity
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,6 +32,11 @@ class FcmService : FirebaseMessagingService() {
 
     @Inject
     lateinit var stockVisionRepository: StockVisionRepository
+
+    @ApplicationContext
+    lateinit var context: Context
+
+    var areaT =""
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         showNotification(message)
@@ -39,7 +46,8 @@ class FcmService : FirebaseMessagingService() {
     private fun showNotification(message: RemoteMessage) {
         val messageContent = message.notification?.body
         val messageParts = messageContent?.split("|")
-        val fragmentToOpen = messageParts?.get(0)
+        val fragmentToOpen = messageParts?.getOrNull(0) ?: return
+
         val intent = Intent(this, HomeActivity::class.java).apply {
             putExtra("fragment_to_show", fragmentToOpen)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -54,11 +62,11 @@ class FcmService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(NotificationManager::class.java)
 
-        val remoteView: RemoteViews = when (fragmentToOpen) {
-            "0" -> RemoteViews(packageName, R.layout.custom_alert_incoming_product).apply {
-                val productId = messageParts?.get(1)?.toIntOrNull() ?: return@apply
-                val arrivalDate = messageParts?.get(2) ?: return@apply
-                val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
+        when (fragmentToOpen) {
+            "0" -> {
+                val productId = messageParts.getOrNull(1)?.toIntOrNull() ?: return
+                val arrivalDate = messageParts.getOrNull(2) ?: return
+                val quantity = messageParts.getOrNull(3)?.toIntOrNull() ?: return
 
                 doAsynTask({
                     val product = stockVisionRepository.productsDao.getByProductCode(productId.toString())
@@ -68,26 +76,40 @@ class FcmService : FirebaseMessagingService() {
                     }
                     Triple(product, area, warehouse)
                 }, { (product, area, warehouse) ->
-                    // Mostrar en notificación
-                    setTextViewText(R.id.tvIncomingProduct, product.productName)
-                    setTextViewText(R.id.tvIncomingQuantity, quantity.toString())
-                    setTextViewText(R.id.tvIncomingDate, arrivalDate)
+                    val remoteView = RemoteViews(packageName, R.layout.custom_alert_incoming_product).apply {
+                        setTextViewText(R.id.tvIncomingProduct, product.productName)
+                        setTextViewText(R.id.tvIncomingQuantity, quantity.toString())
+                        setTextViewText(R.id.tvIncomingDate, arrivalDate)
+                    }
 
-                    // Guardar notificación
+                    val notification = NotificationCompat.Builder(this, StockVisionApp.NOTIFICATION_CHANNEL_ID)
+                        .setContentTitle(message.notification?.title)
+                        .setSmallIcon(R.drawable.ic_bell)
+                        .setCustomBigContentView(remoteView)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .build()
+
+                    notificationManager.notify(1, notification)
+
                     doAsync {
                         stockVisionRepository.notificationsDao.insert(
-                            Notifications(typeNotification = 0, productCode = product.productCode, areaId = area?.areaWarehouseCode ?: "", quantity = quantity)
+                            Notifications(
+                                typeNotification = 0,
+                                productCode = product.productCode,
+                                areaId = area?.areaWarehouseCode ?: "",
+                                quantity = quantity
+                            )
                         )
                     }
                 })
             }
 
-            "1" -> RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
-                val areaCode = messageParts?.get(1) ?: return@apply
-                val productId = messageParts?.get(2)?: return@apply
-                val quantity = messageParts?.get(3)?.toIntOrNull() ?: return@apply
-                val arrivalDate = messageParts?.get(4) ?: return@apply
-
+            "1" -> {
+                val areaCode = messageParts.getOrNull(1) ?: return
+                val productId = messageParts.getOrNull(2) ?: return
+                val quantity = messageParts.getOrNull(3)?.toIntOrNull() ?: return
+                val arrivalDate = messageParts.getOrNull(4) ?: return
 
                 doAsynTask({
                     val area = stockVisionRepository.areaWarehouseDao.getByCode(areaCode)
@@ -96,9 +118,20 @@ class FcmService : FirebaseMessagingService() {
                     }
                     Pair(area?.areaWarehouseName ?: "Área desconocida", warehouse?.warehouseName ?: "Almacén desconocido")
                 }, { (areaName, warehouseName) ->
-                    setTextViewText(R.id.tvArea, areaName)
-                    setTextViewText(R.id.tvAlmacen, warehouseName)
+                    val remoteView = RemoteViews(packageName, R.layout.custom_alert_reserve_area).apply {
+                        setTextViewText(R.id.tvArea, areaName)
+                        setTextViewText(R.id.tvAlmacen, warehouseName)
+                    }
 
+                    val notification = NotificationCompat.Builder(this, StockVisionApp.NOTIFICATION_CHANNEL_ID)
+                        .setContentTitle(message.notification?.title)
+                        .setSmallIcon(R.drawable.ic_bell)
+                        .setCustomBigContentView(remoteView)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .build()
+
+                    notificationManager.notify(1, notification)
 
                     doAsync {
                         val reserve = ReserveArea(
@@ -109,47 +142,68 @@ class FcmService : FirebaseMessagingService() {
                         )
                         stockVisionRepository.reserveAreaDao.insert(reserve)
 
-                        val notification = Notifications(typeNotification = 1, productCode = productId, areaId = areaCode, quantity = quantity)
-                        stockVisionRepository.notificationsDao.insert(notification)
+                        val notificationEntity = Notifications(
+                            typeNotification = 1,
+                            productCode = productId,
+                            areaId = areaCode,
+                            quantity = quantity
+                        )
+                        stockVisionRepository.notificationsDao.insert(notificationEntity)
                     }
                 })
             }
 
+            "2" -> {
+                val productId = messageParts.getOrNull(1) ?: return
+                val areaCode = messageParts.getOrNull(2) ?: return
 
-            "2" -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
-                val productId = messageParts?.get(1)?: return@apply
-                val areaCode = messageParts?.get(2)?: return@apply
-                setTextViewText(R.id.tvLowStockProduct, messageParts?.get(1) ?: "")
                 doAsynTask({
-                    stockVisionRepository.productStockDao.getByProductAndArea(productId,areaCode)
-                },{
-                    doAsync{
-                        val notification = Notifications(typeNotification = 2, productCode = productId, areaId = areaCode, quantity = it!!.stock)
-                        stockVisionRepository.notificationsDao.insert(notification)
+                    val stock = stockVisionRepository.productStockDao.getByProductAndArea(productId, areaCode)
+                    stock
+                }, { stock ->
+                    val remoteView = RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
+                        setTextViewText(R.id.tvLowStockProduct, productId)
                     }
 
+                    val notification = NotificationCompat.Builder(this, StockVisionApp.NOTIFICATION_CHANNEL_ID)
+                        .setContentTitle(message.notification?.title)
+                        .setSmallIcon(R.drawable.ic_bell)
+                        .setCustomBigContentView(remoteView)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .build()
+
+                    notificationManager.notify(1, notification)
+
+                    doAsync {
+                        val notificationEntity = Notifications(
+                            typeNotification = 2,
+                            productCode = productId,
+                            areaId = areaCode,
+                            quantity = stock?.stock ?: 0
+                        )
+                        stockVisionRepository.notificationsDao.insert(notificationEntity)
+                    }
                 })
-
-
             }
 
-            else -> RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
-                setTextViewText(R.id.tvLowStockProduct, "Mensaje no reconocido")
+            else -> {
+                val remoteView = RemoteViews(packageName, R.layout.custom_alert_low_stock_product).apply {
+                    setTextViewText(R.id.tvLowStockProduct, "Mensaje no reconocido")
+                }
+
+                val notification = NotificationCompat.Builder(this, StockVisionApp.NOTIFICATION_CHANNEL_ID)
+                    .setContentTitle(message.notification?.title)
+                    .setSmallIcon(R.drawable.ic_bell)
+                    .setCustomBigContentView(remoteView)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .build()
+
+                notificationManager.notify(1, notification)
             }
         }
-
-
-
-
-        val notification = NotificationCompat.Builder(this, StockVisionApp.NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(message.notification?.title)
-////            .setContentText(message.notification?.body)
-            .setSmallIcon(R.drawable.ic_bell)
-            .setCustomBigContentView(remoteView)  // Usamos el RemoteViews para la vista personalizada
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
-        notificationManager.notify(1, notification)
     }
+
 
 }
