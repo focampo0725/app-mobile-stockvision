@@ -18,8 +18,11 @@ interface ProductStockDao : BaseDao<ProductStock>  {
     @Query("""
     SELECT * FROM ProductStock
     WHERE product_code = :productCode AND stock > 0
+    ORDER BY createdAt ASC
+    LIMIT 1
 """)
-    fun getByProduct(productCode: String): List<ProductStock>
+    fun getFirstByProduct(productCode: String): ProductStock?
+
 
     @Update
     fun update(productStock: ProductStock)

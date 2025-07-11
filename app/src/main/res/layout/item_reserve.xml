@@ -8,66 +8,76 @@
     app:cardCornerRadius="8dp"
     android:layout_margin="8dp">
 
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
-
-        <ImageView
-            android:id="@+id/ivProduct"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/rounded_border_item"
-            android:src="@drawable/ic_warehouse_64"
-            android:scaleType="fitCenter"
-            android:padding="4dp"
-
-            />
-
-        <!-- Línea divisoria vertical -->
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
-            android:layout_marginHorizontal="8dp"/>
-
-        <!-- Contenedor para las cajas de texto -->
+        <!-- Contenido original -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvProduct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#FF8C42"
-                android:text="Nombre del Producto"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:paddingBottom="4dp"/>
+            <ImageView
+                android:id="@+id/ivProduct"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/rounded_border_item"
+                android:src="@drawable/ic_warehouse_64"
+                android:scaleType="fitCenter"
+                android:padding="4dp"/>
 
-            <TextView
-                android:id="@+id/tvWarehouse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Almacen : "
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:paddingBottom="4dp"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"
+                android:layout_marginHorizontal="8dp"/>
 
-            <TextView
-                android:id="@+id/tvAreaWarehouse"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Zona : "
-                android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FF8C42"
+                    android:text="Nombre del Producto"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Almacen : "
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:paddingBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/tvAreaWarehouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zona : "
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <!-- Círculo de estado -->
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/circle_indicator"/>
+
+    </FrameLayout>
 </androidx.cardview.widget.CardView>

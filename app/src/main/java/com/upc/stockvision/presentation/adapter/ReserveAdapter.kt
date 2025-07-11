@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.upc.stockvision.R
 import com.upc.stockvision.databinding.ItemReserveBinding
 import com.upc.stockvision.domain.dto.ReservationDetailDTO
 import java.text.SimpleDateFormat
@@ -41,6 +43,13 @@ class ReserveAdapter(
             tvProduct.text = reserve.productName
             tvWarehouse.text = reserve.warehouseName
             tvAreaWarehouse.text = reserve.areaWarehouseName
+            val statusColor = when (reserve.state) {
+                0 -> R.color.status_cancelled
+                1 -> R.color.status_created
+                2 -> R.color.status_confirmed
+                else -> R.color.gray
+            }
+            statusIndicator.background.setTint(ContextCompat.getColor(root.context, statusColor))
             root.setOnClickListener { onClick(reserve) }
         }
     }

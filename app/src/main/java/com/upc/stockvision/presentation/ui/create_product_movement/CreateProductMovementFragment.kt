@@ -113,6 +113,10 @@ class CreateProductMovementFragment @Inject constructor(val appState: AppState) 
                     binding.tvInitialQuantity.text = initialQuantity.toString()
                 } else {
                     val resultado = initialQuantity - cantidadRestar
+                    if (resultado <= 0){
+                        context?.toast("Numero ingresado incorrecto")
+                        return
+                    }
                     binding.tvInitialQuantity.text = resultado.toString()
                 }
             }

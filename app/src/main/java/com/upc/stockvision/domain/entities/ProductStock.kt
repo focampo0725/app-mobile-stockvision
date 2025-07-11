@@ -27,6 +27,7 @@ import androidx.room.*
 data class ProductStock(
     @ColumnInfo(name = "product_code") val productCode: String,
     @ColumnInfo(name = "area_code") val areaCode: String,
-    @ColumnInfo(name = "stock") var stock: Int
+    @ColumnInfo(name = "stock") var stock: Int,
+    @ColumnInfo(name = "createdAt") val createdAt: Long = System.currentTimeMillis()
 )
 

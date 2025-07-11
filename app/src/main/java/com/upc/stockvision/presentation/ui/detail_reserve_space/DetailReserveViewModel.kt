@@ -9,20 +9,23 @@ import com.upc.stockvision.data.repository.StockVisionRepository
 import com.upc.stockvision.domain.dto.*
 import com.upc.stockvision.domain.entities.ProductMovement
 import com.upc.stockvision.domain.entities.ProductStock
+import com.upc.stockvision.domain.entities.ReserveArea.Companion.CANCEL_RESERVE
+import com.upc.stockvision.domain.entities.ReserveArea.Companion.CONFIRM_RESERVE
 import com.upc.stockvision.infrastructure.extensions.LCEState
 import com.upc.stockvision.infrastructure.extensions.doAsynTask
 import com.upc.stockvision.infrastructure.extensions.doAsync
 import com.upc.stockvision.infrastructure.extensions.logi
 import com.upc.stockvision.presentation.BaseViewModel
 import com.upc.stockvision.presentation.IViewModel
+import com.upc.stockvision.presentation.ui.inventory_control.InventoryControlState
 import com.upc.stockvision.presentation.ui.product_registration.ProductRegistrationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-sealed class DetailReserveState{
-
+sealed class DetailReserveState {
+    class ReserveState(val messageConfirm : String) : DetailReserveState()
 
 }
 
@@ -36,48 +39,53 @@ class DetailReserveViewModel @Inject constructor(val stockVisionRepository: Stoc
     lateinit var context: Context
 
 
+    fun cancelReservation(reserveId: Int){
+        doAsync{
+            stockVisionRepository.reserveAreaDao.updateState(reserveId, CANCEL_RESERVE)
+            renderState.postValue(LCEState.Content(DetailReserveState.ReserveState("Reserva Cancelada")))
+        }
+    }
     fun MakeReservation(
+        reserveId : Int,
         productId: String,
         destinationAreaId: String,
         amountArrived: Int,
         typeMovement: String
     ) {
-        // Paso 1: Loguear los datos de entrada para trazabilidad
+        // Paso 1: Log para trazabilidad
         context.logi("Registro de llegada -> Producto: $productId, Hacia: $destinationAreaId, Cantidad: $amountArrived, Tipo: $typeMovement")
 
         doAsync {
             val stockDao = stockVisionRepository.productStockDao
             val movementDao = stockVisionRepository.productMovementDao
 
-            // Paso 2: Validar que la cantidad sea mayor a 0
+            // Paso 2: Validar cantidad positiva
             if (amountArrived <= 0) {
                 context.logi("Cantidad inválida: $amountArrived")
                 return@doAsync
             }
 
-            // Paso 3: Verificar si ya existe stock del producto en el área de destino (lugar donde llega)
+            // Paso 3: Obtener stock en el área de destino
             val stockInDestination = stockDao.getByProductAndArea(productId, destinationAreaId)
             val initialStockDestination = stockInDestination?.stock ?: 0
 
             // Paso 4: Determinar el área de origen
             val sourceAreaId = if (stockInDestination != null) {
-                // Si el producto ya está en el área de destino, asumimos que no hay cambio de área
+                // Si ya hay stock en destino, se considera que el producto ya estaba ahí
                 destinationAreaId
             } else {
-                // Si no está en destino, buscamos en qué otra área está disponible
-                val otherStockAreas = stockDao.getByProduct(productId)
-                val sourceStock = otherStockAreas.firstOrNull { it.areaCode != destinationAreaId && it.stock > 0 }
-
-                sourceStock?.areaCode ?: "UNKNOWN" // puede ser útil para controlar errores o trazabilidad
+                // Si no hay stock en destino, buscar la primera otra área donde haya stock del producto
+                val existingStockInOtherArea = stockDao.getFirstByProduct(productId)
+                existingStockInOtherArea?.areaCode ?: destinationAreaId // fallback por seguridad
             }
 
-            // Paso 5: Actualizar o insertar el stock en destino
+            // Paso 5: Insertar o actualizar el stock en destino
+            val finalStockDestination = initialStockDestination + amountArrived
+
             if (stockInDestination != null) {
-                // Ya hay stock en el área de destino, solo actualizamos
-                stockInDestination.stock += amountArrived
+                stockInDestination.stock = finalStockDestination
                 stockDao.update(stockInDestination)
             } else {
-                // No había stock en destino, insertamos un nuevo registro
                 val newStock = ProductStock(
                     productCode = productId,
                     areaCode = destinationAreaId,
@@ -86,24 +94,23 @@ class DetailReserveViewModel @Inject constructor(val stockVisionRepository: Stoc
                 stockDao.insert(newStock)
             }
 
-            val finalStockDestination = initialStockDestination + amountArrived
-
-            // Paso 6: Registrar el movimiento en la base de datos
+            // Paso 6: Registrar el movimiento
             val movement = ProductMovement(
                 productCode = productId,
-                initialAreaId = sourceAreaId,               // Donde estaba originalmente (si ya estaba en destino, será el mismo)
-                amountInitial = initialStockDestination,    // Stock en destino antes de llegar
-                amountFinalInitialArea = finalStockDestination, // Stock en destino después de llegar
-                finalAreaId = destinationAreaId,            // Donde llegó
+                initialAreaId = sourceAreaId,
+                amountInitial = initialStockDestination,
+                amountFinalInitialArea = finalStockDestination,
+                finalAreaId = destinationAreaId,
                 amountInitialFinalArea = initialStockDestination,
                 amountMoved = amountArrived,
                 typeMovement = typeMovement
             )
 
             movementDao.insert(movement)
+            stockVisionRepository.reserveAreaDao.updateState(reserveId,CONFIRM_RESERVE)
 
-            // Paso 7: Notificar éxito
-//        renderState.postValue(LCEState.Content(CreateProductMovementState.CreateProductMovementDetails("Llegada registrada con éxito")))
+            // Paso 7: (opcional) Notificación o estado
+             renderState.postValue(LCEState.Content(DetailReserveState.ReserveState("Ingreso Confirmado")))
         }
     }
 

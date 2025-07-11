@@ -14,6 +14,7 @@ import com.upc.stockvision.databinding.FragmentDetailReserveBinding
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReservationDetailDTO
 import com.upc.stockvision.infrastructure.AppState
+import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.Constants
 import com.upc.stockvision.presentation.BaseFragment
 import com.upc.stockvision.presentation.dialog.DialogAreaWarehouse
@@ -29,7 +30,11 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
     private lateinit var binding : FragmentDetailReserveBinding
     private lateinit var reserve: ReservationDetailDTO
     override fun processRenderState(renderState: DetailReserveState, context: Context) {
-
+        when(renderState){
+            is DetailReserveState.ReserveState ->{
+                context.toast(renderState.messageConfirm)
+            }
+        }
     }
 
 
@@ -60,13 +65,22 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
             appState.onDrawShowReserve?.invoke()
         }
         binding.btnMakeReservation.setOnClickListener {
-            DialogConfirmation("¿Estás seguro que deseas continuar?", object : OnDialogListener {
+            DialogConfirmation("¿Quiere confirmar el Ingreso?", object : OnDialogListener {
                 override fun onAceptar() {
-                    Toast.makeText(requireContext(), "Confirmado", Toast.LENGTH_SHORT).show()
+                    viewModel.MakeReservation(reserveId= reserve.reservationId , productId = reserve.productCode, destinationAreaId = reserve.areaWarehouseCode, amountArrived = reserve.quantityReserved, typeMovement = "Ingreso")
 
                 }
             }).show(parentFragmentManager, DialogConfirmation.TAG)
 
+        }
+
+        binding.btnCancelReservation.setOnClickListener {
+            DialogConfirmation("¿Estás seguro que deseas Cancelar?", object : OnDialogListener {
+                override fun onAceptar() {
+                    viewModel.cancelReservation(reserveId= reserve.reservationId)
+
+                }
+            }).show(parentFragmentManager, DialogConfirmation.TAG)
         }
     }
     fun base64ToBitmap(base64String: String): Bitmap? {

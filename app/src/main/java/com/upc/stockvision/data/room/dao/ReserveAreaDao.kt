@@ -15,10 +15,17 @@ interface ReserveAreaDao : BaseDao<ReserveArea> {
     @Query("DELETE FROM ReserveArea")
     fun deleteAll()
 
+    @Query("""
+    UPDATE ReserveArea
+    SET state = :state
+    WHERE id = :reserveId
+""")
+    fun updateState(reserveId: Int, state: Int)
     @Query(
         """
     SELECT
         r.id AS reservationId,
+        p.productCode AS productCode,
         p.productName,
         p.photo,
         r.quantity AS quantityReserved,
@@ -26,7 +33,8 @@ interface ReserveAreaDao : BaseDao<ReserveArea> {
         aw.areaWarehouseName AS areaWarehouseName,
         w.warehouseCode AS warehouseCode,
         w.warehouseName AS warehouseName,
-        r.arrivalDate
+        r.arrivalDate,
+        r.state
     FROM ReserveArea r
     INNER JOIN Product p ON p.productCode = r.product_code
     INNER JOIN AreaWarehouse aw ON aw.areaWarehouseCode = r.area_id

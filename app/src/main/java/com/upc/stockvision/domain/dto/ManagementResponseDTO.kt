@@ -75,6 +75,7 @@ data class ProductOnDetailDTO(
 
 data class ReservationDetailDTO(
     val reservationId: Int,
+    val productCode : String,
     val productName: String,
     val photo: String,
     val quantityReserved: Int,
@@ -82,7 +83,8 @@ data class ReservationDetailDTO(
     val areaWarehouseName: String,
     val warehouseCode: String,
     val warehouseName: String,
-    val arrivalDate: String
+    val arrivalDate: String,
+    val state : Int
 ): Serializable
 
 

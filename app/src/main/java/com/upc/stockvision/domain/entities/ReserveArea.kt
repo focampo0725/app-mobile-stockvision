@@ -17,20 +17,24 @@ import java.util.*
 data class ReserveArea(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     @ColumnInfo(name = "product_code")
     val productCode: String,
-
     @ColumnInfo(name = "area_id")
     val areaId: String,
-
     @ColumnInfo(name = "quantity")
     val quantity: Int,
-
     @ColumnInfo(name = "arrivalDate")
     val arrivalDate: String,
-
+    @ColumnInfo(name = "state")
+    val state : Int = CREATE_RESERVE,
     @ColumnInfo(name = "createAt")
     val createAt: Date = Date()
-)
+){
+    companion object{
+        val CANCEL_RESERVE = 0
+        val CREATE_RESERVE = 1
+        val CONFIRM_RESERVE =2
+    }
+
+}
 

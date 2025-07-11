@@ -32,4 +32,8 @@
 
     <color name="colorPrincipalDatePicker">#042431</color>
 
+    <color name="status_created">#607D8B</color>
+    <color name="status_confirmed">#4CAF50</color>
+    <color name="status_cancelled">#F44336</color>
+
 </resources>
