@@ -121,7 +121,7 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 //        Product("Circus Enterizo Short", "Conjuntos",10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo))),
 
         val productsToInsert = listOf(
-            Product(productName = "Blusa manga farol satén", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.blusa_farol)), categoryCode = "2004", supplierCode = "1001", productCode = "PRD-A8K"),
+            Product(productName = "Blusa manga larga estamp.", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.blusa_farol)), categoryCode = "2004", supplierCode = "1001", productCode = "PRD-A8K"),
             Product(productName = "Pantalón palazo mujer", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.pantalon_palazo)), categoryCode = "2002", supplierCode = "1002", productCode = "PRD-X3B"),
             Product(productName = "Short denim con bordado", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.short_bordado)), categoryCode = "2002", supplierCode = "1003", productCode = "PRD-C1L"),
             Product(productName = "Polo manga corta stretch", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.polo_manga_strench)), categoryCode = "2001", supplierCode = "1004", productCode = "PRD-M6V"),
@@ -131,7 +131,11 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             Product(productName = "Casaca jean oversize", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.casaca_oversize)), categoryCode = "2003", supplierCode = "1008", productCode = "PRD-F2Z"),
             Product(productName = "Short deportivo de licra", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.short_licra)), categoryCode = "2002", supplierCode = "1009", productCode = "PRD-N5J"),
             Product(productName = "Falda midi plisada", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.falda_mini)), categoryCode = "2006", supplierCode = "1003", productCode = "PRD-L8M"),
-            Product(productName = "Ropa de bebé con gorro", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.ropa_bebe_borro)), categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X")
+            Product(productName = "Ropa de bebé con gorro", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.ropa_bebe_borro)), categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X"),
+
+            Product(productName = "Chaleco acolchado sin mangas", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.chaleco)), categoryCode = "2003", supplierCode = "1006", productCode = "PRD-Y1J"),
+            Product(productName = "Pantalón jogger con bolsillos", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.jogger)), categoryCode = "2002", supplierCode = "1002", productCode = "PRD-V9T")
+
         )
 
 
@@ -146,13 +150,35 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             ProductStock(productCode = "PRD-F2Z", areaCode = "ZS-CHA-D", stock = 18),      // Casaca jean - Chaquetas (2003)
             ProductStock(productCode = "PRD-N5J", areaCode = "ZO-PAN-C", stock = 22),      // Short licra - Pantalones (2002)
             ProductStock(productCode = "PRD-L8M", areaCode = "ZN-ACC-B", stock = 28),      // Falda midi - Accesorios (2006)
-            ProductStock(productCode = "PRD-Z3X", areaCode = "ZO-CONJ-B", stock = 14)      // Ropa bebé con gorro - Conjuntos (2007)
+            ProductStock(productCode = "PRD-Z3X", areaCode = "ZO-CONJ-B", stock = 14)  ,    // Ropa bebé con gorro - Conjuntos (2007)
+            ProductStock(productCode = "PRD-Y1J", areaCode = "ZS-CHA-D", stock = 20),
+            ProductStock(productCode = "PRD-V9T", areaCode = "ZO-PAN-C", stock = 10)
+
+
         )
 
-//        val reserveToInsert = listOf(
-//            ReserveArea(productId = 1, areaId = "ZC-CAM-A", quantity = 10, arrivalDate = "2025-07-08"),
-//            ReserveArea(productId = 9, areaId = "ZE-CAM-B", quantity = 5, arrivalDate = "2025-07-10")
-//        )
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        val notificationsToInsert = listOf(
+            // Blusa manga larga estampada
+            Notifications(typeNotification = 0, productCode = "PRD-A8K", areaId = "ZS-TOPS-C", quantity = 19, createAT = sdf.parse("15/05/2025")!!),
+            Notifications(typeNotification = 1, productCode = "PRD-A8K", areaId = "ZS-TOPS-C", quantity = 19, createAT = sdf.parse("15/05/2025")!!),
+
+            // Pantalón jogger con bolsillos
+            Notifications(typeNotification = 0, productCode = "PRD-V9T", areaId = "ZO-PAN-C", quantity = 16, createAT = sdf.parse("17/05/2025")!!),
+            Notifications(typeNotification = 1, productCode = "PRD-V9T", areaId = "ZO-PAN-C", quantity = 16, createAT = sdf.parse("17/05/2025")!!),
+
+            // Chaleco acolchado sin mangas
+            Notifications(typeNotification = 0, productCode = "PRD-Y1J", areaId = "ZS-CHA-D", quantity = 15, createAT = sdf.parse("17/05/2025")!!),
+            Notifications(typeNotification = 1, productCode = "PRD-Y1J", areaId = "ZS-CHA-D", quantity = 15, createAT = sdf.parse("17/05/2025")!!)
+        )
+
+        val reservesToInsert = listOf(
+            ReserveArea(productCode = "PRD-A8K", areaId = "ZS-TOPS-C", quantity = 19, arrivalDate = "20/05/2025", state = ReserveArea.CONFIRM_RESERVE),
+            ReserveArea(productCode = "PRD-V9T", areaId = "ZO-PAN-C", quantity = 16, arrivalDate = "22/05/2025", state = ReserveArea.CONFIRM_RESERVE),
+            ReserveArea(productCode = "PRD-Y1J", areaId = "ZS-CHA-D", quantity = 15, arrivalDate = "22/05/2025", state = ReserveArea.CONFIRM_RESERVE)
+        )
 
 
 
@@ -183,6 +209,8 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.areaWarehouseDao.insertAll(areaWarehousesToInsert)
 //            stockVisionRepository.notificationsDao.insertAll(listNotifications)
             stockVisionRepository.productStockDao.insertAll(productStockToInsert)
+            stockVisionRepository.notificationsDao.insertAll(notificationsToInsert)
+            stockVisionRepository.reserveAreaDao.insertAll(reservesToInsert)
 
 
         }
