@@ -8,7 +8,8 @@ import com.upc.stockvision.domain.entities.ReserveArea
 
 @Dao
 interface ReserveAreaDao : BaseDao<ReserveArea> {
-
+    @Query("SELECT * FROM ReserveArea WHERE id = :id")
+    fun getAReserve(id: Int): ReserveArea
     @Query("SELECT * FROM ReserveArea")
     fun getAllReserve(): List<ReserveArea>
 

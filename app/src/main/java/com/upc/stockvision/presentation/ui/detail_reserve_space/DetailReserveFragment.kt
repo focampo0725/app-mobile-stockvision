@@ -9,10 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.upc.stockvision.R
 import com.upc.stockvision.databinding.FragmentDetailReserveBinding
 import com.upc.stockvision.domain.dto.ProductOnDetailDTO
 import com.upc.stockvision.domain.dto.ReservationDetailDTO
+import com.upc.stockvision.domain.entities.ReserveArea.Companion.CANCEL_RESERVE
+import com.upc.stockvision.domain.entities.ReserveArea.Companion.CONFIRM_RESERVE
 import com.upc.stockvision.infrastructure.AppState
 import com.upc.stockvision.infrastructure.extensions.toast
 import com.upc.stockvision.infrastructure.utils.Constants
@@ -33,6 +37,25 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
         when(renderState){
             is DetailReserveState.ReserveState ->{
                 context.toast(renderState.messageConfirm)
+            }
+            is DetailReserveState.ReserveStateShow -> {
+                when(renderState.state){
+                    CANCEL_RESERVE -> {
+                            binding.btnMakeReservation.visibility = View.GONE
+                            binding.btnCancelReservation.visibility = View.GONE
+                            binding.tvReservationStatus.text ="CANCELADO"
+                            binding.tvReservationStatus.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.alert_error))
+                            binding.tvReservationStatus.visibility = View.VISIBLE
+
+                    }
+                    CONFIRM_RESERVE -> {
+                        binding.btnMakeReservation.visibility = View.GONE
+                        binding.btnCancelReservation.visibility = View.GONE
+                        binding.tvReservationStatus.text ="CONCRETADO"
+                        binding.tvReservationStatus.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.alert_success))
+                        binding.tvReservationStatus.visibility = View.VISIBLE
+                    }
+                }
             }
         }
     }
@@ -56,6 +79,7 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
         super.onViewCreated(view, savedInstanceState)
         setupViewModel(viewModel = viewModel)
         initView()
+        viewModel.stateReserve(reserve.reservationId)
 
     }
 

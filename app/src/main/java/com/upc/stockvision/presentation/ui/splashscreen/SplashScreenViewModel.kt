@@ -121,17 +121,17 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
 //        Product("Circus Enterizo Short", "Conjuntos",10, "MOUNT.ASSY.E", "Almacén Central", "Zona Ropa Mujer", bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo))),
 
         val productsToInsert = listOf(
-            Product(productName = "Blusa manga farol satén", photo = "", categoryCode = "2004", supplierCode = "1001", productCode = "PRD-A8K"),
-            Product(productName = "Pantalón palazo mujer", photo = "", categoryCode = "2002", supplierCode = "1002", productCode = "PRD-X3B"),
-            Product(productName = "Short denim con bordado", photo = "", categoryCode = "2002", supplierCode = "1003", productCode = "PRD-C1L"),
-            Product(productName = "Polo manga corta stretch", photo = "", categoryCode = "2001", supplierCode = "1004", productCode = "PRD-M6V"),
-            Product(productName = "Falda acampanada de lino", photo = "", categoryCode = "2006", supplierCode = "1005", productCode = "PRD-T4E"),
-            Product(productName = "Casaca rompeviento impermeable", photo = "", categoryCode = "2003", supplierCode = "1006", productCode = "PRD-Q9Y"),
-            Product(productName = "Ropa de bebé enterizo polar", photo = "", categoryCode = "2007", supplierCode = "1007", productCode = "PRD-B7K"),
-            Product(productName = "Casaca jean oversize", photo = "", categoryCode = "2003", supplierCode = "1008", productCode = "PRD-F2Z"),
-            Product(productName = "Short deportivo de licra", photo = "", categoryCode = "2002", supplierCode = "1009", productCode = "PRD-N5J"),
-            Product(productName = "Falda midi plisada", photo = "", categoryCode = "2006", supplierCode = "1003", productCode = "PRD-L8M"),
-            Product(productName = "Ropa de bebé con gorro", photo = "", categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X")
+            Product(productName = "Blusa manga farol satén", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.blusa_farol)), categoryCode = "2004", supplierCode = "1001", productCode = "PRD-A8K"),
+            Product(productName = "Pantalón palazo mujer", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.pantalon_palazo)), categoryCode = "2002", supplierCode = "1002", productCode = "PRD-X3B"),
+            Product(productName = "Short denim con bordado", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.short_bordado)), categoryCode = "2002", supplierCode = "1003", productCode = "PRD-C1L"),
+            Product(productName = "Polo manga corta stretch", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.polo_manga_strench)), categoryCode = "2001", supplierCode = "1004", productCode = "PRD-M6V"),
+            Product(productName = "Falda acampanada de lino", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.falda_acampana)), categoryCode = "2006", supplierCode = "1005", productCode = "PRD-T4E"),
+            Product(productName = "Casaca rompeviento impermeable", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.casac_cviento)), categoryCode = "2003", supplierCode = "1006", productCode = "PRD-Q9Y"),
+            Product(productName = "Ropa de bebé enterizo polar", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.enterizo_bebe)), categoryCode = "2007", supplierCode = "1007", productCode = "PRD-B7K"),
+            Product(productName = "Casaca jean oversize", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.casaca_oversize)), categoryCode = "2003", supplierCode = "1008", productCode = "PRD-F2Z"),
+            Product(productName = "Short deportivo de licra", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.short_licra)), categoryCode = "2002", supplierCode = "1009", productCode = "PRD-N5J"),
+            Product(productName = "Falda midi plisada", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.falda_mini)), categoryCode = "2006", supplierCode = "1003", productCode = "PRD-L8M"),
+            Product(productName = "Ropa de bebé con gorro", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.ropa_bebe_borro)), categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X")
         )
 
 

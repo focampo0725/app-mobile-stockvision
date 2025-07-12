@@ -26,6 +26,7 @@ import javax.inject.Inject
 
 sealed class DetailReserveState {
     class ReserveState(val messageConfirm : String) : DetailReserveState()
+    class ReserveStateShow(val state : Int) : DetailReserveState()
 
 }
 
@@ -38,7 +39,12 @@ class DetailReserveViewModel @Inject constructor(val stockVisionRepository: Stoc
     @ApplicationContext
     lateinit var context: Context
 
-
+    fun stateReserve(id : Int){
+        doAsync{
+            val reserveStatus =  stockVisionRepository.reserveAreaDao.getAReserve(id)
+            renderState.postValue(LCEState.Content(DetailReserveState.ReserveStateShow(reserveStatus.state)))
+        }
+    }
     fun cancelReservation(reserveId: Int){
         doAsync{
             stockVisionRepository.reserveAreaDao.updateState(reserveId, CANCEL_RESERVE)
