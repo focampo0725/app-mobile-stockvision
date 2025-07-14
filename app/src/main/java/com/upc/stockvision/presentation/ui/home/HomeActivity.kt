@@ -198,25 +198,23 @@ class HomeActivity : BaseActivity<HomeViewModel,HomeSatate>() {
                 .commit()
         }
     }
+//    private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
+//        removeCurrentFragment()
+//        val fragmentManager = supportFragmentManager
+//        val transaction = fragmentManager.beginTransaction()
+//        fragment.arguments = args
+//        transaction.replace(R.id.content_frame, fragment)
+//            .addToBackStack(null)
+//        transaction.commit()
+//    }
     private fun replaceFragment(fragment: Fragment, args: Bundle? = null) {
-        removeCurrentFragment()
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
         fragment.arguments = args
-        transaction.replace(R.id.content_frame, fragment)
-            .addToBackStack(null)
-        transaction.commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.content_frame, fragment) // Esto reemplaza y destruye el anterior
+            .commit()
     }
 
-    private fun replaceFragmentArea(fragment: Fragment, args: Bundle? = null) {
-        removeCurrentFragment()
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        fragment.arguments = args
-        transaction.replace(R.id.content_frame, fragment)
-            .addToBackStack(null)
-        transaction.commit()
-    }
+
 
     fun drawProductDetail() {
         appState.onDrawProductDetail = {

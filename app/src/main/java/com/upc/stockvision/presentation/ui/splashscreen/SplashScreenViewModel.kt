@@ -132,7 +132,6 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             Product(productName = "Short deportivo de licra", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.short_licra)), categoryCode = "2002", supplierCode = "1009", productCode = "PRD-N5J"),
             Product(productName = "Falda midi plisada", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.falda_mini)), categoryCode = "2006", supplierCode = "1003", productCode = "PRD-L8M"),
             Product(productName = "Ropa de bebé con gorro", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.ropa_bebe_borro)), categoryCode = "2007", supplierCode = "1001", productCode = "PRD-Z3X"),
-
             Product(productName = "Chaleco acolchado sin mangas", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.chaleco)), categoryCode = "2003", supplierCode = "1006", productCode = "PRD-Y1J"),
             Product(productName = "Pantalón jogger con bolsillos", photo = bitmapToBase64(BitmapFactory.decodeResource(context.resources, R.drawable.jogger)), categoryCode = "2002", supplierCode = "1002", productCode = "PRD-V9T")
 
@@ -197,9 +196,9 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.warehouseDao.deleteAll()
             stockVisionRepository.areaWarehouseDao.deleteAll()
             stockVisionRepository.notificationsDao.deleteAllSequence()
-            stockVisionRepository.notificationsDao.deleteAll()
+//            stockVisionRepository.notificationsDao.deleteAll()
             stockVisionRepository.productStockDao.deleteAll()
-            stockVisionRepository.reserveAreaDao.deleteAll()
+//            stockVisionRepository.reserveAreaDao.deleteAll()
 
             stockVisionRepository.supplierDao.insertAll(suppliersToInsert)
             stockVisionRepository.categoryDao.insertAll(categoriesToInsert)
@@ -209,8 +208,8 @@ class SplashScreenViewModel @Inject constructor(val stockVisionRepository: Stock
             stockVisionRepository.areaWarehouseDao.insertAll(areaWarehousesToInsert)
 //            stockVisionRepository.notificationsDao.insertAll(listNotifications)
             stockVisionRepository.productStockDao.insertAll(productStockToInsert)
-            stockVisionRepository.notificationsDao.insertAll(notificationsToInsert)
-            stockVisionRepository.reserveAreaDao.insertAll(reservesToInsert)
+//            stockVisionRepository.notificationsDao.insertAll(notificationsToInsert)
+//            stockVisionRepository.reserveAreaDao.insertAll(reservesToInsert)
 
 
         }

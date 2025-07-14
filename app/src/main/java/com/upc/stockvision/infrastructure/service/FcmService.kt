@@ -64,13 +64,14 @@ class FcmService : FirebaseMessagingService() {
 
         when (fragmentToOpen) {
             "0" -> {
-                val productId = messageParts.getOrNull(1)?.toIntOrNull() ?: return
+                val productId = messageParts.getOrNull(1) ?: return
                 val arrivalDate = messageParts.getOrNull(2) ?: return
                 val quantity = messageParts.getOrNull(3)?.toIntOrNull() ?: return
 
                 doAsynTask({
                     val product = stockVisionRepository.productsDao.getByProductCode(productId.toString())
-                    val area = stockVisionRepository.areaWarehouseDao.getByCode(product.categoryCode)
+                    val area1 = stockVisionRepository.productStockDao.getFirstByProduct(product.productCode)
+                    val area = stockVisionRepository.areaWarehouseDao.getByCode(area1!!.areaCode)
                     val warehouse = area?.let {
                         stockVisionRepository.warehouseDao.getByCode(it.warehouseReference)
                     }
