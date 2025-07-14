@@ -92,6 +92,7 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
             DialogConfirmation("¿Quiere confirmar el Ingreso?", object : OnDialogListener {
                 override fun onAceptar() {
                     viewModel.MakeReservation(reserveId= reserve.reservationId , productId = reserve.productCode, destinationAreaId = reserve.areaWarehouseCode, amountArrived = reserve.quantityReserved, typeMovement = "Ingreso")
+                    appState.onDrawShowReserve?.invoke()
 
                 }
             }).show(parentFragmentManager, DialogConfirmation.TAG)
@@ -102,6 +103,7 @@ class DetailReserveFragment @Inject constructor(val appState: AppState): BaseFra
             DialogConfirmation("¿Estás seguro que deseas Cancelar?", object : OnDialogListener {
                 override fun onAceptar() {
                     viewModel.cancelReservation(reserveId= reserve.reservationId)
+                    appState.onDrawShowReserve?.invoke()
 
                 }
             }).show(parentFragmentManager, DialogConfirmation.TAG)
